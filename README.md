@@ -1,0 +1,1 @@
+# estrutura básica de um novo projeto

@@ -1,0 +1,21 @@
+body{
+    background: #EEE;
+}
+
+.wrapper{
+    margin: 100px auto;
+    max-width: 350px;
+}
+
+
+.AlertLogin{
+    position: absolute;
+    margin-top: 325px;
+    margin-left: -175px;
+    left: 50%;
+    max-width: 350px;
+}
+
+.buttonLogin{
+    width: 100%;
+}
