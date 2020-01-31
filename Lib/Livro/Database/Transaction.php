@@ -3,11 +3,12 @@
 namespace Livro\Database;
 
 final class Transaction {//final class não pode ser super classe
+
     private static $conn; //conexão ativa - atributos estaticos pertencem a classe n ao obj
     private static $logger;//objeto de log
 
-
-    private function __construct(){} //marcando o construtor como 'private' a classe só poderá ter instancias dentro do escopo da propria classe (Transaction)
+    //marcando o construtor como 'private' a classe só poderá ter instancias dentro do escopo da propria classe (Transaction)
+    private function __construct(){} 
 
     public static function open($database){//recebe o nome do arquivo .ini
         if(empty(self::$conn))//checa se não há uma transação ativa
