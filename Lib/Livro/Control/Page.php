@@ -14,7 +14,7 @@ class Page extends Element
     //todas as classes filhas de page (classes control) herdarão e podem executar o metodo show()    
     public function show()
     {
-        //nas classes onde existirem uma reuisição GET segue o processo abaixo:
+        //nas classes onde existirem uma requisição GET segue o processo abaixo:
         if ($_GET)//existe uma requisição GET?
         {
             $class  = isset($_GET['class'])  ? $_GET['class'] : NULL;//existe uma classe definida?

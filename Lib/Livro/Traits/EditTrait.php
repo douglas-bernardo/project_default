@@ -1,5 +1,4 @@
 <?php
-
 namespace Livro\Traits;
 
 use Livro\Database\Transaction;

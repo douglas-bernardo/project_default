@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
-class RadioButton extends Field implements FormElementInterface {
+class RadioButton extends Field implements FormElementInterface 
+{
     public function show(){
         //atribui as propriedades da tag
         $this->tag->name = $this->name; //nome da tag

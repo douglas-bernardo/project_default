@@ -1,5 +1,4 @@
 <?php
-
 namespace Livro\Log;
 
 class LoggerXML extends Logger

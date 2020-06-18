@@ -1,5 +1,4 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
 use Livro\Control\Action;

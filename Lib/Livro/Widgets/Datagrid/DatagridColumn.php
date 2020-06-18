@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace Livro\Widgets\Datagrid;
 
 use Livro\Control\Action;

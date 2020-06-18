@@ -2,25 +2,29 @@
 //Config
 require 'config.php';
 
-// index - front controller
-
-//Library loader
-require_once 'Lib/Livro/Core/ClassLoader.php';
-$al = new Livro\Core\ClassLoader;
-$al->addNamespace('Livro', 'Lib/Livro');
-$al->register();
-
-//Application loader
-require_once 'Lib/Livro/Core/AppLoader.php';
-$al = new Livro\Core\AppLoader;
-$al->addDirectory('App/Control');
-$al->addDirectory('App/Model');
-$al->register();
-
 use Livro\Session\Session;
 
+// composer autoload
+require __DIR__ . '/vendor/autoload.php';
+
+// //Library loader
+// require_once 'Lib/Livro/Core/ClassLoader.php';
+// $al = new Livro\Core\ClassLoader;
+// $al->addNamespace('Livro', 'Lib/Livro');
+// $al->register();
+
+// //Application loader
+// require_once 'Lib/Livro/Core/AppLoader.php';
+// $al = new Livro\Core\AppLoader;
+// $al->addDirectory('App/Control');
+// $al->addDirectory('App/Model');
+// $al->register();
+
+// var_dump(get_included_files());
+// die;
+
 $content = '';
-//session start
+
 new Session;
 
 if (Session::getValue('logged')){//se parametro logged == true

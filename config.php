@@ -5,10 +5,10 @@ $config = array();
 
 if (ENVIRONMENT == 'development') {
     define("BASE_URL", "http://localhost/conta_azul_oo/");
-    // $config['dbname'] = 'contaazul';
-    // $config['host'] = 'localhost';
-    // $config['dbuser'] = 'root';
-    // $config['dbpass'] = '';
+    $config['dbname'] = 'contaazul';
+    $config['host'] = 'localhost';
+    $config['dbuser'] = 'developer';
+    $config['dbpass'] = 'developer';
 } else {
     define("BASE_URL", "http://localhost/conta_azul_oo/");
     // $config['dbname'] = 'contaazul';

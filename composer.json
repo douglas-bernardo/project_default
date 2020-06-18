@@ -1,0 +1,25 @@
+{
+    "name": "project/default",
+    "description": "Projeto Padrão - Micro Framework para aplicações PHP",
+    "minimum-stability": "stable",
+    "authors": [{
+        "name": "Jackson Douglas B. Feijão",
+        "email": "jkdouglas21@gmail.com",
+        "role": "Developer"
+    }],
+    "config": {
+        "vendor-dir": "vendor"
+    },
+    "autoload": {
+        "psr-4": {
+            "Livro\\":"Lib/Livro/",
+            "App\\":"App/"
+        },
+        "classmap": [
+            "App/Control",
+            "App/Model"
+        ]
+    },    
+    "require": {
+    }
+}

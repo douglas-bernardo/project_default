@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
-class CheckButton extends Field implements FormElementInterface {
+class CheckButton extends Field implements FormElementInterface 
+{
     public function show(){
         //atribui as propriedades da tag
         $this->tag->name = $this->name; //nome da tag

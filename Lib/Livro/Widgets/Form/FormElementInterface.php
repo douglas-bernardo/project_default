@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
-interface FormElementInterface {
+interface FormElementInterface 
+{
     public function setName($name);
     public function getName();
     public function setValue($value);

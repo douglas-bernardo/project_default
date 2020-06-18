@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Database;
 
-class Criteria extends Expression{
+class Criteria extends Expression
+{
     private $expressions; //armazena a lista de expressões
     private $operators;    //armazena a lista de operadores
     private $properties;   //propriedades do critério

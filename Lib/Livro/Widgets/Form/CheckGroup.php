@@ -1,10 +1,10 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
 use Livro\Widgets\Base\Element;
 
-class CheckGroup extends Field implements FormElementInterface {
+class CheckGroup extends Field implements FormElementInterface 
+{
     private $layout = 'vertical';
     private $items;
 

@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Database;
 
-class Filter extends Expression {
+class Filter extends Expression 
+{
     private $variable;
     private $operator;
     private $value;

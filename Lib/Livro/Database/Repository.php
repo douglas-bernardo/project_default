@@ -2,8 +2,10 @@
 namespace Livro\Database;
 
 final class Repository
-{    
+{   
+
     private $activeRecord;//classe manipulada pelo repositorio
+
     function __construct($class)
     {
         $this->activeRecord = $class;
@@ -12,8 +14,10 @@ final class Repository
     function load(Criteria $criteria)//injeção de dependencia
     {
         //instancia a instrução de SELECT
-        $sql = "SELECT * FROM " . constant($this->activeRecord.'::TABLENAME');//nome da classe::constante = nome tabela no bd
+        $reflection = new \ReflectionClass($this->activeRecord);
 
+        $sql = "SELECT * FROM " . constant($this->activeRecord.'::TABLENAME'); //nome da classe::constante = nome tabela no bd
+ 
         //Obtêm a cláusula  WHERE da classe criteria.
         if($criteria){
             $expression = $criteria->dump();//resultado da expressão de filter 
@@ -54,7 +58,7 @@ final class Repository
             return $results;
         }
         else {
-            throw new Exception("Não há conexão ativa");            
+            throw new \Exception("Não há conexão ativa");            
         }
     }
 
@@ -72,7 +76,7 @@ final class Repository
             return $result;
         }
         else {
-            throw new Exception("Não há conexão ativa");            
+            throw new \Exception("Não há conexão ativa");            
         }
     }
 
@@ -94,7 +98,7 @@ final class Repository
             return $row[0];
         }
         else{
-            throw new Exception("Não há conexão ativa");            
+            throw new \Exception("Não há conexão ativa");            
         }
     }
 }

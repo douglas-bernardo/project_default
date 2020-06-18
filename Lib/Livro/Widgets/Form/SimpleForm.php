@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
-class SimpleForm {
+class SimpleForm 
+{
     private $name, $action, $fields, $title;
 
     public function __construct($name){

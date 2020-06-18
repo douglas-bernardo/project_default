@@ -47,8 +47,7 @@ class AppLoader
             {
                 if (file_exists($folder))
                 {
-                    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder),
-                                                           RecursiveIteratorIterator::SELF_FIRST) as $entry)
+                    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($folder), RecursiveIteratorIterator::SELF_FIRST) as $entry)
                     {
                         if (is_dir($entry))
                         {

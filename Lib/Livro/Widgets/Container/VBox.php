@@ -1,10 +1,10 @@
 <?php
-
 namespace Livro\Widgets\Container;
 
 use Livro\Widgets\Base\Element;
 
-class VBox extends Element {
+class VBox extends Element 
+{
     public function __construct(){
         parent::__construct('div');
         $this->{'style'} = 'display: inline-block';

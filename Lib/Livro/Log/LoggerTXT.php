@@ -1,7 +1,6 @@
 <?php
-
 namespace Livro\Log;
-//classe filha da classe abstrata logger
+
 class LoggerTXT extends Logger
 {
     public function write($message){

@@ -1,5 +1,4 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
 use Livro\Widgets\Base\Element;
@@ -12,7 +11,6 @@ class Combo extends Field implements FormElementInterface
     {
         //executa o método construtor da classe pai
         parent::__construct($name);
-
         //cria uma tag html do tipo selec
         $this->tag = new Element('select');
         $this->tag->class = 'combo';    //classe CSS
@@ -23,6 +21,7 @@ class Combo extends Field implements FormElementInterface
     {
         $this->items = $items;
     }
+
     public function show()
     {
         //atribui as propriedades da tag
@@ -37,17 +36,16 @@ class Combo extends Field implements FormElementInterface
         //adiciona a opção a combo
         $this->tag->add($option);
 
-        if($this->items)
-        {
+        if ($this->items) {
             //percorre os itens adicionados
-            foreach ($this->items as $chave => $item){
+            foreach ($this->items as $chave => $item) {
                 //cria uma tag <option> para o item
                 $option = new Element('option');
                 $option->value = $chave;//define o indice da opção
                 $option->add($item);//adiciona o texto da opção
 
                 //caso seja a opção selecionada
-                if ($chave == $this->value){
+                if ($chave == $this->value) {
                     $option->selected = 1;
                 }
                 //adiciona a opção a combo
@@ -55,8 +53,7 @@ class Combo extends Field implements FormElementInterface
             }
         }
         //verifica se o campo é editável
-        if(!parent::getEditable())
-        {
+        if (!parent::getEditable()) {
             $this->tag->readonly = "1";
         }
         $this->tag->show();

@@ -3,7 +3,8 @@ namespace Livro\Widgets\Form;
 
 use Livro\Widgets\Base\Element;
 
-abstract class Field implements FormElementInterface {
+abstract class Field implements FormElementInterface 
+{
     protected $name;
     protected $size;
     protected $value;

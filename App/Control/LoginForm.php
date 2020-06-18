@@ -1,4 +1,5 @@
 <?php
+
 use Livro\Control\Page;
 use Livro\Control\Action;
 use Livro\Widgets\Base\Element;
@@ -21,6 +22,7 @@ class LoginForm extends Page
     {
 
         parent::__construct();
+
         $div = new Element('div');
         $div->class = 'wrapper';
 
@@ -56,7 +58,7 @@ class LoginForm extends Page
                 Transaction::open('contaazul');
                 $repository = new Repository('Users');
 
-                $criteria = new Criteria;
+                $criteria = new Criteria;   
                 $criteria->add(new Filter('email', '=', $email));
                 $criteria->add(new Filter('password', '=', md5($password)));
 
@@ -68,15 +70,15 @@ class LoginForm extends Page
                     Transaction::close();
                     header("Location: index.php");
                 } else {
-                    new Message('danger', "Usuário não encontrado :(", 'login.php', '100', 'AlertLogin');
+                    new Message('danger', "Usuário não encontrado :(", '100', 'AlertLogin');
                 }
 
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 new Message('danger', $e->getMessage());
             }
 
         } else {
-            new Message('warning ', "Informe seu usuário e senha...", 'login.php', '100', 'AlertLogin');
+            new Message('warning ', "Informe seu usuário e senha...", '100', 'AlertLogin');
         }
     }
 

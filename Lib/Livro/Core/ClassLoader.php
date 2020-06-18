@@ -1,4 +1,5 @@
 <?php
+
 namespace Livro\Core;
 
 /**

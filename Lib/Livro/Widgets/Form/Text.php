@@ -1,10 +1,10 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
 use Livro\Widgets\Base\Element;
 
-class Text extends Field implements FormElementInterface {
+class Text extends Field implements FormElementInterface 
+{
     private $width;
     private $height;
     public function __construct($name){

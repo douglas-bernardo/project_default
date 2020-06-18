@@ -1,11 +1,17 @@
 <?php
 namespace Livro\Database;
+
 use PDO;
 use Exception;
 
-final class Connection{//final class não pode ter descendentes - n pode ser super classe
-    //marcando o método construtor como 'private', fará com que esse metodo
-    //só possa ser chamado dentro do escopo da propria classe
+final class Connection
+{    
+    /**
+     * final class não pode ter descendentes - n pode ser super classe
+     * marcando o método construtor como 'private', fará com que esse metodo
+     * só possa ser chamado dentro do escopo da propria classe
+     */
+    
     private function __construc(){}
 
     public static function open($name){

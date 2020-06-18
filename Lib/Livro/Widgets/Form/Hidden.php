@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
-class Hidden extends Field implements FormElementInterface {
+class Hidden extends Field implements FormElementInterface 
+{
     public function show(){
         $this->tag->name = $this->name; //nome da tag
         $this->tag->value = $this->value; //value da tag

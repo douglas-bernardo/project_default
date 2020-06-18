@@ -1,10 +1,10 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
 use Livro\Widgets\Base\Element;
 
-class RadioGroup extends Field implements FormElementInterface {
+class RadioGroup extends Field implements FormElementInterface 
+{
     private $layout = 'vertical';
     private $items;
 

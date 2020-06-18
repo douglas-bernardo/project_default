@@ -1,8 +1,8 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
-class Entry extends Field implements FormElementInterface {
+class Entry extends Field implements FormElementInterface 
+{
     public function show()
     {
         $this->tag->name  = $this->name; //nome da tag

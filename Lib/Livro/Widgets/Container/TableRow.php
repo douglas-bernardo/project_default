@@ -1,8 +1,10 @@
 <?php
 namespace Livro\Widgets\Container;
+
 use Livro\Widgets\Base\Element;
 
-class TableRow extends Element{
+class TableRow extends Element
+{
     public function __construct(){
         parent::__construct('tr');
     }

@@ -1,7 +1,8 @@
 <?php
 namespace Livro\Widgets\Base;
 
-class Element{
+class Element
+{
     protected $tagname;
     protected $properties;
     protected $children;

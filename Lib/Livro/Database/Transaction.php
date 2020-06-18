@@ -1,8 +1,9 @@
 <?php
-
 namespace Livro\Database;
 
-final class Transaction {//final class não pode ser super classe
+final class Transaction 
+{   
+    //final class não pode ser super classe
 
     private static $conn; //conexão ativa - atributos estaticos pertencem a classe n ao obj
     private static $logger;//objeto de log

@@ -1,5 +1,4 @@
 <?php
-
 namespace Livro\Session;
 
 class Session

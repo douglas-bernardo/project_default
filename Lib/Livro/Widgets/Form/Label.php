@@ -1,10 +1,10 @@
 <?php
-
 namespace Livro\Widgets\Form;
 
 use Livro\Widgets\Base\Element;
 
-class Label extends Field implements FormElementInterface {
+class Label extends Field implements FormElementInterface 
+{
     public function __construct($value){
         $this->setValue($value);
         $this->tag = new Element('label');
