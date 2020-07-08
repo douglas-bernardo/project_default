@@ -18,7 +18,8 @@
     width: 200px;
     height: 100%;
     overflow-y: hidden;
-    background: #0277bd;
+    /* background: #30336b; */
+    background: #192a56;
     /*border: 2px solid red;*/
     /*opacity: 0.9;*/
     transition: all 0.2s;

@@ -6,7 +6,16 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
 {
+    public static $files = array (
+        '26484eceb1c01c6dfae4a962bdb24b78' => __DIR__ . '/../..' . '/Services/Source/Boot/Config.php',
+        '61f5d8363ef2d03785f1675a2e008ed5' => __DIR__ . '/../..' . '/Services/Source/Boot/Helpers.php',
+    );
+
     public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'Services\\' => 9,
+        ),
         'L' => 
         array (
             'Livro\\' => 6,
@@ -18,6 +27,10 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
     );
 
     public static $prefixDirsPsr4 = array (
+        'Services\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Services/Source',
+        ),
         'Livro\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Lib/Livro',
@@ -39,6 +52,7 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
         'HomeControl' => __DIR__ . '/../..' . '/App/Control/HomeControl.php',
         'ItemVenda' => __DIR__ . '/../..' . '/App/Model/ItemVenda.php',
         'LoginForm' => __DIR__ . '/../..' . '/App/Control/LoginForm.php',
+        'OcorrenciasList' => __DIR__ . '/../..' . '/App/Control/OcorrenciasList.php',
         'PermissionGroup' => __DIR__ . '/../..' . '/App/Model/PermissionGroup.php',
         'Permissions' => __DIR__ . '/../..' . '/App/Model/Permissions.php',
         'Pessoa' => __DIR__ . '/../..' . '/App/Model/Pessoa.php',

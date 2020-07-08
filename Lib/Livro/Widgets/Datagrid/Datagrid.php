@@ -11,6 +11,9 @@ class Datagrid extends Table
     private $columns;
     private $actions;
     private $rowcount;
+    private $headerRow;
+    private $bodyRow;
+    private $actionsPosition  = 'left';
 
     public function addColumn(DatagridColumn $object)
     {
@@ -26,41 +29,39 @@ class Datagrid extends Table
     {
         //faz uma cópia do cabeçalho
         $copy = $this->children[0];
-
         //inicializa o vetor de linhas
         $this->children = array();
-
         //acrescenta novamente o cabeçalho
         $this->children[] = $copy;
-
         //zera a contagem de linhas
         $this->rowcount = 0;
     }
 
     public function createModel()
     {
+        //header <thead>
         $thead = new Element('thead');
-        $thead->class = 'thead-dark';
+        $thead->class = 'thead-light';
         parent::add($thead);
-        //adiciona uma linha a tabela
+        //adiciona uma linha ao cabeçalho
         $row = new Element('tr');
         $thead->add($row);
 
         //adiciona celulas <th> vazias para cada ação (no cabeçalho ficam vazias)
-        $celula = new Element('th');
-        $celula->width = "8%";
-        $celula->style = "text-align:center";
-        $celula->colspan = '2';
-        $celula->add('Ações');
-        $row->add($celula);
+        // $celula = new Element('th');
+        // $celula->width = "8%";
+        // $celula->style = "text-align:center";
+        // $celula->colspan = '2';
+        // $celula->add('Ações');
+        // $row->add($celula);
 
-        // if($this->actions){
-        //     foreach ($this->actions as $action){
-        //         $celula = new Element('th');
-        //         $celula->width = '40px';
-        //         $row->add($celula);
-        //     }
-        // }
+        if($this->actions){
+            foreach ($this->actions as $action){
+                $celula = new Element('th');
+                $celula->width = '40px';
+                $row->add($celula);
+            }
+        }
 
         //adiciona as células <th> para os titulos das colunas do cabeçalho
         if($this->columns){
@@ -83,10 +84,11 @@ class Datagrid extends Table
                 //verifica se a coluna do cabeçalho tem uma ação
                 if($column->getAction()){
                     $url = $column->getAction();
-                    $celula->onclick = "document.location='$url'";
+                    $celula->onclick = "document.location='{$url}'";
                 }
             }
         }
+
     }
 
     public function addItem($object)
@@ -119,15 +121,12 @@ class Datagrid extends Table
                 }
 
                 //verifica se o link será com imagem ou com texto
-                if($image){
-                    //se for imagem adiciona a imagem ao link usando o path padrão
+                if ($image) {
                     $img = new Element('img');
                     $img->src = "App/Images/$image";
                     $img->title = $label;
                     $link->add($img);
-                }
-                else {
-                    //se for texto adiciona o rótulo de texto ao link
+                } else {
                     $link->add($label);
                 }
                 //adiciona a celula a linha
@@ -159,6 +158,11 @@ class Datagrid extends Table
             }
         }
         //incrementa o contador de linhas
-        $this->rowcount++;//?
+        $this->rowcount++;
+    }
+
+    public function getActions()
+    {
+        return $this->actions;
     }
 }

@@ -13,11 +13,16 @@
     "autoload": {
         "psr-4": {
             "Livro\\":"Lib/Livro/",
-            "App\\":"App/"
+            "App\\":"App/",
+            "Services\\": "Services/Source/"
         },
         "classmap": [
             "App/Control",
             "App/Model"
+        ],
+        "files": [
+            "Services/Source/Boot/Config.php",
+            "Services/Source/Boot/Helpers.php"
         ]
     },    
     "require": {

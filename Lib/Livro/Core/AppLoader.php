@@ -5,10 +5,7 @@ use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Exception;
 
-/**
- * Carrega a classe da aplicação
- * @author Pablo Dall'Oglio
- */
+
 class AppLoader
 {
     protected $directories;

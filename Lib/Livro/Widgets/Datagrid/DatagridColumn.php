@@ -54,6 +54,7 @@ class DatagridColumn
     {   
         $this->transformer = $callback;
     }
+    
     public function getTransformer()
     {
         return $this->transformer;

@@ -37,9 +37,10 @@ class Card extends Element
 
     }
 
-    public function setHeader($header)
+    public function setHeader($header, $align = 'justify')
     {   
         $this->header->add($header);
+        $this->header->align = $align;
         parent::add($this->header);
     }
 

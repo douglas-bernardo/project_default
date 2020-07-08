@@ -17,7 +17,9 @@ use Livro\Session\Session;
 
 class LoginForm extends Page
 {
+    /** @var Form */
     private $form;
+
     public function __construct()
     {
 
@@ -27,7 +29,7 @@ class LoginForm extends Page
         $div->class = 'wrapper';
 
         $this->form = new FormWrapper(new Form('form_login'), null, 'buttonLogin');
-        $this->form->setFormTitle('Faça Seu Login');
+        $this->form->setFormTitle('Renegociação TS');
 
         $email = new Entry('email');
         $email->id = 'email';

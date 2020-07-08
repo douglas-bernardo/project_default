@@ -11,7 +11,8 @@ class Page extends Element
         parent::__construct('div');
     }
 
-    //todas as classes filhas de page (classes control) herdarão e podem executar o metodo show()    
+    //todas as classes filhas de page (classes control) herdarão e podem executar o metodo show()
+    //override show
     public function show()
     {
         //nas classes onde existirem uma requisição GET segue o processo abaixo:

@@ -60,7 +60,7 @@ class UsersList extends Page
         $datagrid->addColumn($grupo);
 
         //instancia duas ações da datagrid
-        $action1 = new DatagridAction(array(new UsersForm, 'onEdit'));
+        $action1 = new DatagridAction( [new UsersForm, 'onEdit'] );
         $action1->setLabel('Editar');
         $action1->setImage('ico_edit.png');
         $action1->setField('id');

@@ -77,7 +77,7 @@ class FormWrapper
 
         $group->add($col);
         $card = new Card;
-        $card->setHeader($this->decorated->getTitle());
+        $card->setHeader($this->decorated->getTitle(), 'center');   
         $card->setBody($element);
         $card->setFooter($group);
         $card->show();
