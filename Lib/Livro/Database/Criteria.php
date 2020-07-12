@@ -4,12 +4,13 @@ namespace Livro\Database;
 class Criteria extends Expression
 {
     private $expressions; //armazena a lista de expressões
-    private $operators;    //armazena a lista de operadores
-    private $properties;   //propriedades do critério
+    private $operators;   //armazena a lista de operadores
+    private $properties;  //propriedades do critério
 
     function __construct(){//inicializa adicionando arrays vazios as variaveis expressions e operators
         $this->expressions = array();
         $this->operators = array();
+        $this->properties['offset'] = 0;
     }
 
     public function add(Expression $expression, $operator = self::AND_OPERATOR){
@@ -52,4 +53,17 @@ class Criteria extends Expression
             return $this->properties[$property];
         }
     }
+
+    public function resetProperties()
+    {
+        $this->properties['limit'] = null;
+    }
+
+    public function setProperties($properties)
+    {
+        if (isset($properties['offset']) and $properties['offset']) {
+            $this->properties['offset'] = (int) $properties['offset'];
+        }
+    }
+
 }

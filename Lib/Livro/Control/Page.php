@@ -10,23 +10,23 @@ class Page extends Element
     {
         parent::__construct('div');
     }
-
     //todas as classes filhas de page (classes control) herdarão e podem executar o metodo show()
     //override show
     public function show()
     {
         //nas classes onde existirem uma requisição GET segue o processo abaixo:
-        if ($_GET)//existe uma requisição GET?
-        {
+        //existe uma requisição GET?
+        if ($_GET) {
+
             $class  = isset($_GET['class'])  ? $_GET['class'] : NULL;//existe uma classe definida?
             $method = isset($_GET['method']) ? $_GET['method'] : NULL;//existe um método?
 
-            if($class)
-            {
+            if ($class) {
                 //a classe da URL é mesma da classe atual? (filha de PAGE)
-                $object = $class == get_class($this) ? $this : new $class;// se sim, realiza a instancia da mesma
-                if (method_exists($object, $method))// na classe atual existe o mmétodo?
-                {
+                // se sim, realiza a instancia da mesma
+                $object = $class == get_class($this) ? $this : new $class;
+                // na classe atual existe o mmétodo?
+                if ( method_exists($object, $method) ) {
                     call_user_func(array($object, $method), $_GET);
                 }
             }

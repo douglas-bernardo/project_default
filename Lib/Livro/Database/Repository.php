@@ -11,7 +11,8 @@ final class Repository
         $this->activeRecord = $class;
     }
 
-    function load(Criteria $criteria)//injeção de dependencia
+    //injeção de dependencia
+    function load(Criteria $criteria)
     {
         //instancia a instrução de SELECT
         $reflection = new \ReflectionClass($this->activeRecord);
@@ -26,9 +27,9 @@ final class Repository
             }
 
             //Obtêm as propriedades do criterio
-            $order = $criteria->getProperty('ORDER');
-            $limit = $criteria->getProperty('LIMIT');
-            $offset = $criteria->getProperty('OFFSET');
+            $order = $criteria->getProperty('order');
+            $limit = $criteria->getProperty('limit');
+            $offset = $criteria->getProperty('offset');
 
             //Obtêm a ordenação do SELECT
             if($order){

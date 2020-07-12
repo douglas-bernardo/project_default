@@ -29,7 +29,7 @@ class UsersForm extends Page
     public function __construct() {
         parent::__construct();
 
-        $this->connection   = 'contaazul';
+        $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Users';
         $this->url_save_return = 'index.php?class=UsersList&method=confirm&type=salvo&activeRecord=UsersList';
         
@@ -47,22 +47,22 @@ class UsersForm extends Page
         $company          = new Combo('id_company');
 
         //carrega as permissões do banco de dados
-        Transaction::open('contaazul');
-        $groups = PermissionGroup::all();
-        $items = array();
-        foreach ($groups as $obj_group) {
-            $items[$obj_group->id] = $obj_group->name;
-        }
-        $permission_group->addItems($items);
+        // Transaction::open('bp_renegociacao');
+        // $groups = PermissionGroup::all();
+        // $items = array();
+        // foreach ($groups as $obj_group) {
+        //     $items[$obj_group->id] = $obj_group->name;
+        // }
+        // $permission_group->addItems($items);
 
-        //carrega a compania
-        $companies = Company::all();
-        $items = array();
-        foreach ($companies as $obj_company) {
-            $items[$obj_company->id] = $obj_company->name;
-        }
-        $company->addItems($items);
-        Transaction::close();
+        // //carrega a compania
+        // $companies = Company::all();
+        // $items = array();
+        // foreach ($companies as $obj_company) {
+        //     $items[$obj_company->id] = $obj_company->name;
+        // }
+        // $company->addItems($items);
+        // Transaction::close();
 
         $this->form->addField('Id', $id, '10%');
         $this->form->addField('Email', $user_email);

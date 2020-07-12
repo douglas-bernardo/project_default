@@ -36,7 +36,7 @@ class UsersList extends Page
     {
         parent::__construct();
 
-        $this->connection = 'contaazul';
+        $this->connection = 'bp_renegociacao';
 
         //ação para um novo usuário
         $newUser = new Action(array(new UsersForm, 'onEdit'));
@@ -50,14 +50,14 @@ class UsersList extends Page
         $datagrid = new DatagridWrapper(new Datagrid);
 
         //instancia as colunas da Datagrid - Cabeçalho
-        $id = new DatagridColumn('id', 'Id', 'center', 40);
+        $id    = new DatagridColumn('id', 'Id', 'center', 40);
         $email = new DatagridColumn('email', 'Email Usuário', 'center', 200);
-        $grupo = new DatagridColumn('nome_grupo', 'Grupo Permissões', 'center', 200);
+        // $grupo = new DatagridColumn('nome_grupo', 'Grupo Permissões', 'center', 200);
 
         //adiciona as colunas à Datagrid
         $datagrid->addColumn($id);
         $datagrid->addColumn($email);
-        $datagrid->addColumn($grupo);
+        // $datagrid->addColumn($grupo);
 
         //instancia duas ações da datagrid
         $action1 = new DatagridAction( [new UsersForm, 'onEdit'] );

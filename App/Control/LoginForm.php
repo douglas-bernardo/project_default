@@ -55,9 +55,9 @@ class LoginForm extends Page
             try {
 
                 $email = $_POST['email'];
-                $password = $_POST['password']; 
+                $password = $_POST['password'];
 
-                Transaction::open('contaazul');
+                Transaction::open('bp_renegociacao');
                 $repository = new Repository('Users');
 
                 $criteria = new Criteria;   
@@ -73,6 +73,7 @@ class LoginForm extends Page
                     header("Location: index.php");
                 } else {
                     new Message('danger', "Usuário não encontrado :(", '100', 'AlertLogin');
+                    Transaction::close();
                 }
 
             } catch (\Exception $e) {

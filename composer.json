@@ -17,6 +17,7 @@
             "Services\\": "Services/Source/"
         },
         "classmap": [
+            "App/ApiServices",
             "App/Control",
             "App/Model"
         ],

@@ -1,31 +1,25 @@
--- Query: cm_ocorrencias_ts_renegociacao
--- Descri��o: Busca todas as ocorr�ncias direcionadas para o departamento ADM TS - RENEGOCIA��O e relaciona o contrato a qual
----- a ocorr�ncia foi direcionada e seus respectivos valores
--- �ltimo ajuste: 01/05/2020
--- Isolada somente a consulta que retorna as ocorr�ncias do cliente adaptando para trazer um consolidado geral
--- Ano Ocorr�ncia = 2018 ate hoje (28-04-2020): 10.703  Linhas / iddepartamento = 3 (ADM TS - RENEGOCIA��O) / DESENVOLVIMENTO
--- Ano Ocorr�ncia = 2018 ate hoje (28-04-2020): 15.068  Linhas / iddepartamento = 3 (ADM TS - RENEGOCIA��O) / PRODU��O
 SELECT
-        O.IDOCORRENCIA                          AS NUM_OCORRENCIA,
-        O.IDVENDAXCONTRATO                      AS OC_IDVENDAXCONTRATO,
-        VC.IDVENDATS                            AS VXC_IDVENDATS,
-        DECODE(O.STATUS, 'F', 'Finalizado',
-                         'P', 'Pendente',
-                         'C', 'Cancelado')      AS STATUS_OCORRENCIA,
-        O.IDMOTIVOTS                            AS ID_MOTIVO,
-        M.DESCRICAO                             AS MOTIVO,
-        TO_CHAR(O.DTOCORRENCIA, 'DD/MM/YYYY')   AS DATA_OCORRENCIA,
+        O.IDOCORRENCIA,
+        O.IDVENDAXCONTRATO,
+        VC.IDVENDATS,
+        O.STATUS,
+     --    DECODE(O.STATUS, 'F', 'Finalizado',
+     --                     'P', 'Pendente',
+     --                     'C', 'Cancelado')               AS STATUS_OCORRENCIA,
+        O.IDMOTIVOTS,
+        M.DESCRICAO                                      AS MOTIVO,
+        TO_CHAR(O.DTOCORRENCIA, 'YYYY-MM-DD HH24:MI:SS') AS DTOCORRENCIA,
         D.IDDEPARTAMENTO,
-        D.DESCRICAO                             AS DEPARTAMENTO, 
-        MF.IDMOTIVOTS                           AS ID_MOTIVO_FINALIZACAO,
-        MF.DESCRICAO                            AS MOTIVO_FINALIZACAO,
-        U.IDUSUARIO                             AS ID_USUARIO_CADASTRO,
-        U.NOMEUSUARIO                           AS USUARIO_CADASTRO,
-        P.IDPESSOA                              AS IDCLIENTE,
-        P.NOME                                  AS NOMECLIENTE,
-        PR.NUMEROPROJETO                        AS PROJETO,
-        VC.NUMEROCONTRATO                       AS CONTRATO,
-        TO_CHAR(TO_NUMBER(PR.NUMEROPROJETO)) || TO_CHAR(TO_NUMBER(VC.NUMEROCONTRATO)) AS PROJ_CONTRATO,
+        D.DESCRICAO                                      AS DEPARTAMENTO,
+        MF.IDMOTIVOTS                                    AS ID_MOTIVO_FINALIZACAO,
+        MF.DESCRICAO                                     AS MOTIVO_FINALIZACAO,
+        U.IDUSUARIO                                      AS ID_USUARIO_CADASTRO,
+        U.NOMEUSUARIO                                    AS USUARIO_CADASTRO,
+        P.IDPESSOA                                       AS IDCLIENTE,
+        P.NOME                                           AS NOMECLIENTE,
+        PR.NUMEROPROJETO,
+        VC.NUMEROCONTRATO,
+        -- TO_CHAR(TO_NUMBER(PR.NUMEROPROJETO)) || TO_CHAR(TO_NUMBER(VC.NUMEROCONTRATO))            AS PROJ_CONTRATO,
         VC.FLGREVERTIDO,
         VC.FLGCANCELADO,
         TO_NUMBER(
@@ -183,16 +177,6 @@ WHERE
         AND O.IDVENDAXCONTRATO = CONTRATOSCANCELADOS.IDVENDAXCONTRATO (+)
         AND O.IDVENDAXCONTRATO = VALORVENDANORMAL.IDVENDAXCONTRATO (+)
         AND O.IDVENDAXCONTRATO = VALORJUROSVENDANORMAL.IDVENDAXCONTRATO (+)
-        AND O.IDVENDAXCONTRATO = VALORVENDATRGDTINCLUSAO.IDVENDAXCONTRATO (+)
-        AND TO_DATE(TO_CHAR(O.DTOCORRENCIA,'dd/mm/yyyy'), 'dd/mm/yyyy') >= TO_DATE('15/06/2020', 'dd/mm/yyyy')
-        AND D.IDDEPARTAMENTO IN (3, 83) -- ADM TS - RENEGOCIA��O
-        -- AND P.IDPESSOA = 2427592 -- MARCELO AUGUSTO AMORIM - VC 
-        -- AND P.IDPESSOA = 2472922 -- MORENO AUGUSTO DE ALMEIDA BARRETO - VC / RETEN��O MUDAN�A DE VALOR
-        -- AND P.IDPESSOA = 2225781 -- GILDELAN FRANCISCO CORDEIRO DE SOUZA - VC  / UPGRADE
-        -- AND P.IDPESSOA = 2291628 -- ALINE WALDECK RIBEIRO - VC / MANU / VARIOS LAN�AMENTO NA TABELA LANCAMENTOTS COM A MESMA DATA EM TRGDTINCLUSAO E  JUROS COM ERRO OPERACIONAL
-        -- AND P.IDPESSOA = 2267752 -- MARCUS JOSE CORDEIRO SARNEY - VC / VALORES COM JUROS
-        -- AND P.IDPESSOA = 937784  -- GLAUBER PESSOA BRANCO - VC / BIANCA /  VALORES COM JUROS
-        -- AND P.IDPESSOA = 1191237 -- LARA LAVINIA TOMAZ BENTO - VC
-        -- AND P.IDPESSOA = 2117904
-        AND UR.IDUSUARIO = 640054
-        ORDER BY O.DTOCORRENCIA ASC
+        AND O.IDVENDAXCONTRATO = VALORVENDATRGDTINCLUSAO.IDVENDAXCONTRATO (+)        
+        AND D.IDDEPARTAMENTO IN (3, 83) -- ADM TS - RENEGOCIAÇÃO
+        AND TO_DATE(TO_CHAR(O.DTOCORRENCIA,'dd/mm/yyyy'), 'dd/mm/yyyy') >= TO_DATE('01/01/2020', 'dd/mm/yyyy')

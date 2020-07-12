@@ -55,4 +55,6 @@ class Card extends Element
         $this->footer->add($footer);
         parent::add($this->footer);
     }
+
+
 }

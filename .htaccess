@@ -1,6 +1,16 @@
 RewriteEngine On
+RewriteBase /
+
+# Remove index.php das URLs
+RewriteCond %{THE_REQUEST} ^GET.*index\.php [NC]
+RewriteCond %{REQUEST_URI} !/system/.* [NC]
+RewriteRule (.*?)index\.php/*(.*) /project-default/$1$2 [R=301,NE,L]
+
+# redireciona suas páginas a partir  de index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /project-default/index.php?url=$1 [QSA,L]
 
-#https://php.eduardokraus.com/trabalhando-com-url-amigavel-no-php
+# RewriteRule ^(.*)$ /project-default/index.php?url=$1 [QSA,L]
+# https://php.eduardokraus.com/trabalhando-com-url-amigavel-no-php
+# https://pt.stackoverflow.com/questions/130713/como-remover-a-index-atrav%C3%A9s-do-arquivo-htaccess-do-site

@@ -1,6 +1,8 @@
 <?php
 namespace Livro\Database;
 
+use Livro\Log\Logger;
+
 final class Transaction 
 {   
     //final class não pode ser super classe

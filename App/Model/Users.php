@@ -4,7 +4,7 @@ use Livro\Database\Record;
 
 class Users extends Record
 {
-    const TABLENAME = 'users';
+    const TABLENAME = 'usuario';
 
     public function get_grupo()
     {

@@ -52,6 +52,8 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
         'HomeControl' => __DIR__ . '/../..' . '/App/Control/HomeControl.php',
         'ItemVenda' => __DIR__ . '/../..' . '/App/Model/ItemVenda.php',
         'LoginForm' => __DIR__ . '/../..' . '/App/Control/LoginForm.php',
+        'Ocorrencia' => __DIR__ . '/../..' . '/App/Model/Ocorrencia.php',
+        'OcorrenciaService' => __DIR__ . '/../..' . '/App/ApiServices/OcorrenciaService.php',
         'OcorrenciasList' => __DIR__ . '/../..' . '/App/Control/OcorrenciasList.php',
         'PermissionGroup' => __DIR__ . '/../..' . '/App/Model/PermissionGroup.php',
         'Permissions' => __DIR__ . '/../..' . '/App/Model/Permissions.php',

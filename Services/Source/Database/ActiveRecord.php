@@ -21,8 +21,20 @@ abstract class ActiveRecord
     /** @var int|null */
     protected static $nresults;
 
-    public function __construct(string $sql) {
+    public function __construct(string $sql, $fields = null, $params = null)
+    {
+
+        if ($fields) {
+            $fields = implode(", ", $fields);
+            $sql = "SELECT {$fields} FROM ({$sql})";
+        }
+        
+        if ($params) {
+            $sql .= " WHERE " . $params;
+        }
+
         self::$sql = $sql;
+
     }
 
     /**
