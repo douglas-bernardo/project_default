@@ -22,7 +22,7 @@ final class ConnectOracle
     public static function connectOracleDB()
     {
         if (empty(self::$conn)) {
-            if(!self::$conn = oci_connect(CONF_DB_OCI_USER, CONF_DB_OCI_PASS, self::TNS)){
+            if(!self::$conn = oci_connect(CONF_DB_OCI_USER, CONF_DB_OCI_PASS, self::TNS, 'AL32UTF8')){
                 $e = oci_error();
                 throw new Exception("Erro ao conectar ao servidor usando a extensão OCI - " . $e['message']);  
             }   

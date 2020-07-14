@@ -12,24 +12,18 @@ trait ReloadTrait
 {
     function onReload($param = null)
     {
-
-        // var_dump($param);
-        // die;
-
         try{
 
-            //$param_criteria = $param;            
-            Transaction::open($this->connection); 
-            
-            Transaction::setLogger(new LoggerTXT('/var/www/project-default/tmp/log_reloadTrait.txt'));
-            
+            $order = ($this->order_param ? $this->order_param : 'id');
+
+            Transaction::open($this->connection);            
 
             $repository = new Repository($this->activeRecord);  //cria um repositório
             
             $criteria = new Criteria;
             $criteria->setProperties($param);
             $criteria->setProperty('limit', 10);
-            $criteria->setProperty('order', 'id');
+            $criteria->setProperty('order', $order);
             
             if(isset($this->filter)){
                 $criteria->add($this->filter);

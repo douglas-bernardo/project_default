@@ -10,6 +10,7 @@ class Datagrid extends Table
 {
     private $columns;
     private $actions;
+    private $actionWidth;
     private $rowcount;
     private $headerRow;
     private $bodyRow;
@@ -20,9 +21,10 @@ class Datagrid extends Table
         $this->columns[] = $object;
     }
     //public function addAction(DatagridAction $object)
-    public function addAction($object)
+    public function addAction($object, $actionWidth = '40px')
     {
         $this->actions[] = $object;
+        $this->actionWidth = $actionWidth;
     }
 
     function clear()
@@ -50,7 +52,7 @@ class Datagrid extends Table
         if($this->actions){
             foreach ($this->actions as $action){
                 $celula = new Element('th');
-                $celula->width = '20px';
+                $celula->{'width'} = $this->actionWidth;
                 $row->add($celula);
             }
         }
@@ -119,6 +121,8 @@ class Datagrid extends Table
                     $img->title = $label;
                     $link->add($img);
                 } else {
+                    $link->{'class'} = $action->getClass();
+                    $link->{'style'} = $action->getStyle();
                     $link->add($label);
                 }
                 //adiciona a celula a linha

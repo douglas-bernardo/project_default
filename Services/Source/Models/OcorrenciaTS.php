@@ -10,7 +10,8 @@ class OcorrenciaTS extends ActiveRecord
         "status", 
         "idmotivots", 
         "dtocorrencia", 
-        "idcliente", 
+        "idcliente",
+        "nomecliente",
         "numeroprojeto",
         "numerocontrato",
         "id_us_resp as idusuarioresp"
@@ -21,11 +22,6 @@ class OcorrenciaTS extends ActiveRecord
         $sql = getStringSql('cm_ocorrencias_ts_renegociacao');        
         parent::__construct($sql, $this->fields);
     }
-
-    // public function all()
-    // {
-    //     return $this->load();
-    // }
 
     public function getNumResults()
     {

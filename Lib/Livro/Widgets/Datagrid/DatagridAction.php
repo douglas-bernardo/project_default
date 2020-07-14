@@ -8,6 +8,8 @@ class DatagridAction extends Action
     private $image;
     private $label;
     private $field;
+    private $class;
+    private $style;
 
     public function setImage($image)
     {
@@ -35,4 +37,25 @@ class DatagridAction extends Action
     {
         return $this->field;
     }
+
+    public function setClass($className)
+    {
+        $this->class = $className;
+    }
+
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    public function setStyle($style)
+    {
+        $this->style = $style;
+    }
+
+    public function getStyle()
+    {
+        return $this->style;
+    }
+    
 }

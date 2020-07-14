@@ -131,6 +131,25 @@ abstract class Record
         }
     }
 
+    public function loadBy($param, $value)
+    {
+        $sql = "SELECT * FROM {$this->getEntity()}";
+        $sql .= " WHERE {$param} = " . $this->escape($value);
+        //obtém a transação ativa
+        if ($conn = Transaction::get()){
+            //cria msg de log e executa a consulta
+            Transaction::log($sql);
+            $result = $conn->query($sql);
+            //se retornou algum dado:
+            if ($result){
+                $object = $result->fetchObject(get_class($this));
+            }
+            return $object;
+        } else {
+            throw new Exception("Não há transação ativa!");            
+        }
+    }
+
     public function delete($id = NULL)
     {
         //o ID é o paramentro ou a propriedade ID

@@ -67,8 +67,11 @@ class LoginForm extends Page
                 $user = $repository->load($criteria);
 
                 if($user){
-                    Session::setValue('logged', TRUE);
-                    Session::setValue('user_email', $user[0]->email);
+
+                    Session::setValue( 'logged', true );
+                    Session::setValue( 'user_email', $user[0]->email );
+                    Session::setValue( 'ts_usuario_id', $user[0]->ts_usuario_id );
+
                     Transaction::close();
                     header("Location: index.php");
                 } else {

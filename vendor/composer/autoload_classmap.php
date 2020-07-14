@@ -16,6 +16,8 @@ return array(
     'HomeControl' => $baseDir . '/App/Control/HomeControl.php',
     'ItemVenda' => $baseDir . '/App/Model/ItemVenda.php',
     'LoginForm' => $baseDir . '/App/Control/LoginForm.php',
+    'Motivo' => $baseDir . '/App/Model/Motivo.php',
+    'MotivoService' => $baseDir . '/App/ApiServices/MotivoService.php',
     'Ocorrencia' => $baseDir . '/App/Model/Ocorrencia.php',
     'OcorrenciaService' => $baseDir . '/App/ApiServices/OcorrenciaService.php',
     'OcorrenciasList' => $baseDir . '/App/Control/OcorrenciasList.php',
