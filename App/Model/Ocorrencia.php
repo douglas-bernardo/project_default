@@ -12,6 +12,6 @@ class Ocorrencia extends Record
 
     public function get_descricao()
     {
-        return (new Motivo())->loadBy('idmotivots', $this->idmotivots)->descricao;
+        return (new Motivo())->loadBy('idmotivots', $this->ts_motivo_id)->descricao;
     }
 }

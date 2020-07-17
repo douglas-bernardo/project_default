@@ -1,0 +1,2 @@
+2020-07-14 13:14:32 :: SELECT max(id) FROM negociacao
+2020-07-14 13:14:32 :: INSERT INTO negociacao (usuario_id,ocorrencia_id,origem_id,tipo_solicitacao_id,situacao_id,id) VALUES ('640054','347483','1','1','1',1)

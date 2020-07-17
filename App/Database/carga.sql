@@ -1,17 +1,17 @@
 -- -----------------------------------------------------
 -- Carga dados: usuario
 -- -----------------------------------------------------
--- INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
--- values ('admin', 'admin', 'admin@beachpark.com.br', md5('123456'), 1);
+INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
+values ('admin', 'admin', 'admin@beachpark.com.br', md5('123456'), 1);
 
--- INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
--- values ('Bianca', 'ANEZIA BIANCA RANGEL OLIVEIRA', 'biancaoliveira@beachpark.com.br', md5('123456'), 972599);
+INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
+values ('Bianca', 'ANEZIA BIANCA RANGEL OLIVEIRA', 'biancaoliveira@beachpark.com.br', md5('123456'), 972599);
 
--- INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
--- values ('Anne', 'ANNE GRACIELLI DE SOUSA', 'annesousa@beachpark.com.br', md5('123456'), 640054);
+INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
+values ('Anne', 'ANNE GRACIELLI DE SOUSA', 'annesousa@beachpark.com.br', md5('123456'), 640054);
 
--- INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
--- values ('Deise', 'DEISIANE BARBOSA DA SILVA', 'deisianesilva@beachpark.com.br', md5('123456'), 312448);
+INSERT INTO usuario (primeiro_nome, nome, email, password, ts_usuario_id) 
+values ('Deise', 'DEISIANE BARBOSA DA SILVA', 'deisianesilva@beachpark.com.br', md5('123456'), 312448);
 
 -- -----------------------------------------------------
 -- Carga dados: origem

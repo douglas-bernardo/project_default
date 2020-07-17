@@ -1,12 +1,9 @@
 SELECT
-        O.IDOCORRENCIA,
+        O.IDOCORRENCIA                                   AS numero_ocorrencia,
         O.IDVENDAXCONTRATO,
         VC.IDVENDATS,
         O.STATUS,
-     --    DECODE(O.STATUS, 'F', 'Finalizado',
-     --                     'P', 'Pendente',
-     --                     'C', 'Cancelado')               AS STATUS_OCORRENCIA,
-        O.IDMOTIVOTS,
+        O.IDMOTIVOTS                                     AS ts_motivo_id,
         M.DESCRICAO                                      AS MOTIVO,
         TO_CHAR(O.DTOCORRENCIA, 'YYYY-MM-DD HH24:MI:SS') AS DTOCORRENCIA,
         D.IDDEPARTAMENTO,
@@ -15,11 +12,10 @@ SELECT
         MF.DESCRICAO                                     AS MOTIVO_FINALIZACAO,
         U.IDUSUARIO                                      AS ID_USUARIO_CADASTRO,
         U.NOMEUSUARIO                                    AS USUARIO_CADASTRO,
-        P.IDPESSOA                                       AS IDCLIENTE,
-        P.NOME                                           AS NOMECLIENTE,
-        PR.NUMEROPROJETO,
-        VC.NUMEROCONTRATO,
-        -- TO_CHAR(TO_NUMBER(PR.NUMEROPROJETO)) || TO_CHAR(TO_NUMBER(VC.NUMEROCONTRATO))            AS PROJ_CONTRATO,
+        P.IDPESSOA                                       AS ts_cliente_id,
+        P.NOME                                           AS NOME_CLIENTE,
+        PR.NUMEROPROJETO AS NUMERO_PROJETO,
+        VC.NUMEROCONTRATO AS NUMERO_CONTRATO,
         VC.FLGREVERTIDO,
         VC.FLGCANCELADO,
         TO_NUMBER(
@@ -48,8 +44,8 @@ SELECT
                 -- VALORVENDANORMAL.VALORCONTRATONORMAL                 
                 VALORVENDATRGDTINCLUSAO.VALORCONTRATOTRGDTINCLUSAO + NVL(VALORJUROSVENDANORMAL.VALORJUROSVENDANORMAL, 0) -- TESTE
         END)                                    AS VALORVENDA,
-        UR.IDUSUARIO                            AS ID_US_RESP,
-        UR.NOMEUSUARIO                          AS USUARIO_RESP,
+        UR.IDUSUARIO                            AS ts_usuario_resp_id,
+        UR.NOMEUSUARIO                          AS TS_USUARIO_RESP_NOME,
         --DEBUG        
         VALORVENDATRGDTINCLUSAO.VALORCONTRATOTRGDTINCLUSAO,
         VALORVENDANORMAL.VALORCONTRATONORMAL,
@@ -144,7 +140,6 @@ FROM
           WHERE
                 L.IDVENDATS = VXC.IDVENDATS
                 AND L.IDAJUSTEFINANCTS = AJ.IDAJUSTEFINANCTS (+)
-                -- AND L.VLRLANCAMENTO > 0 TESTE
                 AND L.IDREVCONTRATOTS IS NULL
                 AND L.IDCANCCONTRATOTS IS NULL
                 AND L.IDTIPOLANCAMENTO = 7

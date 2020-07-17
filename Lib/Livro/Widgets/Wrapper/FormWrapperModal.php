@@ -5,8 +5,9 @@ use Livro\Widgets\Form\Form;
 use Livro\Widgets\Base\Element;
 use Livro\Widgets\Form\Button;
 use Livro\Widgets\Container\Card;
+use Livro\Widgets\Dialog\GenericModal;
 
-class FormWrapper
+class FormWrapperModal
 {
     private $decorated;
     private $layout;
@@ -26,11 +27,11 @@ class FormWrapper
 
     public function show()
     {
-        $element = new Element('form');
+        $form = new Element('form');
         //$element->class = "form-horizontal";
-        $element->enctype = "multipart/form-data";
-        $element->method = 'post';
-        $element->name = $this->decorated->getName();
+        $form->enctype = "multipart/form-data";
+        $form->method = 'post';
+        $form->name = $this->decorated->getName();
 
         foreach ($this->decorated->getFields() as $field){
             
@@ -52,7 +53,7 @@ class FormWrapper
             $field->class = 'form-control';
 
             $group->add($col);
-            $element->add($group);
+            $form->add($group);
         }
 
         //actions container
@@ -76,11 +77,18 @@ class FormWrapper
         }
         $group->add($col);
 
-        $card = new Card;
-        $card->setHeader($this->decorated->getTitle(), 'justify');   
-        $card->setBody($element);
-        $card->setFooter($group);
-        $card->show();
+        // $card = new Card;
+        // $card->setHeader($this->decorated->getTitle(), 'justify');   
+        // $card->setBody($form);
+        // $card->setFooter($group);
+        // $card->show();
+
+        $modal = new GenericModal("ModalNegociacao");
+        $modal->setHeader($this->decorated->getTitle());
+        $modal->setBody($form);
+        $modal->setDefaultCloseOperation();
+        $modal->setFooter($group);
+        $modal->show();
 
     }
 }

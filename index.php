@@ -52,10 +52,16 @@ if(class_exists($class)){
     }
 }
 
+$email = '';
+if (Session::getValue('user'))
+{
+    $email = Session::getValue('user')->email;
+}
+
 //Injeta conteúdo gerado dentro do template
 $output = str_replace('{content}', $content, $template);
 $output = str_replace('{class}', $class, $output);
-$output = str_replace('{user_email}', Session::getValue('user_email'), $output);
+$output = str_replace('{user_email}', $email, $output);
 
 //Exibe a saída gerada
 echo $output;

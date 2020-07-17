@@ -34,7 +34,7 @@ class UsersForm extends Page
         $this->url_save_return = 'index.php?class=UsersList&method=confirm&type=salvo&activeRecord=UsersList';
         
         //instancia de um formulário
-        $this->form = new FormWrapper(new Form('form_users'));
+        $this->form = new FormWrapper(new Form('form_users'), 'row');
         $this->form->setFormTitle('Cadastro de Usuários');
 
         //cria os campos do formulário
@@ -46,24 +46,6 @@ class UsersForm extends Page
         $permission_group = new Combo('id_group');
         $company          = new Combo('id_company');
 
-        //carrega as permissões do banco de dados
-        // Transaction::open('bp_renegociacao');
-        // $groups = PermissionGroup::all();
-        // $items = array();
-        // foreach ($groups as $obj_group) {
-        //     $items[$obj_group->id] = $obj_group->name;
-        // }
-        // $permission_group->addItems($items);
-
-        // //carrega a compania
-        // $companies = Company::all();
-        // $items = array();
-        // foreach ($companies as $obj_company) {
-        //     $items[$obj_company->id] = $obj_company->name;
-        // }
-        // $company->addItems($items);
-        // Transaction::close();
-
         $this->form->addField('Id', $id, '10%');
         $this->form->addField('Email', $user_email);
         $this->form->addField('Senha', $user_pass );
@@ -72,7 +54,7 @@ class UsersForm extends Page
 
         $id->setEditable(FALSE);
 
-        $this->form->addAction('Salvar', new Action(array($this, 'onSave')));
+       
         $this->form->addAction('Limpar', new Action(array($this, 'onClear')));
 
         parent::add($this->form);

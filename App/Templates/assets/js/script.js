@@ -32,3 +32,11 @@ function del(id, url, activeRecord){
         }
     });
 }
+
+
+function negociacao(param, url, activeRecord) {
+
+    $('#ocorrencia_id').attr('value', param);
+    $('#ModalNegociacao').modal('show');
+    
+}

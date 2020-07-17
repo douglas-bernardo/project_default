@@ -9,9 +9,6 @@ trait EditTrait
 {
     function onEdit($param)
     {
-        var_dump($param);
-        die;
-        
         try{
             if(isset($param['id'])){
                 $id = $param['id'];

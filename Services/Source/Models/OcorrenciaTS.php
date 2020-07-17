@@ -6,15 +6,16 @@ use Services\Database\ActiveRecord;
 class OcorrenciaTS extends ActiveRecord
 {
     private $fields = [
-        "idocorrencia", 
+        "numero_ocorrencia", 
         "status", 
-        "idmotivots", 
-        "dtocorrencia", 
-        "idcliente",
-        "nomecliente",
-        "numeroprojeto",
-        "numerocontrato",
-        "id_us_resp as idusuarioresp"
+        "ts_motivo_id", 
+        "dtocorrencia",
+        "ts_cliente_id",
+        "nome_cliente",
+        "numero_projeto",
+        "numero_contrato",
+        "ts_usuario_resp_id",
+        "ts_usuario_resp_nome"
     ];
 
     public function __construct() 

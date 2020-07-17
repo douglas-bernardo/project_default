@@ -64,13 +64,26 @@ class LoginForm extends Page
                 $criteria->add(new Filter('email', '=', $email));
                 $criteria->add(new Filter('password', '=', md5($password)));
 
-                $user = $repository->load($criteria);
+                $user_array_data = $repository->load($criteria);
+                $user = new Users();
+                $user->fromArray($user_array_data[0]);
+
 
                 if($user){
 
                     Session::setValue( 'logged', true );
-                    Session::setValue( 'user_email', $user[0]->email );
-                    Session::setValue( 'ts_usuario_id', $user[0]->ts_usuario_id );
+                    Session::setValue( 'user', $user->toArray() );
+                    
+                    // var_dump($_SESSION,
+                    //     Session::getValue('user')->nome,
+                    //     Session::getValue('user')->ts_usuario_id
+                    // );
+                    // die;
+                    
+
+                    // Session::setValue( 'user_email', $user[0]->email );
+                    // Session::setValue( 'usuario_id', $user[0]->id );
+                    // Session::setValue( 'ts_usuario_id', $user[0]->ts_usuario_id );
 
                     Transaction::close();
                     header("Location: index.php");

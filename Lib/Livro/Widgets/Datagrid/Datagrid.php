@@ -68,12 +68,17 @@ class Datagrid extends Table
                 $width = $column->getWidth();
 
                 $celula = new Element('th');
-                $celula->scope = "col";
+                $celula->scope = "col";                
                 $celula->add($label);
                 //adiciona a célula com a coluna
                 $row->add($celula);
                 $celula->style = "text-align:$align";//melhorado
-                $celula->width = $width;
+
+                if ( $width == '') {
+                    $celula->{'style'} = "display:none"; 
+                } else {
+                    $celula->width = $width;
+                }
 
                 //verifica se a coluna do cabeçalho tem uma ação
                 if($column->getAction()){
@@ -144,17 +149,23 @@ class Datagrid extends Table
                 //verifica se há função para transformar os dados
                 if($function){
                     //aplica a função sobre os dados
-                    $data = call_user_func($function, $data);
+                    $data = call_user_func($function, $data, $row);
                 }
 
                 //adiciona a celula a linha
                 $celula = $row->addCell($data);
                 $celula->align = $align;
-                $celula->width = $width;
+
+                if ( $width == '') {
+                    $celula->{'style'} = "display:none"; 
+                } else {
+                    $celula->width = $width;
+                }
             }
         }
         //incrementa o contador de linhas
         $this->rowcount++;
+        return $row;
     }
 
     public function getActions()

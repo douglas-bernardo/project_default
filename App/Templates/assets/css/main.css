@@ -89,6 +89,15 @@
     cursor: pointer;
 }
 
+/* card settings*/
+
 .card {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Datagrids options */
+
+.datagrig-disable-link{
+    pointer-events: none;
+    opacity: 0.5;
 }

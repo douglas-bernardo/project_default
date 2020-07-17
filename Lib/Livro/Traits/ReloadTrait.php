@@ -32,6 +32,7 @@ trait ReloadTrait
             //carrega os objetos que satisfazem o critério
             $objects = $repository->load($criteria);
             $this->datagrid->clear();
+            
             if($objects){
                 foreach($objects as $object){
                     //adiciona objeto no datagrid

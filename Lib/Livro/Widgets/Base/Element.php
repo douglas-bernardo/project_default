@@ -26,6 +26,11 @@ class Element
         return isset($this->properties[$name])? $this->properties[$name] : NULL;
     }
 
+    public function setParentAttribute($class, $value)
+    {
+        $this->properties[$class] = $value;
+    }
+
     public function add($child)
     {
         //add o elemento filho recem criado ao array $children
