@@ -1,9 +1,9 @@
 SELECT
-        O.IDOCORRENCIA                                   AS numero_ocorrencia,
+        O.IDOCORRENCIA                                   AS NUMERO_OCORRENCIA,
         O.IDVENDAXCONTRATO,
         VC.IDVENDATS,
         O.STATUS,
-        O.IDMOTIVOTS                                     AS ts_motivo_id,
+        O.IDMOTIVOTS                                     AS TS_MOTIVO_ID,
         M.DESCRICAO                                      AS MOTIVO,
         TO_CHAR(O.DTOCORRENCIA, 'YYYY-MM-DD HH24:MI:SS') AS DTOCORRENCIA,
         D.IDDEPARTAMENTO,
@@ -12,10 +12,10 @@ SELECT
         MF.DESCRICAO                                     AS MOTIVO_FINALIZACAO,
         U.IDUSUARIO                                      AS ID_USUARIO_CADASTRO,
         U.NOMEUSUARIO                                    AS USUARIO_CADASTRO,
-        P.IDPESSOA                                       AS ts_cliente_id,
+        P.IDPESSOA                                       AS TS_CLIENTE_ID,
         P.NOME                                           AS NOME_CLIENTE,
-        PR.NUMEROPROJETO AS NUMERO_PROJETO,
-        VC.NUMEROCONTRATO AS NUMERO_CONTRATO,
+        PR.NUMEROPROJETO                                 AS NUMERO_PROJETO,
+        VC.NUMEROCONTRATO                                AS NUMERO_CONTRATO,
         VC.FLGREVERTIDO,
         VC.FLGCANCELADO,
         TO_NUMBER(
@@ -43,8 +43,8 @@ SELECT
             ELSE 
                 -- VALORVENDANORMAL.VALORCONTRATONORMAL                 
                 VALORVENDATRGDTINCLUSAO.VALORCONTRATOTRGDTINCLUSAO + NVL(VALORJUROSVENDANORMAL.VALORJUROSVENDANORMAL, 0) -- TESTE
-        END)                                    AS VALORVENDA,
-        UR.IDUSUARIO                            AS ts_usuario_resp_id,
+        END)                                    AS VALOR_VENDA,
+        UR.IDUSUARIO                            AS TS_USUARIO_RESP_ID, 
         UR.NOMEUSUARIO                          AS TS_USUARIO_RESP_NOME,
         --DEBUG        
         VALORVENDATRGDTINCLUSAO.VALORCONTRATOTRGDTINCLUSAO,
@@ -174,5 +174,5 @@ WHERE
         AND O.IDVENDAXCONTRATO = VALORJUROSVENDANORMAL.IDVENDAXCONTRATO (+)
         AND O.IDVENDAXCONTRATO = VALORVENDATRGDTINCLUSAO.IDVENDAXCONTRATO (+)        
         AND D.IDDEPARTAMENTO IN (3, 83) -- ADM TS - RENEGOCIAÇÃO
-        AND TO_DATE(TO_CHAR(O.DTOCORRENCIA,'dd/mm/yyyy'), 'dd/mm/yyyy') >= TO_DATE('01/01/2020', 'dd/mm/yyyy')
+        AND TO_DATE(TO_CHAR(O.DTOCORRENCIA,'dd/mm/yyyy'), 'dd/mm/yyyy') >= TO_DATE('01/06/2020', 'dd/mm/yyyy')
     ORDER BY O.IDOCORRENCIA DESC

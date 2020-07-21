@@ -77,11 +77,6 @@ class FormWrapperModal
         }
         $group->add($col);
 
-        // $card = new Card;
-        // $card->setHeader($this->decorated->getTitle(), 'justify');   
-        // $card->setBody($form);
-        // $card->setFooter($group);
-        // $card->show();
 
         $modal = new GenericModal("ModalNegociacao");
         $modal->setHeader($this->decorated->getTitle());

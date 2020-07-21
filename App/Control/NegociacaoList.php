@@ -1,6 +1,8 @@
 <?php
 
 use Livro\Control\Page;
+use Livro\Session\Session;
+use Livro\Traits\ReloadTrait;
 use Livro\Widgets\Datagrid\Datagrid;
 use Livro\Widgets\Datagrid\DatagridColumn;
 use Livro\Widgets\Wrapper\DatagridWrapper;
@@ -10,23 +12,45 @@ class NegociacaoList extends Page
     private $loaded;
     private $datagrid;
 
+    use ReloadTrait{
+        onReload as onReloadTrait;
+    }
+
     public function __construct() 
     {
         parent::__construct();
 
+        if (!Session::getValue('logged')) {
+            echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
+            return;
+        }
+
+        $this->connection   = 'bp_renegociacao';
+        $this->activeRecord = 'Negociacao'; 
+
         $this->datagrid = new DatagridWrapper(new Datagrid);
+        
+        $ocorrencia       = new DatagridColumn('numero_ocorrencia', 'Ocorrência', 'center','10%');
+        $data_ocorrencia  = new DatagridColumn('data_ocorrencia', 'Data', 'center','10%');
+        $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'center','15%');
+        $cliente          = new DatagridColumn('cliente', 'Cliente', 'center', '25%');
+        $proj_contrato    = new DatagridColumn('proj_contrato', 'Proj-Contrato', 'center', '15%');
+        $valor_venda      = new DatagridColumn('valor_venda', 'Valor Venda', 'center', '15%');
+        $situacao         = new DatagridColumn('situacao', 'Situação', 'center', '20%');
 
-        $id = new DatagridColumn('id', 'id', 'center','10%');
-        $ocorrencia = new DatagridColumn('ocorrencia', 'ocorrencia', 'center','20%');
-        $data = new DatagridColumn('data', 'data', 'center','10%');
-        $finalizada = new DatagridColumn('finalizada', 'finalizada', 'center','10%');
-
-        $this->datagrid->addColumn($id);
         $this->datagrid->addColumn($ocorrencia);
-        $this->datagrid->addColumn($data);
-        $this->datagrid->addColumn($finalizada);
+        $this->datagrid->addColumn($data_ocorrencia);
+        $this->datagrid->addColumn($tipo_solicitacao);
+        $this->datagrid->addColumn($cliente);
+        $this->datagrid->addColumn($proj_contrato);
+        $this->datagrid->addColumn($valor_venda);
+        $this->datagrid->addColumn($situacao);
 
-        $finalizada->setTransformer(array($this, 'setColor'));
+        //$finalizada->setTransformer(array($this, 'setColor'));
+        $cliente->setTransformer(array($this, 'setFirstUpper'));
+        $data_ocorrencia->setTransformer(array($this, 'formatDate'));
+        $valor_venda->setTransformer(array($this, 'setCurrence'));
+        $situacao->setTransformer(array($this, 'setSituacao'));
 
         $this->datagrid->createModel();
 
@@ -42,44 +66,27 @@ class NegociacaoList extends Page
         return $value;
     }
 
-    function onReload()
+    public function formatDate($value)
     {
-        $this->datagrid->clear();
+        return date('d-m-Y', strtotime( $value ));
+    }
 
-        $neg1 = new stdClass;
-        $neg1->id = 1;
-        $neg1->ocorrencia = 50000;
-        $neg1->data = '10-01-2020';
-        $neg1->finalizada = 'sim';
-        $this->datagrid->addItem($neg1);
+    public function setFirstUpper($value)
+    {
+        $str = str_replace(' - VC', '', $value);
+        $str = str_replace(' -VC', '', $str);
+        $str = str_replace('-VC', '', $str);
+        return ucwords(mb_strtolower($str, 'UTF-8'));
+    }
 
-        $neg2 = new stdClass;
-        $neg2->id = 2;
-        $neg2->ocorrencia = 50002;
-        $neg2->data = '10-02-2020';
-        $neg2->finalizada = 'não';
-        $this->datagrid->addItem($neg2);
-        
-        $neg3 = new stdClass;
-        $neg3->id = 3;
-        $neg3->ocorrencia = 50003;
-        $neg3->data = '10-03-2020';
-        $neg3->finalizada = 'sim';
-        $this->datagrid->addItem($neg3);
+    public function setCurrence($value)
+    {
+        return number_format($value, 2, ",", ".");
+    }
 
-        $neg4 = new stdClass;
-        $neg4->id = 4;
-        $neg4->ocorrencia = 50004;
-        $neg4->data = '10-04-2020';
-        $neg4->finalizada = 'sim';
-        $this->datagrid->addItem($neg4);
-
-        $neg5 = new stdClass;
-        $neg5->id = 5;
-        $neg5->ocorrencia = 50005;
-        $neg5->data = '10-05-2020';
-        $neg5->finalizada = 'sim';
-        $this->datagrid->addItem($neg5);
+    public function setSituacao($value)
+    {
+        return ($value == 'Aguardando Retorno' ? '<span class="badge badge-danger">'. $value .'</span>' : $value);
     }
 
     function show()

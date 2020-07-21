@@ -1,0 +1,12 @@
+2020-07-20 21:32:52 :: SELECT * FROM ocorrencia WHERE (ts_usuario_resp_id = '640054' AND ts_motivo_id IN (364, 365, 427, 683, 702, 993)) ORDER BY numero_ocorrencia DESC LIMIT 10
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '365'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '365'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT * FROM motivo WHERE idmotivots = '364'
+2020-07-20 21:32:52 :: SELECT COUNT(*) FROM ocorrencia WHERE (ts_usuario_resp_id = '640054' AND ts_motivo_id IN (364, 365, 427, 683, 702, 993))

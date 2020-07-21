@@ -41,10 +41,19 @@ class OcorrenciasList extends Page
     public function __construct() 
     {
         parent::__construct();
+        
+        if (!Session::getValue('logged')) {
+            echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
+            return;
+        }
 
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Ocorrencia';
-        $this->filter = new Filter('ts_usuario_resp_id', '=', Session::getValue('user')->ts_usuario_id);
+
+        // filtro de ocorrências
+        $this->filter[] = new Filter('ts_usuario_resp_id', '=', Session::getValue('user')->ts_usuario_id);
+        $this->filter[] = new Filter('ts_motivo_id', 'IN', array(364, 365, 427, 683, 702, 993));
+        $this->filter[] = new Filter('atendida', '=', false);
 
         //instancia o obj Datagrid
         $this->datagrid = new DatagridWrapper( new Datagrid );
@@ -58,7 +67,7 @@ class OcorrenciasList extends Page
         $projeto         = new DatagridColumn('numero_projeto', 'Proj.', 'center', '4%');
         $contrato        = new DatagridColumn('numero_contrato', 'Contrato', 'center', '14%');
         $resp            = new DatagridColumn('ts_usuario_resp_nome', 'Resp.', 'center', '15%');
-        $atendida        = new DatagridColumn('atendida', 'Situação', 'center', '20%');
+        $status          = new DatagridColumn('status', 'Status', 'center', '20%');
 
         // order to show
         $this->order_param = 'numero_ocorrencia DESC';
@@ -72,13 +81,13 @@ class OcorrenciasList extends Page
         $this->datagrid->addColumn($projeto);
         $this->datagrid->addColumn($contrato);
         $this->datagrid->addColumn($resp);
-        $this->datagrid->addColumn($atendida);
+        $this->datagrid->addColumn($status);
 
         // apply transformers
         $motivo->setTransformer(array($this, 'setFirstUpper'));
         $cliente->setTransformer(array($this, 'setFirstUpper'));
         $resp->setTransformer(array($this, 'setFirstUpper'));
-        $atendida->setTransformer(array($this, 'setSituacao'));
+        $status->setTransformer(array($this, 'setStatus'));
         $data_ocorrencia->setTransformer(array($this, 'formatDate'));
 
         // instance of action
@@ -101,9 +110,6 @@ class OcorrenciasList extends Page
 
         // *************** FIM TESTE ***********************
 
-
-
-
         //cria o modelo da Datagrid montando sua estrutura (cabeçalho)
         $this->datagrid->createModel();
 
@@ -116,9 +122,6 @@ class OcorrenciasList extends Page
         $card->setHeader('Ocorrências Timesharing');
         $card->setBody($this->datagrid);
         $card->setFooter($this->pageNavigation);
-
-
-
 
         // *********************** TESTE *************************************
 
@@ -137,8 +140,7 @@ class OcorrenciasList extends Page
         $ocorrencia_id->setEditable(false);
 
         $origem           = new Combo('origem_id');
-        $tipo_solicitacao = new Combo('tipo_solicitacao_id');
-        $situacao         = new Combo('situacao_id');
+        $tipo_solicitacao = new Combo('tipo_solicitacao_id');        
 
         Transaction::open('bp_renegociacao');
         //load origem
@@ -157,28 +159,18 @@ class OcorrenciasList extends Page
         }
         $tipo_solicitacao->addItems($items);
 
-        //load situacao
-        $situacao_itens = Situacao::all();
-        $items = array();
-        foreach ($situacao_itens as $obj_sit) {
-            $items[$obj_sit->id] = $obj_sit->nome;
-        }
-        $situacao->addItems($items);
-
         Transaction::close();
 
-        $this->form->addField('id usuario', $usuario_id);
-        $this->form->addField('id ocorrencia', $ocorrencia_id);
+        $this->form->addField('id_usuario', $usuario_id);
+        $this->form->addField('id_ocorrencia', $ocorrencia_id);
         $this->form->addField('Origem', $origem);
         $this->form->addField('Tipo de Solicitação', $tipo_solicitacao);
-        $this->form->addField('Situação', $situacao);
         
         $act = new Action(array($this, 'saveNegociacao'));
         $this->form->addAction('Salvar', $act);
 
         // $modal = new Modal("Dados Negociação", "ModalNegociacao");
         // $modal->add($this->form);
-
 
         parent::add($this->form);
 
@@ -191,33 +183,30 @@ class OcorrenciasList extends Page
 
     public function setFirstUpper($value)
     {
-        return ucwords(mb_strtolower($value, 'UTF-8'));
+        $str = str_replace(' - VC', '', $value);
+        $str = str_replace(' -VC', '', $str);
+        $str = str_replace('-VC', '', $str);
+        return ucwords(mb_strtolower($str, 'UTF-8'));
     }
 
-    public function setSituacao($value, $row)
+    public function setStatus($value, $row)
     {
-        if ($value) {
-            $row->children[0]->{'class'} = "datagrig-disable-link";
-            $row->children[0]->children[0]->{'href'} = '#';
-        }
-        return ($value == 0 ? '<span class="badge badge-danger">Não atendida</span>' : '<span class="badge badge-success">Atendida</span>');
-    }
+        // if ($value) {
+        //     $row->children[0]->{'class'} = "datagrig-disable-link";
+        //     $row->children[0]->children[0]->{'href'} = '#';
+        // }
+        // return ($value == 0 ? '<span class="badge badge-danger">Não atendida</span>' : '<span class="badge badge-success">Atendida</span>');
+        $status = array('P' => 'Pendente', 'F' => 'Finalizado', 'C' => 'Cancelado');
+        return $status[$value];
+    }    
 
     public function formatDate($value)
     {
         return date('d-m-Y', strtotime( $value ));
     }
 
-    //teste
-
     public function saveNegociacao()
     {
-        
-        if (Session::getValue('storage_process')) {
-            Session::unSet('storage_process');
-            header("Location: ?class=OcorrenciasList");
-        }
-
         try{
 
             Transaction::open($this->connection);
@@ -231,6 +220,7 @@ class OcorrenciasList extends Page
 
             // additional user data
             $negociacao->usuario_id = Session::getValue('user')->id;
+            $negociacao->situacao_id = 1;
             
             // persistence negociacao
             $negociacao->store(); 
@@ -242,16 +232,13 @@ class OcorrenciasList extends Page
 
             Transaction::close();
 
-            new Message('success', 'Dados armazenados com sucesso');            
-            $this->onReload();           
-            Session::setValue('storage_process', true);
-        }
+            new Message('success', 'Negociação registrada - acesse "Negociações", para gerenciar suas negociações');
+            $this->onReload();
 
-        catch(Exception $e){
+        } catch(Exception $e) {
             new Message('warning', "<b>Erro:</b> " . $e->getMessage());
             Transaction::rollback();
         }
-
         
     }
 

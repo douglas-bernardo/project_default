@@ -103,7 +103,8 @@ class LoginForm extends Page
 
     public function onLogout()
     {
-        Session::setValue('logged', FALSE);
+        Session::setValue('logged', false);
+        Session::unSet('user');
         echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
     }
 }

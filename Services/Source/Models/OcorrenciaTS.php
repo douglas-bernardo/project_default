@@ -14,13 +14,14 @@ class OcorrenciaTS extends ActiveRecord
         "nome_cliente",
         "numero_projeto",
         "numero_contrato",
+        "valor_venda",
         "ts_usuario_resp_id",
         "ts_usuario_resp_nome"
     ];
 
     public function __construct() 
     {
-        $sql = getStringSql('cm_ocorrencias_ts_renegociacao');        
+        $sql = getStringSql('cm_ocorrencias_ts_renegociacao_app');        
         parent::__construct($sql, $this->fields);
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace Livro\Control;
 
+use Livro\Session\Session;
 use Livro\Widgets\Base\Element;
 
 class Page extends Element

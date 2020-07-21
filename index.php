@@ -30,7 +30,8 @@ new Session;
 if (Session::getValue('logged')){//se parametro logged == true
     $template = file_get_contents('App/Templates/template.html');// carrega o template principal
     $class = 'HomeControl';
-}else{
+} else {
+    
     $template = file_get_contents('App/Templates/login.html');//retorna para a página de login
     $class = 'LoginForm';//
 }
@@ -53,8 +54,7 @@ if(class_exists($class)){
 }
 
 $email = '';
-if (Session::getValue('user'))
-{
+if (Session::getValue('user')) {
     $email = Session::getValue('user')->email;
 }
 

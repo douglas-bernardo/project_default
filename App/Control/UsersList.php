@@ -14,7 +14,7 @@ use Livro\Widgets\Wrapper\DatagridWrapper;
 use Livro\Database\Transaction;
 use Livro\Database\Repository;
 use Livro\Database\Criteria;
-
+use Livro\Session\Session;
 use Livro\Traits\DeleteTrait;
 use Livro\Traits\ReloadTraitTeste;
 use Livro\Traits\ConfirmTrait;
@@ -35,6 +35,11 @@ class UsersList extends Page
     public function __construct()
     {
         parent::__construct();
+
+        if (!Session::getValue('logged')) {
+            echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
+            return;
+        }
 
         $this->connection = 'bp_renegociacao';
 

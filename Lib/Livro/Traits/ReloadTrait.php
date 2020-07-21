@@ -16,7 +16,9 @@ trait ReloadTrait
 
             $order = ($this->order_param ? $this->order_param : 'id');
 
-            Transaction::open($this->connection);            
+            Transaction::open($this->connection);
+            
+            //Transaction::setLogger(new LoggerTXT('tmp/onReloadTrait.txt'));
 
             $repository = new Repository($this->activeRecord);  //cria um repositório
             
@@ -25,8 +27,14 @@ trait ReloadTrait
             $criteria->setProperty('limit', 10);
             $criteria->setProperty('order', $order);
             
-            if(isset($this->filter)){
-                $criteria->add($this->filter);
+            if( isset($this->filter) ) {
+                if (is_array($this->filter)) {
+                    foreach ($this->filter as $f) {
+                        $criteria->add($f);      
+                    }
+                } else {
+                    $criteria->add($this->filter);
+                }
             }
             
             //carrega os objetos que satisfazem o critério
