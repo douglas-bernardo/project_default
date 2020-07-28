@@ -21,7 +21,8 @@ function confirm(param, url, activeRecord) {
     
 }
 
-function del(id, url, activeRecord){
+function del(id, url, activeRecord) 
+{
     $.ajax({
         url: url,
         type:'GET',
@@ -34,9 +35,8 @@ function del(id, url, activeRecord){
 }
 
 
-function negociacao(param, url, activeRecord) {
-
+function negociacao(param, url, activeRecord) 
+{
     $('#ocorrencia_id').attr('value', param);
-    $('#ModalNegociacao').modal('show');
-    
+    $('#ModalNegociacao').modal('show');    
 }

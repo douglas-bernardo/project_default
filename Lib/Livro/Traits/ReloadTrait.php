@@ -24,7 +24,7 @@ trait ReloadTrait
             
             $criteria = new Criteria;
             $criteria->setProperties($param);
-            $criteria->setProperty('limit', 10);
+            $criteria->setProperty('limit', 15);
             $criteria->setProperty('order', $order);
             
             if( isset($this->filter) ) {
@@ -55,9 +55,8 @@ trait ReloadTrait
                 $this->pageNavigation->setCount($count);
                 $this->pageNavigation->setProperties($param);
             }
-
-
             Transaction::close();
+            $this->loaded = true;
         }
         catch(Exception $e){
             new Message('warning', $e->getMessage());

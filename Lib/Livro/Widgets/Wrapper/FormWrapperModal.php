@@ -77,7 +77,6 @@ class FormWrapperModal
         }
         $group->add($col);
 
-
         $modal = new GenericModal("ModalNegociacao");
         $modal->setHeader($this->decorated->getTitle());
         $modal->setBody($form);

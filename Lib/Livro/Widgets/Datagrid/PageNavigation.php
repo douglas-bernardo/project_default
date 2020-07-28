@@ -135,6 +135,7 @@ class PageNavigation
 
         }
 
+        // active pages
         for ($n = $first_page; $n <= $last_page + $first_page - 1; $n++) { 
             $offset = ($n - 1) * $page_size;
             $item = new Element('li');
@@ -154,6 +155,7 @@ class PageNavigation
             }
         }
 
+        // inactive pages/placeholders
         for ($z=$n; $z<=10; $z++) {
             $item = new Element('li');
             $link = new Element('a');

@@ -7,7 +7,6 @@ use Livro\Widgets\Form\Form;
 use Livro\Widgets\Form\Entry;
 use Livro\Widgets\Form\Password;
 use Livro\Widgets\Wrapper\FormWrapper;
-use Livro\Widgets\Container\Panel;
 use Livro\Widgets\Dialog\Message;
 use Livro\Database\Transaction;
 use Livro\Database\Repository;
@@ -65,11 +64,11 @@ class LoginForm extends Page
                 $criteria->add(new Filter('password', '=', md5($password)));
 
                 $user_array_data = $repository->load($criteria);
-                $user = new Users();
-                $user->fromArray($user_array_data[0]);
 
+                if($user_array_data){
 
-                if($user){
+                    $user = new Users();
+                    $user->fromArray($user_array_data[0]);
 
                     Session::setValue( 'logged', true );
                     Session::setValue( 'user', $user->toArray() );
@@ -78,8 +77,7 @@ class LoginForm extends Page
                     //     Session::getValue('user')->nome,
                     //     Session::getValue('user')->ts_usuario_id
                     // );
-                    // die;
-                    
+                    // die;                    
 
                     // Session::setValue( 'user_email', $user[0]->email );
                     // Session::setValue( 'usuario_id', $user[0]->id );
@@ -87,9 +85,10 @@ class LoginForm extends Page
 
                     Transaction::close();
                     header("Location: index.php");
+
                 } else {
-                    new Message('danger', "Usuário não encontrado :(", '100', 'AlertLogin');
                     Transaction::close();
+                    new Message('danger', "Usuário não encontrado :(", '100', 'AlertLogin');
                 }
 
             } catch (\Exception $e) {

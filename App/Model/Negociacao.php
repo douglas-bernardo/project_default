@@ -38,9 +38,26 @@ class Negociacao extends Record
         return (new TipoSolicitacao($this->tipo_solicitacao_id))->nome;
     }
 
+    public function get_origem()
+    {
+        return (new Origem($this->origem_id))->nome;
+    }
+
     public function get_situacao()
     {
         return (new Situacao($this->situacao_id))->nome;
     }
+
+
+    /**
+     * Return object 
+     *
+     * @return Ocorrencia
+     */
+    public function getOcorrencia()
+    {
+        return new Ocorrencia($this->ocorrencia_id);
+    }
+
 
 }

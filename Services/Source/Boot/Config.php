@@ -5,18 +5,18 @@
  */
 
 // *** PRODUÇÃO ***
-// define("CONF_DB_OCI_HOST", "bparkto-cluster.bpark.com.br");
-// define("CONF_DB_OCI_PORT", '1521');
-// define("CONF_DB_OCI_USER", "silvino");
-// define("CONF_DB_OCI_PASS", "silvino");
-// define("CONF_DB_OCI_SERVICE_NAME", "bdbp");
+define("CONF_DB_OCI_HOST", "bparkto-cluster.bpark.com.br");
+define("CONF_DB_OCI_PORT", '1521');
+define("CONF_DB_OCI_USER", "silvino");
+define("CONF_DB_OCI_PASS", "silvino");
+define("CONF_DB_OCI_SERVICE_NAME", "bdbp");
 
 // *** DESENVOLVIMENTO ***
-define("CONF_DB_OCI_HOST", "dbclone.bpark.com.br");
-define("CONF_DB_OCI_PORT", '1521');
-define("CONF_DB_OCI_USER", "douglas_feijao");
-define("CONF_DB_OCI_PASS", "douglas_feijao");
-define("CONF_DB_OCI_SERVICE_NAME", "desenv");
+// define("CONF_DB_OCI_HOST", "dbclone.bpark.com.br");
+// define("CONF_DB_OCI_PORT", '1521');
+// define("CONF_DB_OCI_USER", "douglas_feijao");
+// define("CONF_DB_OCI_PASS", "douglas_feijao");
+// define("CONF_DB_OCI_SERVICE_NAME", "desenv");
 
 /**
  * DATABASE MYSQL

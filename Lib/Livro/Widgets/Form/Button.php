@@ -27,6 +27,11 @@ class Button extends Field implements FormElementInterface
         $this->class = $class;
     }
 
+    public function getLabel()
+    {
+        $this->label;
+    }
+
     public function show()
     {
         $url = $this->action->serialize();
@@ -35,10 +40,8 @@ class Button extends Field implements FormElementInterface
         $this->tag->type = 'button'; //tipo de input
         //$this->tag->class = $this->class;    
         $this->tag->value = $this->label; //rótulo do botão
-
         //define a ação do botão
-        $this->tag->onclick = "document.{$this->formName}.action='{$url}';".
-                              "document.{$this->formName}.submit()";
+        $this->tag->onclick = "document.{$this->formName}.action='{$url}';"."document.{$this->formName}.submit()";
         //exibe o botão
         $this->tag->show();
     }

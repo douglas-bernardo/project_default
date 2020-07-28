@@ -6,15 +6,9 @@ use Livro\Widgets\Base\Element;
 use Livro\Widgets\Datagrid\Datagrid;
 use Livro\Widgets\Datagrid\DatagridColumn;
 use Livro\Widgets\Datagrid\DatagridAction;
-use Livro\Widgets\Datagrid\DatagridAjax;
-use Livro\Widgets\Dialog\Message;
-use Livro\Widgets\Dialog\Question;
+use Livro\Widgets\Datagrid\DatagridActionAjax;
 use Livro\Widgets\Dialog\Modal;
 use Livro\Widgets\Wrapper\DatagridWrapper;
-use Livro\Database\Transaction;
-use Livro\Database\Repository;
-use Livro\Database\Criteria;
-use Livro\Session\Session;
 use Livro\Traits\DeleteTrait;
 use Livro\Traits\ReloadTraitTeste;
 use Livro\Traits\ConfirmTrait;
@@ -35,11 +29,6 @@ class UsersList extends Page
     public function __construct()
     {
         parent::__construct();
-
-        if (!Session::getValue('logged')) {
-            echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
-            return;
-        }
 
         $this->connection = 'bp_renegociacao';
 
@@ -72,7 +61,7 @@ class UsersList extends Page
 
         $actDelUser = new Action(array($this, 'Delete'));
         $linkDelUser = $actDelUser->serialize();
-        $action2 = new DatagridAjax('confirm', $linkDelUser, 'Users');
+        $action2 = new DatagridActionAjax('confirm', $linkDelUser, 'Users');
         $action2->setLabel('Excluir');
         $action2->setImage('ico_delete.png');
         $action2->setField('id');

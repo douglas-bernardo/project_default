@@ -101,3 +101,7 @@
     pointer-events: none;
     opacity: 0.5;
 }
+
+.off {
+    color: #a3a0a0;
+}

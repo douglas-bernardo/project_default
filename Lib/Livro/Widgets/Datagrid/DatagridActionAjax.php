@@ -3,7 +3,7 @@ namespace Livro\Widgets\Datagrid;
 
 use Livro\Control\Action;
 
-class DatagridAjax
+class DatagridActionAjax
 {
     private $function;
     private $url;
@@ -12,7 +12,7 @@ class DatagridAjax
     private $label;
     private $field;
 
-    public function __construct($function, $url, $activeRecord)
+    public function __construct($function, $url = '', $activeRecord = '')
     {
         $this->function = $function;
         $this->url = $url;

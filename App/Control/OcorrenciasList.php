@@ -9,16 +9,13 @@ use Livro\Traits\ReloadTrait;
 use Livro\Widgets\Container\Card;
 use Livro\Widgets\Datagrid\Datagrid;
 use Livro\Widgets\Datagrid\DatagridColumn;
-use Livro\Widgets\Datagrid\DatagridAction;
-use Livro\Widgets\Datagrid\DatagridAjax;
+use Livro\Widgets\Datagrid\DatagridActionAjax;
 use Livro\Widgets\Datagrid\PageNavigation;
 use Livro\Widgets\Dialog\Message;
-use Livro\Widgets\Dialog\Modal;
 use Livro\Widgets\Form\Combo;
 use Livro\Widgets\Form\Form;
 use Livro\Widgets\Form\Hidden;
 use Livro\Widgets\Wrapper\DatagridWrapper;
-use Livro\Widgets\Wrapper\FormWrapper;
 use Livro\Widgets\Wrapper\FormWrapperModal;
 
 class OcorrenciasList extends Page
@@ -41,19 +38,9 @@ class OcorrenciasList extends Page
     public function __construct() 
     {
         parent::__construct();
-        
-        if (!Session::getValue('logged')) {
-            echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
-            return;
-        }
 
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Ocorrencia';
-
-        // filtro de ocorrências
-        $this->filter[] = new Filter('ts_usuario_resp_id', '=', Session::getValue('user')->ts_usuario_id);
-        $this->filter[] = new Filter('ts_motivo_id', 'IN', array(364, 365, 427, 683, 702, 993));
-        $this->filter[] = new Filter('atendida', '=', false);
 
         //instancia o obj Datagrid
         $this->datagrid = new DatagridWrapper( new Datagrid );
@@ -69,8 +56,6 @@ class OcorrenciasList extends Page
         $resp            = new DatagridColumn('ts_usuario_resp_nome', 'Resp.', 'center', '15%');
         $status          = new DatagridColumn('status', 'Status', 'center', '20%');
 
-        // order to show
-        $this->order_param = 'numero_ocorrencia DESC';
 
         //adiciona as colunas à Datagrid
         $this->datagrid->addColumn($id);
@@ -90,25 +75,13 @@ class OcorrenciasList extends Page
         $status->setTransformer(array($this, 'setStatus'));
         $data_ocorrencia->setTransformer(array($this, 'formatDate'));
 
-        // instance of action
-        // $action1 = new DatagridAction( [new NegociacaoForm, 'add'] );
-        // $action1->setLabel('Registrar Negociação');
-        // //$action1->setClass('btn btn-info btn-sm');
-        // //$action1->setStyle('font-size:10px');
-        // $action1->setImage('support.png');
-        // $action1->setField('numero_ocorrencia');
-        // $this->datagrid->addAction($action1, '5%');
 
-
-        // ******************* TESTE *********************
-        $link_teste = "teste";
-        $action2 = new DatagridAjax('negociacao', $link_teste, 'NegociacaoForm');
+        // Datagrid Action Ajax 
+        $action2 = new DatagridActionAjax('negociacao');
         $action2->setLabel('Registrar Negociação');
         $action2->setImage('support.png');
         $action2->setField('id');
         $this->datagrid->addAction($action2, '5%');
-
-        // *************** FIM TESTE ***********************
 
         //cria o modelo da Datagrid montando sua estrutura (cabeçalho)
         $this->datagrid->createModel();
@@ -117,24 +90,21 @@ class OcorrenciasList extends Page
         $this->pageNavigation = new PageNavigation;
         $this->pageNavigation->setAction(new Action(array($this, 'onReload')));
 
-        //criando um card:
+        // insert datagrid on card
         $card = new Card();
         $card->setHeader('Ocorrências Timesharing');
         $card->setBody($this->datagrid);
         $card->setFooter($this->pageNavigation);
 
-        // *********************** TESTE *************************************
+        // inert card on page
+        parent::add($card);
 
-        //instancia de um formulário
-        
-        //$this->form = new FormWrapper(new Form('form_negociacao'), 'row');
+        // *********************** MODAL FORM *************************************
 
-        $this->form = new FormWrapperModal(new Form('form_negociacao'));
+        $this->form = new FormWrapperModal(new Form('form_negociacao_register'));
         $this->form->setFormTitle('Dados da Negociação');
 
         // hidden fields
-        $usuario_id = new Hidden('usuario_id');
-        $usuario_id->setEditable(false);
         $ocorrencia_id    = new Hidden('ocorrencia_id');
         $ocorrencia_id->{'id'} = 'ocorrencia_id';
         $ocorrencia_id->setEditable(false);
@@ -160,8 +130,7 @@ class OcorrenciasList extends Page
         $tipo_solicitacao->addItems($items);
 
         Transaction::close();
-
-        $this->form->addField('id_usuario', $usuario_id);
+        
         $this->form->addField('id_ocorrencia', $ocorrencia_id);
         $this->form->addField('Origem', $origem);
         $this->form->addField('Tipo de Solicitação', $tipo_solicitacao);
@@ -169,15 +138,7 @@ class OcorrenciasList extends Page
         $act = new Action(array($this, 'saveNegociacao'));
         $this->form->addAction('Salvar', $act);
 
-        // $modal = new Modal("Dados Negociação", "ModalNegociacao");
-        // $modal->add($this->form);
-
         parent::add($this->form);
-
-        // *********************** FIM TESTE ***********************
-
-        //adiciona a Datagrid a página
-        parent::add($card);
 
     }
 
@@ -232,8 +193,8 @@ class OcorrenciasList extends Page
 
             Transaction::close();
 
-            new Message('success', 'Negociação registrada - acesse "Negociações", para gerenciar suas negociações');
-            $this->onReload();
+            Session::setValue('save_process', true);
+            header("Location: ?class=OcorrenciasList");
 
         } catch(Exception $e) {
             new Message('warning', "<b>Erro:</b> " . $e->getMessage());
@@ -242,11 +203,30 @@ class OcorrenciasList extends Page
         
     }
 
-    function show()
+    public function onReload()
     {
+        if (Session::getValue('save_process')) {
+            new Message('success', 'Negociação registrada - acesse "Negociações", para gerenciar suas negociações');
+            Session::unSet('save_process');
+        }
+        
+        // order to show
+        $this->order_param = 'numero_ocorrencia DESC';
+
+        // filtro de ocorrências
+        $this->filter[] = new Filter('ts_usuario_resp_id', '=', Session::getValue('user')->ts_usuario_id);
+        $this->filter[] = new Filter('ts_motivo_id', 'IN', array(364, 365, 427, 683, 702, 993));
+        $this->filter[] = new Filter('atendida', '=', false);
+        
+        $param = $_REQUEST;
+        $this->onReloadTrait($param);
+    }
+
+    function show()
+    {        
         if(!$this->loaded){
             $this->onReload();
-        }
-        parent::show();
+        }        
+        parent::show();        
     }
 }

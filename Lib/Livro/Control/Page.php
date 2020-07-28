@@ -22,6 +22,11 @@ class Page extends Element
             $class  = isset($_GET['class'])  ? $_GET['class'] : NULL;//existe uma classe definida?
             $method = isset($_GET['method']) ? $_GET['method'] : NULL;//existe um método?
 
+            if (!Session::getValue('logged') && $class != 'LoginForm') {
+                echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
+                return;
+            }
+
             if ($class) {
                 //a classe da URL é mesma da classe atual? (filha de PAGE)
                 // se sim, realiza a instancia da mesma

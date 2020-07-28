@@ -8,8 +8,9 @@ class Card extends Element
     private $header;
     private $body;
     private $footer;
+    private $card_title;
 
-    public function __construct($card_title = NULL)
+    public function __construct($card_title = '', $divider = null)
     {        
         parent::__construct('div');
         $this->class = 'card mb-3';
@@ -23,13 +24,19 @@ class Card extends Element
         $this->body->class = 'card-body';
 
         //se for informado um titulo no construtor esse titulo fica dentro do body do card
-        if ($card_title)
-        {
-            $label = new Element('h5');
-            $label->class = 'card-title';
-            $label->add($card_title);
-            $this->body->add($label);
-        }
+        //if ($card_title)
+        //{
+            $this->card_title = new Element('h5');
+            //$label = new Element('h5');
+            $this->card_title->class = 'card-title';
+            $this->card_title->add($card_title);
+            $this->body->add($this->card_title);
+            if ($divider) {
+                $div = new Element('hr');
+                $div->{'style'} = $divider;
+                $this->body->add($div);
+            }
+        //}
 
         //cria o footer do card
         $this->footer = new Element('div');
@@ -56,5 +63,9 @@ class Card extends Element
         parent::add($this->footer);
     }
 
+    public function setCardTitle($card_title)
+    {
+        $this->card_title->add($card_title);
+    }
 
 }

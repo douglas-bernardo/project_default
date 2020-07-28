@@ -1,10 +1,14 @@
 <?php
 
+use Livro\Control\Action;
 use Livro\Control\Page;
 use Livro\Session\Session;
 use Livro\Traits\ReloadTrait;
+use Livro\Widgets\Container\Card;
 use Livro\Widgets\Datagrid\Datagrid;
+use Livro\Widgets\Datagrid\DatagridAction;
 use Livro\Widgets\Datagrid\DatagridColumn;
+use Livro\Widgets\Datagrid\PageNavigation;
 use Livro\Widgets\Wrapper\DatagridWrapper;
 
 class NegociacaoList extends Page
@@ -20,25 +24,23 @@ class NegociacaoList extends Page
     {
         parent::__construct();
 
-        if (!Session::getValue('logged')) {
-            echo "<script language='JavaScript'> window.location = 'index.php'; </script>";
-            return;
-        }
-
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Negociacao'; 
 
         $this->datagrid = new DatagridWrapper(new Datagrid);
         
-        $ocorrencia       = new DatagridColumn('numero_ocorrencia', 'Ocorrência', 'center','10%');
+        $id               = new DatagridColumn('id', 'id', 'center', '');  // hidden
+        $num_ocorrencia   = new DatagridColumn('numero_ocorrencia', 'Ocorrência', 'center','10%');
         $data_ocorrencia  = new DatagridColumn('data_ocorrencia', 'Data', 'center','10%');
-        $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'center','15%');
-        $cliente          = new DatagridColumn('cliente', 'Cliente', 'center', '25%');
+        $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'justify','15%');
+        $cliente          = new DatagridColumn('cliente', 'Cliente', 'justify', '25%');
         $proj_contrato    = new DatagridColumn('proj_contrato', 'Proj-Contrato', 'center', '15%');
         $valor_venda      = new DatagridColumn('valor_venda', 'Valor Venda', 'center', '15%');
         $situacao         = new DatagridColumn('situacao', 'Situação', 'center', '20%');
 
-        $this->datagrid->addColumn($ocorrencia);
+        // add columns to datagrid
+        $this->datagrid->addColumn($id);
+        $this->datagrid->addColumn($num_ocorrencia);
         $this->datagrid->addColumn($data_ocorrencia);
         $this->datagrid->addColumn($tipo_solicitacao);
         $this->datagrid->addColumn($cliente);
@@ -52,9 +54,28 @@ class NegociacaoList extends Page
         $valor_venda->setTransformer(array($this, 'setCurrence'));
         $situacao->setTransformer(array($this, 'setSituacao'));
 
+        // actions
+        $manager = new DatagridAction( [new NegociacaoForm, 'management'] );
+        $manager->setLabel('Gerenciar Negociação');
+        //$action1->setClass('btn btn-info btn-sm');
+        //$action1->setStyle('font-size:10px');
+        $manager->setImage('phone.png');
+        $manager->setField('id');
+        $this->datagrid->addAction($manager, '5%');
+
         $this->datagrid->createModel();
 
-        parent::add($this->datagrid);
+        // create the page navigation
+        $this->pageNavigation = new PageNavigation;
+        $this->pageNavigation->setAction(new Action(array($this, 'onReload')));
+
+        // insert datagrid on card
+        $card = new Card();
+        $card->setHeader('Negociações');
+        $card->setBody($this->datagrid);
+        $card->setFooter($this->pageNavigation);
+
+        parent::add($card);
 
     }
 

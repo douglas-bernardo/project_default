@@ -111,10 +111,10 @@ class Datagrid extends Table
                 //obtem o valor do campo do objeto que será passado adiante
                 $key = $object->$field;
 
-                if ($action instanceof Action){
+                if ($action instanceof Action) {
                     $url = $action->serialize();
                     $link->href = "{$url}&key={$key}&{$field}={$key}";
-                }else{
+                } else {
                     $link->id = "ajaxDel";
                     $link->onclick = "{$action->getFunction()}($key, '{$action->getUrl()}', '{$action->getActiveRecord()}')";
                 }
