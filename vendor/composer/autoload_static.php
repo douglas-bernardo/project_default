@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
 {
     public static $files = array (
-        '26484eceb1c01c6dfae4a962bdb24b78' => __DIR__ . '/../..' . '/Services/Source/Boot/Config.php',
-        '61f5d8363ef2d03785f1675a2e008ed5' => __DIR__ . '/../..' . '/Services/Source/Boot/Helpers.php',
+        'c89a91e8362c2a538aa38c6e0dad83bf' => __DIR__ . '/../..' . '/services/boot/Config.php',
+        'b678a33e61b122510090acfb060bc723' => __DIR__ . '/../..' . '/services/boot/Helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -18,7 +18,7 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
         ),
         'L' => 
         array (
-            'Livro\\' => 6,
+            'Library\\' => 8,
         ),
         'A' => 
         array (
@@ -29,51 +29,52 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
     public static $prefixDirsPsr4 = array (
         'Services\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Services/Source',
+            0 => __DIR__ . '/../..' . '/services/source',
         ),
-        'Livro\\' => 
+        'Library\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/Lib/Livro',
+            0 => __DIR__ . '/../..' . '/lib/library',
         ),
         'App\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/App',
+            0 => __DIR__ . '/../..' . '/app',
         ),
     );
 
     public static $classMap = array (
-        'Cidade' => __DIR__ . '/../..' . '/App/Model/Cidade.php',
-        'Cliente' => __DIR__ . '/../..' . '/App/Model/Cliente.php',
-        'Company' => __DIR__ . '/../..' . '/App/Model/Company.php',
-        'Conta' => __DIR__ . '/../..' . '/App/Model/Conta.php',
-        'Estado' => __DIR__ . '/../..' . '/App/Model/Estado.php',
-        'Fabricante' => __DIR__ . '/../..' . '/App/Model/Fabricante.php',
-        'Grupo' => __DIR__ . '/../..' . '/App/Model/Grupo.php',
-        'HomeControl' => __DIR__ . '/../..' . '/App/Control/HomeControl.php',
-        'ItemVenda' => __DIR__ . '/../..' . '/App/Model/ItemVenda.php',
-        'LoginForm' => __DIR__ . '/../..' . '/App/Control/LoginForm.php',
-        'Motivo' => __DIR__ . '/../..' . '/App/Model/Motivo.php',
-        'MotivoService' => __DIR__ . '/../..' . '/App/ApiServices/MotivoService.php',
-        'Negociacao' => __DIR__ . '/../..' . '/App/Model/Negociacao.php',
-        'NegociacaoForm' => __DIR__ . '/../..' . '/App/Control/NegociacaoForm.php',
-        'NegociacaoList' => __DIR__ . '/../..' . '/App/Control/NegociacaoList.php',
-        'Ocorrencia' => __DIR__ . '/../..' . '/App/Model/Ocorrencia.php',
-        'OcorrenciaService' => __DIR__ . '/../..' . '/App/ApiServices/OcorrenciaService.php',
-        'OcorrenciasList' => __DIR__ . '/../..' . '/App/Control/OcorrenciasList.php',
-        'Origem' => __DIR__ . '/../..' . '/App/Model/Origem.php',
-        'PermissionGroup' => __DIR__ . '/../..' . '/App/Model/PermissionGroup.php',
-        'Permissions' => __DIR__ . '/../..' . '/App/Model/Permissions.php',
-        'Pessoa' => __DIR__ . '/../..' . '/App/Model/Pessoa.php',
-        'PessoaGrupo' => __DIR__ . '/../..' . '/App/Model/PessoaGrupo.php',
-        'Produto' => __DIR__ . '/../..' . '/App/Model/Produto.php',
-        'Situacao' => __DIR__ . '/../..' . '/App/Model/Situacao.php',
-        'Tipo' => __DIR__ . '/../..' . '/App/Model/Tipo.php',
-        'TipoSolicitacao' => __DIR__ . '/../..' . '/App/Model/TipoSolicitacao.php',
-        'Unidade' => __DIR__ . '/../..' . '/App/Model/Unidade.php',
-        'Users' => __DIR__ . '/../..' . '/App/Model/Users.php',
-        'UsersForm' => __DIR__ . '/../..' . '/App/Control/UsersForm.php',
-        'UsersList' => __DIR__ . '/../..' . '/App/Control/UsersList.php',
-        'Venda' => __DIR__ . '/../..' . '/App/Model/Venda.php',
+        'Cidade' => __DIR__ . '/../..' . '/app/model/Cidade.php',
+        'Cliente' => __DIR__ . '/../..' . '/app/model/Cliente.php',
+        'Company' => __DIR__ . '/../..' . '/app/model/Company.php',
+        'Conta' => __DIR__ . '/../..' . '/app/model/Conta.php',
+        'Estado' => __DIR__ . '/../..' . '/app/model/Estado.php',
+        'Fabricante' => __DIR__ . '/../..' . '/app/model/Fabricante.php',
+        'Grupo' => __DIR__ . '/../..' . '/app/model/Grupo.php',
+        'HomeControl' => __DIR__ . '/../..' . '/app/control/HomeControl.php',
+        'ItemVenda' => __DIR__ . '/../..' . '/app/model/ItemVenda.php',
+        'LoginForm' => __DIR__ . '/../..' . '/app/control/LoginForm.php',
+        'Motivo' => __DIR__ . '/../..' . '/app/model/Motivo.php',
+        'MotivoService' => __DIR__ . '/../..' . '/app/apiservices/MotivoService.php',
+        'Negociacao' => __DIR__ . '/../..' . '/app/model/Negociacao.php',
+        'NegociacaoForm' => __DIR__ . '/../..' . '/app/control/NegociacaoForm.php',
+        'NegociacaoList' => __DIR__ . '/../..' . '/app/control/NegociacaoList.php',
+        'Ocorrencia' => __DIR__ . '/../..' . '/app/model/Ocorrencia.php',
+        'OcorrenciaService' => __DIR__ . '/../..' . '/app/apiservices/OcorrenciaService.php',
+        'OcorrenciasList' => __DIR__ . '/../..' . '/app/control/OcorrenciasList.php',
+        'Origem' => __DIR__ . '/../..' . '/app/model/Origem.php',
+        'PermissionGroup' => __DIR__ . '/../..' . '/app/model/PermissionGroup.php',
+        'Permissions' => __DIR__ . '/../..' . '/app/model/Permissions.php',
+        'Pessoa' => __DIR__ . '/../..' . '/app/model/Pessoa.php',
+        'PessoaGrupo' => __DIR__ . '/../..' . '/app/model/PessoaGrupo.php',
+        'Produto' => __DIR__ . '/../..' . '/app/model/Produto.php',
+        'Situacao' => __DIR__ . '/../..' . '/app/model/Situacao.php',
+        'TestService' => __DIR__ . '/../..' . '/app/apiservices/TestService.php',
+        'Tipo' => __DIR__ . '/../..' . '/app/model/Tipo.php',
+        'TipoSolicitacao' => __DIR__ . '/../..' . '/app/model/TipoSolicitacao.php',
+        'Unidade' => __DIR__ . '/../..' . '/app/model/Unidade.php',
+        'Users' => __DIR__ . '/../..' . '/app/model/Users.php',
+        'UsersForm' => __DIR__ . '/../..' . '/app/control/UsersForm.php',
+        'UsersList' => __DIR__ . '/../..' . '/app/control/UsersList.php',
+        'Venda' => __DIR__ . '/../..' . '/app/model/Venda.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

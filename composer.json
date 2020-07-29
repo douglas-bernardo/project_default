@@ -12,18 +12,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Livro\\":"Lib/Livro/",
-            "App\\":"App/",
-            "Services\\": "Services/Source/"
+            "Library\\":"lib/library/",
+            "App\\":"app/",
+            "Services\\": "services/source/"
         },
         "classmap": [
-            "App/ApiServices",
-            "App/Control",
-            "App/Model"
+            "app/apiservices",
+            "app/control",
+            "app/model"
         ],
         "files": [
-            "Services/Source/Boot/Config.php",
-            "Services/Source/Boot/Helpers.php"
+            "services/boot/Config.php",
+            "services/boot/Helpers.php"
         ]
     },    
     "require": {

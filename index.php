@@ -1,11 +1,11 @@
 <?php
 //Config
-require 'config.php';
-
-use Livro\Session\Session;
+require 'config.php'; 
 
 // composer autoload
 require __DIR__ . '/vendor/autoload.php';
+
+use Library\Session\Session;
 
 // //Library loader
 // require_once 'Lib/Livro/Core/ClassLoader.php';
@@ -28,10 +28,10 @@ $content = '';
 new Session;
 
 if (Session::getValue('logged')){//se parametro logged == true
-    $template = file_get_contents('App/Templates/template.html');// carrega o template principal
+    $template = file_get_contents('app/templates/template.html');// carrega o template principal
     $class = 'HomeControl';
 } else {    
-    $template = file_get_contents('App/Templates/login.html');//retorna para a página de login
+    $template = file_get_contents('app/templates/login.html');//retorna para a página de login
     $class = 'LoginForm';//
 }
 

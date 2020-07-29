@@ -28,3 +28,10 @@ if (ENVIRONMENT == 'development') {
  * SESSION
  */
 define("CONF_SES_PATH", __DIR__ . "/storage/sessions/");
+
+
+/**
+ * REST SERVICE
+ */
+
+ define("CONF_URL_SERVICE", "https://localhost/project-default/");

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+      
+    <title>Admin Panel</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="app/templates/assets/css/bootstrap.min.css">
+    
+    <!-- Optional CSS -->
+    <link rel="stylesheet" href="app/templates/assets/css/sidebar.css">
+    <link rel="stylesheet" href="app/templates/assets/css/main.css">
+
+  </head>
+
+  <body>
+
+    <div id="wrapper">
+
+         <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+
+            <!-- logo -->
+            <div class="company_name">
+                <a href="index.php">Renegociação</a>
+            </div>
+
+            <ul class="sidebar-nav">
+                <li><a href="index.php">Home</a></li>
+                <li><a href="?class=OcorrenciasList">Ocorrências</a></li>
+                <!-- <li><a href="?class=UsersList">Clientes</a></li> -->
+                <li><a href="?class=NegociacaoList">Negociações</a></li>
+                <!-- <li><a href="#">Retençoes</a></li>
+                <li><a href="#">Reversões</a></li> -->
+                <li><a href="#">Pendências</a></li>
+                <li><a href="#">Performance</a></li>
+                <li><a href="?class=LoginForm&method=onLogout">Logout</a></li>
+            </ul>
+            
+        </div>
+
+        <!-- Main -->
+        <div id="page-content-wrapper">
+
+            <!-- navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light navbar-custom mb-3"> 
+                <div title="Recolher" id="menu-toggle"></div>
+                
+                <button class="navbar-toggler" data-toggle="collapse" data-target="#collapse_target">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapse_target">
+                    <ul class="navbar-nav ml-auto" id="menu-top">
+                        <li class="nav-item ml-auto"></li>
+                        <li class="nav-item ml-auto"></li>
+                        <li class="nav-item ml-auto"></li>
+                        <li class="nav-item ml-auto">{user_email}</li>
+                        <!-- <li class="nav-item ml-auto">anne@beachpark.com.br</li> -->
+                    </ul>
+                </div>                
+            </nav>
+
+            <!-- page view -->
+            <div class="container-fluid">
+                {content}
+            </div>
+            
+        </div>
+    </div>
+
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript" src="app/templates/assets/js/jquery-3.5.1.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script> 
+    <script type="text/javascript" src="app/templates/assets/js/bootstrap.min.js" ></script>
+
+    <!-- Optional JavaScript -->
+    <script type="text/javascript" src="app/templates/assets/js/script.js"></script>
+
+    </body>
+</html>
