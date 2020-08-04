@@ -32,7 +32,7 @@ class NegociacaoList extends Page
         $num_ocorrencia   = new DatagridColumn('numero_ocorrencia', 'Ocorrência', 'center','10%');
         $data_ocorrencia  = new DatagridColumn('data_ocorrencia', 'Data', 'center','10%');
         $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'justify','15%');
-        $cliente          = new DatagridColumn('cliente', 'Cliente', 'justify', '25%');
+        $cliente          = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '25%');
         $proj_contrato    = new DatagridColumn('proj_contrato', 'Proj-Contrato', 'center', '15%');
         $valor_venda      = new DatagridColumn('valor_venda', 'Valor Venda', 'center', '15%');
         $situacao         = new DatagridColumn('situacao', 'Situação', 'center', '20%');

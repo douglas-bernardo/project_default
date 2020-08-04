@@ -4,8 +4,10 @@ use Library\Control\Action;
 use Library\Control\Page;
 use Library\Database\Filter;
 use Library\Database\Transaction;
+use Library\Log\LoggerTXT;
 use Library\Session\Session;
 use Library\Traits\ReloadTrait;
+use Library\Widgets\Base\Element;
 use Library\Widgets\Container\Card;
 use Library\Widgets\Datagrid\Datagrid;
 use Library\Widgets\Datagrid\DatagridColumn;
@@ -13,8 +15,10 @@ use Library\Widgets\Datagrid\DatagridActionAjax;
 use Library\Widgets\Datagrid\PageNavigation;
 use Library\Widgets\Dialog\Message;
 use Library\Widgets\Form\Combo;
+use Library\Widgets\Form\Entry;
 use Library\Widgets\Form\Form;
 use Library\Widgets\Form\Hidden;
+use Library\Widgets\Form\Text;
 use Library\Widgets\Wrapper\DatagridWrapper;
 use Library\Widgets\Wrapper\FormWrapperModal;
 
@@ -31,6 +35,13 @@ class OcorrenciasList extends Page
     protected $pageNavigation;
     private $form;
 
+    /**
+     * Undocumented variable
+     *
+     * @var LoggerTXT
+     */
+    private $logger;
+
     use ReloadTrait{
         onReload as onReloadTrait;
     }
@@ -38,6 +49,8 @@ class OcorrenciasList extends Page
     public function __construct() 
     {
         parent::__construct();
+
+        $this->logger =  new LoggerTXT('tmp/ocorrencias_proccess.txt');
 
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Ocorrencia';
@@ -107,6 +120,11 @@ class OcorrenciasList extends Page
         $ocorrencia_id->{'id'} = 'ocorrencia_id';
         $ocorrencia_id->setEditable(false);
 
+
+        // $numero_contrato = new Text('dados_contrato');
+        // $numero_contrato->setValue("Lorem Ipsum");
+        // $numero_contrato->setEditable(false);
+
         $origem           = new Combo('origem_id');
         $tipo_solicitacao = new Combo('tipo_solicitacao_id');        
 
@@ -130,6 +148,7 @@ class OcorrenciasList extends Page
         Transaction::close();
         
         $this->form->addField('id_ocorrencia', $ocorrencia_id);
+        //$this->form->addField('Dados Contrato:', $numero_contrato);
         $this->form->addField('Origem', $origem);
         $this->form->addField('Tipo de Solicitação', $tipo_solicitacao);
         
@@ -184,9 +203,14 @@ class OcorrenciasList extends Page
             // persistence negociacao
             $negociacao->store(); 
 
-            // change status ocorrencia
+            // change ocorrencia properties
             $ocorrencia = new Ocorrencia($dados->ocorrencia_id);
-            $ocorrencia->atendida = true;
+            $ocorrencia->atendida = true;            
+            $contrato = $this->getContrato($ocorrencia->idvendaxcontrato);
+
+            if ($contrato) {
+                $ocorrencia->data_venda = $contrato->DATAVENDA;
+            }
             $ocorrencia->store();            
 
             Transaction::close();
@@ -201,10 +225,39 @@ class OcorrenciasList extends Page
         
     }
 
+    public function getContrato($idvendaxcontrato): ?object
+    {
+        // API CM - https://localhost/wser_cm/?class=ContratoServices&method=getData&idvendaxcontrato=128386
+        $log_msg = '';
+        $location = CONF_CM_SERVICE . 'resp.php';
+        $parameters['class']  = 'ContratoServices';
+        $parameters['method'] = 'getData';
+        $parameters['idvendaxcontrato'] = $idvendaxcontrato;
+        $url = $location . '?' . http_build_query($parameters);
+        $result = json_decode(file_get_contents($url));
+        if ($result) {
+            if ($result->status == 'success') {                
+                if (isset($result->data->exception) && $result->data->exception) {
+                    $log  = $result->data->exception->class . PHP_EOL;
+                    $log .= $result->data->exception->method . PHP_EOL;
+                    $log .= $result->data->exception->data;
+                    $this->logger->write($log);
+                } else {
+                    return $result->data;
+                }
+            }                
+        }
+        return null;
+    }
+
     public function onReload()
     {
         if (Session::getValue('save_process')) {
-            new Message('success', 'Negociação registrada - acesse "Negociações", para gerenciar suas negociações');
+            $link = new Element('a');
+            $link->{'class'} = 'alert-link';
+            $link->{'href'} = '?class=NegociacaoList';
+            $link->add('negociações');
+            new Message('success', "Negociação registrada com sucesso! Clique em {$link}, para gerenciar suas ocorrências");
             Session::unSet('save_process');
         }
         

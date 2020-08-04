@@ -9,15 +9,17 @@ $location =  CONF_URL_SERVICE . 'rest.php';
 // $parameters['idvendaxcontrato'] = 128386;
 
 $parameters = [
-    'class' => 'TestService',
-    'method' => 'getData',
-    'idvendaxcontrato' => 128386
+    'class' => 'CmMapControl',
+    'method' => 'test'
+    //'idvendaxcontrato' => 128386
 ];
 
 
 $url = $location . '?' . http_build_query($parameters);
 
 
-echo file_get_contents($url);
+$result = json_decode(file_get_contents($url));
+
+var_dump($result->data);
 
 //var_dump(json_decode(file_get_contents($url)));

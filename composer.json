@@ -22,6 +22,7 @@
             "app/model"
         ],
         "files": [
+            "init.php",
             "services/boot/Config.php",
             "services/boot/Helpers.php"
         ]

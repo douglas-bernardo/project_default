@@ -6,6 +6,8 @@ use Services\Database\ActiveRecord;
 class OcorrenciaTS extends ActiveRecord
 {
     private $fields = [
+        "idvendaxcontrato",
+        "idvendats",
         "numero_ocorrencia", 
         "status", 
         "ts_motivo_id", 
@@ -15,7 +17,7 @@ class OcorrenciaTS extends ActiveRecord
         "numero_projeto",
         "numero_contrato",
         "nome_projeto",
-        "valor_venda",
+        "valor_venda_view",
         "ts_usuario_resp_id",
         "ts_usuario_resp_nome"
     ];

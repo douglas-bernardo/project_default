@@ -1,6 +1,4 @@
 <?php
-//Config
-require 'config.php'; 
 
 // composer autoload
 require __DIR__ . '/vendor/autoload.php';

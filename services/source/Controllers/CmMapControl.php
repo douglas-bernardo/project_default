@@ -10,4 +10,9 @@ class CmMapControl
         $cm_data = new CmMap('cm_resumo_financeiro_dtvenda_app', array('PARAM_IDVENDAXCONTRATO', $param['idvendaxcontrato']));
         return $cm_data->load();
     }
+
+    public function test()
+    {
+        return "direct access";
+    }
 }

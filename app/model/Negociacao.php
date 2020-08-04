@@ -8,34 +8,24 @@ class Negociacao extends Record
 
     public function get_numero_ocorrencia()
     {
-        return (new Ocorrencia($this->ocorrencia_id))->numero_ocorrencia;
+        return $this->getOcorrencia()->numero_ocorrencia;
     }
 
     public function get_data_ocorrencia()
     {
-        return (new Ocorrencia($this->ocorrencia_id))->dtocorrencia;
+        return $this->getOcorrencia()->dtocorrencia;
     }
 
-    public function get_cliente()
+    public function get_nome_cliente()
     {
-        return (new Ocorrencia($this->ocorrencia_id))->nome_cliente;
+        return $this->getOcorrencia()->nome_cliente;
     }
-
-    public function get_nome_projeto()
-    {
-        return (new Ocorrencia($this->ocorrencia_id))->nome_projeto;
-    }
-
+    
     public function get_proj_contrato()
     {
-        $ocorrencia = new Ocorrencia($this->ocorrencia_id);
+        $ocorrencia = $this->getOcorrencia();
         $pro_contrato = $ocorrencia->numero_projeto . '-' . $ocorrencia->numero_contrato;
         return $pro_contrato;
-    }
-
-    public function get_valor_venda()
-    {
-        return (new Ocorrencia($this->ocorrencia_id))->valor_venda;
     }
 
     public function get_tipo_solicitacao()
