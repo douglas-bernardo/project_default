@@ -7,6 +7,7 @@
 #menu-top li{
     width: 20px;
     height: 20px;
+    font-size: 14px;
     margin-right: 17px;
     background-size: 20px 20px; 
     background-repeat: no-repeat;
@@ -22,7 +23,7 @@
 }
 
 #menu-top li:nth-child(3){
-    background-image: url("../img/boy-avatar.png");
+    background-image: url("../img/default-avatar.png");
 }
 
 #menu-top li:nth-child(4){
@@ -41,10 +42,10 @@
 }
 
 #menu-toggle{
-    width: 30px;
-    height: 30px;
+    width: 29px;
+    height: 29px;
     background-image: url("../img/menu-lines.png");
-    background-size: 30px 30px; 
+    background-size: 29px 29px; 
     background-repeat: no-repeat;
     cursor: pointer;
 }
@@ -73,7 +74,7 @@
     width: 30px;
     height: 30px;
     margin-top: 5px;
-    background-image: url("../img/boy-avatar.png");
+    /* background-image: url("../img/default-avatar.png"); */
     background-size: 30px 30px; 
     background-repeat: no-repeat;
     cursor: pointer;
@@ -105,3 +106,36 @@
 .off {
     color: #a3a0a0;
 }
+
+/* form options */
+
+/* override bootstrap style*/
+.form-control:disabled, .form-control[readonly] {
+    background-color:transparent;
+    opacity: 1;
+}
+
+
+/* form reversão */
+.ret_data, .rev_data, .cancel_data {
+    padding: 5px;
+    border-radius: 3px;
+    background: #c7ecee ;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+} 
+
+
+/* loader */
+
+  .loader {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: visible;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }

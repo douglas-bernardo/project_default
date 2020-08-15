@@ -7,7 +7,7 @@ use Library\Database\Criteria;
 use Library\Widgets\Dialog\Message;
 
 use Exception;
-
+use Library\Log\LoggerTXT;
 
 trait ReloadTrait
 {
@@ -19,13 +19,13 @@ trait ReloadTrait
 
             Transaction::open($this->connection);
             
-            //Transaction::setLogger(new LoggerTXT('tmp/onReloadTrait.txt'));
+            Transaction::setLogger(new LoggerTXT('tmp/onReloadTrait.txt'));
 
             $repository = new Repository($this->activeRecord);  //cria um repositório
             
             $criteria = new Criteria;
             $criteria->setProperties($param);
-            $criteria->setProperty('limit', 15);
+            $criteria->setProperty('limit', 10);
             $criteria->setProperty('order', $order);
             
             if( isset($this->filter) ) {
@@ -51,6 +51,7 @@ trait ReloadTrait
 
             $criteria->resetProperties();
             $count = $repository->count($criteria);
+            $this->total_registers = $count;
 
             if (isset($this->pageNavigation)) {
                 $this->pageNavigation->setCount($count);

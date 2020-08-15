@@ -6,8 +6,14 @@ class Ocorrencia extends Record
 {
     const TABLENAME = 'ocorrencia';
 
-    public function get_descricao()
+    /**
+     * Motivo da abertura da ocorrência
+     *
+     * @return string
+     */
+    public function get_descricao(): string
     {
-        return (new Motivo())->loadBy('idmotivots', $this->ts_motivo_id)->descricao;
+        return (new Motivo())->loadBy('idmotivots', $this->idmotivots)->descricao;
     }
+
 }

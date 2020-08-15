@@ -2,11 +2,7 @@
 namespace Library\Widgets\Form;
 
 use Library\Widgets\Base\Element;
-use Library\Widgets\Container\Table;
-use Library\Widgets\Container\Row;
 use Library\Control\ActionInterface;
-use Library\Widgets\Container\HBox;
-use Library\Widgets\Container\Card;
 
 class FormBase implements FormInterface
 {
@@ -14,8 +10,6 @@ class FormBase implements FormInterface
     protected $fields;
     protected $actions;
     protected $title;
-    private $has_action;
-    private $actions_container;
 
     public function __construct($name = 'my_form')
     {
@@ -48,7 +42,10 @@ class FormBase implements FormInterface
     public function addField(FormElementInterface $field)
     {
         $name = $field->getName();
-        $this->fields[$name] = $field;
+        if (isset($name)) {
+            $this->fields[$name] = $field;
+        }
+        return $field;
     }
 
     public function addElement($element)

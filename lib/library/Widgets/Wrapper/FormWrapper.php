@@ -75,12 +75,10 @@ class FormWrapper
             }
         }
         $group->add($col);
-
         $card = new Card;
         $card->setHeader($this->decorated->getTitle(), 'justify');   
         $card->setBody($element);
         $card->setFooter($group);
         $card->show();
-
     }
 }

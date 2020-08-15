@@ -23,7 +23,6 @@ class BootstrapFormBuilder implements FormInterface
      * @var FormBase
      */
     private $decorated;
-    private $layout = 'row';
 
     public function __construct($name = 'my_form') {
         $this->decorated = new FormBase($name);
@@ -44,9 +43,14 @@ class BootstrapFormBuilder implements FormInterface
         $this->decorated->setFormTitle($title);
     }
 
+    public function getTitle(): ? string
+    {
+        return $this->decorated->getTitle();
+    }
+
     public function addField(FormElementInterface $field)
     {
-        return $this->decorated->addField($field);
+        $this->decorated->addField($field);
     }
 
     public function setFields($fields)
@@ -90,11 +94,6 @@ class BootstrapFormBuilder implements FormInterface
 
         $args = func_get_args();
 
-        // echo "<pre>";
-        // var_dump($args);
-        // echo "</pre>";
-        // die;
-
         $form_row = new Element('div');
         $form_row->{'class'} = 'form-row';
 
@@ -129,12 +128,6 @@ class BootstrapFormBuilder implements FormInterface
     public function setDivider(Divider $divider)
     {
         $this->decorated->addElement($divider);
-    }
-
-
-    private function render()
-    {
-
     }
 
     public function show()

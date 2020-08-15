@@ -7,6 +7,7 @@ class Element
     protected $properties;
     protected $children;
     protected $required;
+    protected $meta_data = [];
 
     public function __construct($name, $required = false)
     {
@@ -29,6 +30,13 @@ class Element
     public function setParentAttribute($class, $value)
     {
         $this->properties[$class] = $value;
+    }
+
+    public function setMetaData(string $data): void
+    {
+        if (!in_array($data, $this->meta_data)) {
+            $this->meta_data[] = $data;
+        }
     }
 
     public function add($child)
@@ -64,6 +72,11 @@ class Element
                 if(is_scalar($value)){
                     echo " {$name}=\"{$value}\"";
                 }
+            }
+        }
+        if ($this->meta_data) {
+            foreach ($this->meta_data as $data) {
+                echo $data;
             }
         }
         echo ($this->required) ? ' required>' : '>' ;

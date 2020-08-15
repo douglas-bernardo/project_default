@@ -76,6 +76,7 @@ abstract class Field implements FormElementInterface
     public function setOptions($param, $value)
     {
         $this->options[$param] = $value;
+        return $this;
     }
 
     public function getOptions($param)

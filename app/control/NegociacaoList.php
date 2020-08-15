@@ -3,6 +3,7 @@
 use Library\Control\Action;
 use Library\Control\Page;
 use Library\Traits\ReloadTrait;
+use Library\Widgets\Container\Breadcrumb;
 use Library\Widgets\Container\Card;
 use Library\Widgets\Datagrid\Datagrid;
 use Library\Widgets\Datagrid\DatagridAction;
@@ -13,7 +14,11 @@ use Library\Widgets\Wrapper\DatagridWrapper;
 class NegociacaoList extends Page
 {
     private $loaded;
+    private $breadcrumb;
     private $datagrid;
+    private $connection;
+    private $activeRecord;
+    private $total_registers = 0;
 
     use ReloadTrait{
         onReload as onReloadTrait;
@@ -26,6 +31,11 @@ class NegociacaoList extends Page
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Negociacao'; 
 
+        //breadcrumb
+        $this->breadcrumb = new Breadcrumb();
+        $this->breadcrumb->addBreadCrumbItem('Negociações');
+        parent::add($this->breadcrumb);
+
         $this->datagrid = new DatagridWrapper(new Datagrid);
         
         $id               = new DatagridColumn('id', 'id', 'center', '');  // hidden
@@ -33,7 +43,7 @@ class NegociacaoList extends Page
         $data_ocorrencia  = new DatagridColumn('data_ocorrencia', 'Data', 'center','10%');
         $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'justify','15%');
         $cliente          = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '25%');
-        $proj_contrato    = new DatagridColumn('proj_contrato', 'Proj-Contrato', 'center', '15%');
+        $proj_contrato    = new DatagridColumn('projeto_contrato', 'Proj-Contrato', 'center', '15%');
         $valor_venda      = new DatagridColumn('valor_venda', 'Valor Venda', 'center', '15%');
         $situacao         = new DatagridColumn('situacao', 'Situação', 'center', '20%');
 
@@ -48,7 +58,7 @@ class NegociacaoList extends Page
         $this->datagrid->addColumn($situacao);
 
         //$finalizada->setTransformer(array($this, 'setColor'));
-        $cliente->setTransformer(array($this, 'setFirstUpper'));
+        //$cliente->setTransformer(array($this, 'setFirstUpper'));
         $data_ocorrencia->setTransformer(array($this, 'formatDate'));
         $valor_venda->setTransformer(array($this, 'setCurrence'));
         $situacao->setTransformer(array($this, 'setSituacao'));
@@ -70,7 +80,7 @@ class NegociacaoList extends Page
 
         // insert datagrid on card
         $card = new Card();
-        $card->setHeader('Negociações');
+        //$card->setHeader('Negociações');
         $card->setBody($this->datagrid);
         $card->setFooter($this->pageNavigation);
 
@@ -107,6 +117,17 @@ class NegociacaoList extends Page
     public function setSituacao($value)
     {
         return ($value == 'Aguardando Retorno' ? '<span class="badge badge-danger">'. $value .'</span>' : $value);
+    }
+
+    public function onReload()
+    {
+        $this->order_param = 'id DESC';
+        $this->onReloadTrait();
+    }
+
+    public static function reload()
+    {
+
     }
 
     function show()

@@ -13,6 +13,10 @@ use Library\Database\Repository;
 use Library\Database\Criteria;
 use Library\Database\Filter;
 use Library\Session\Session;
+use Library\Widgets\Base\Image;
+use Library\Widgets\Container\Card;
+use Library\Widgets\Form\Label;
+use Library\Widgets\Wrapper\BootstrapFormBuilder;
 
 class LoginForm extends Page
 {
@@ -26,9 +30,16 @@ class LoginForm extends Page
 
         $div = new Element('div');
         $div->class = 'wrapper';
+        
+        // $logo = new Image('app/images/logo-vacation-club.jpeg');
+        // $logo->{'class'} = 'mb-4';
+        // $logo->{'width'} = '110';
+        // $logo->{'heigth'} = '62';
+        
+        // $div->add($logo);
 
-        $this->form = new FormWrapper(new Form('form_login'), null, 'buttonLogin');
-        $this->form->setFormTitle('Renegociação TS');
+        // $this->form = new FormWrapper(new Form('form_login'), null, 'buttonLogin');
+        // $this->form->setFormTitle('Renegociação TS');
 
         $email = new Entry('email');
         $email->id = 'email';
@@ -36,12 +47,26 @@ class LoginForm extends Page
         $pass = new Password('password');
         $pass->id = 'password';
 
-        $this->form->addField('Email', $email);
-        $this->form->addField('Senha', $pass);
+        // $this->form->addField('Email', $email);
+        // $this->form->addField('Senha', $pass);
 
-        $this->form->addAction('Login', new Action(array($this, 'onLogin')));
+        // $this->form->addAction('Login', new Action(array($this, 'onLogin')));
 
-        $div->add($this->form);
+        $this->form = new BootstrapFormBuilder('form_login');
+
+        $this->form->addFields( [new Label('Email'), $email] );
+        $this->form->addFields( [new Label('Senha'), $pass] );
+
+        $bntLogin = $this->form->addAction('Login', new Action(array($this, 'onLogin')));
+        $bntLogin->{'class'} = 'btn btn-info buttonLogin';
+        $card = new Card();
+        $card->setHeader('Renegociação TS', 'center');
+        $card->setBody($this->form);
+        $card->setFooter($bntLogin);
+
+        $div->add($card);
+
+        //$div->add($this->form);
 
         parent::add($div);
 

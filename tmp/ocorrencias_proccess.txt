@@ -10,3 +10,59 @@ Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed 
 Source\Database\ActiveRecord
 Source\Database\ActiveRecord::load
 Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-05 14:28:27]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-05 14:28:27]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-06 12:11:50]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-06 12:11:50]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-07 10:47:50]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-07 10:47:50]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-07 10:47:50]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::all
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-07 10:58:35]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-07 10:58:35]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-07 10:58:35]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::all
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-11 09:22:44]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-11 09:22:44]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::load
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-11 09:22:44]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::all
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist
+[log: 2020-08-11 09:22:44]
+Source\Database\ActiveRecord
+Source\Database\ActiveRecord::all
+Erro ao conectar ao servidor usando a extensão OCI - ORA-12545: Connect failed because target host or object does not exist

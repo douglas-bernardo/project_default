@@ -6,15 +6,14 @@ use Library\Widgets\Base\Element;
 class Combo extends Field implements FormElementInterface
 {
     private $items;//array contendo os itens do combo
+    private $default;
 
-    public function __construct($name)
+    public function __construct($name, $class = 'combo', $default = '')
     {
-        //executa o método construtor da classe pai
         parent::__construct($name);
-        //cria uma tag html do tipo selec
-        $this->tag = new Element('select');
-        $this->tag->class = 'combo';    //classe CSS
-        
+        $this->tag = new Element('select', true);
+        $this->tag->{'class'} = $class;    //classe CSS
+        $this->default = $default;        
     }
 
     public function addItems($items)
@@ -30,8 +29,9 @@ class Combo extends Field implements FormElementInterface
 
         //cria uma tag option com um valor padrão
         $option = new Element('option');
-        $option->add('');
-        $option->value = '0'; //valor da tag
+        $option->add($this->default);
+        $option->value = "0"; //valor da tag
+        $option->setMetaData('disabled selected');
 
         //adiciona a opção a combo
         $this->tag->add($option);

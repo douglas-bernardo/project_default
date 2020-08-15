@@ -19,7 +19,8 @@ class UsersList extends Page
     private $filter;
     private $connection;
     private $activeRecord;
-
+    private $total_registers = 0;
+    
     use DeleteTrait;
     use ConfirmTrait;
     use ReloadTraitTeste{

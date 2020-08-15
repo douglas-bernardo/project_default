@@ -6,53 +6,71 @@ class Negociacao extends Record
 {
     const TABLENAME = 'negociacao';
 
-    public function get_numero_ocorrencia()
+    public function get_numero_ocorrencia(): ? string
     {
         return $this->getOcorrencia()->numero_ocorrencia;
     }
 
-    public function get_data_ocorrencia()
+    public function get_nome_cliente(): ? string
     {
-        return $this->getOcorrencia()->dtocorrencia;
+        return $this->getContrato()->getCliente()->nome;
     }
 
-    public function get_nome_cliente()
+    public function get_projeto_contrato(): ? string
     {
-        return $this->getOcorrencia()->nome_cliente;
-    }
-    
-    public function get_proj_contrato()
-    {
-        $ocorrencia = $this->getOcorrencia();
-        $pro_contrato = $ocorrencia->numero_projeto . '-' . $ocorrencia->numero_contrato;
-        return $pro_contrato;
+        $c = $this->getContrato();
+        if (isset($c)) {
+            return $c->projeto . '-' . $c->numero;
+        }
+        return null;
     }
 
-    public function get_tipo_solicitacao()
+    public function get_valor_venda()
+    {
+        $c = $this->getContrato();
+        if (isset($c)) {
+            $valor = $c->getValorVenda();
+            if ($valor) {
+                return  $valor;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    public function get_tipo_solicitacao(): string
     {
         return (new TipoSolicitacao($this->tipo_solicitacao_id))->nome;
     }
 
-    public function get_origem()
+    public function get_origem(): string
     {
         return (new Origem($this->origem_id))->nome;
     }
 
-    public function get_situacao()
+    public function get_situacao(): string
     {
         return (new Situacao($this->situacao_id))->nome;
     }
 
-
     /**
-     * Return object 
+     * Retorna a ocorrência relacionada a negociação. 
      *
      * @return Ocorrencia
      */
-    public function getOcorrencia()
+    public function getOcorrencia(): ? Ocorrencia
     {
-        return new Ocorrencia($this->ocorrencia_id);
+        return (new Ocorrencia($this->ocorrencia_id));
     }
 
+    /**
+     * Retorna o contrato relacionado a negociação. 
+     *
+     * @return Contrato
+     */
+    public function getContrato(): ? Contrato
+    {
+        return (new Contrato($this->contrato_id));
+    }
 
 }

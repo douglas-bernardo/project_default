@@ -8,19 +8,20 @@ use Library\Log\LoggerTXT;
 use Library\Session\Session;
 use Library\Traits\ReloadTrait;
 use Library\Widgets\Base\Element;
+use Library\Widgets\Container\Breadcrumb;
 use Library\Widgets\Container\Card;
+use Library\Widgets\Container\Row;
 use Library\Widgets\Datagrid\Datagrid;
 use Library\Widgets\Datagrid\DatagridColumn;
 use Library\Widgets\Datagrid\DatagridActionAjax;
 use Library\Widgets\Datagrid\PageNavigation;
+use Library\Widgets\Dialog\GenericModal;
 use Library\Widgets\Dialog\Message;
 use Library\Widgets\Form\Combo;
-use Library\Widgets\Form\Entry;
-use Library\Widgets\Form\Form;
 use Library\Widgets\Form\Hidden;
-use Library\Widgets\Form\Text;
+use Library\Widgets\Form\Label;
+use Library\Widgets\Wrapper\BootstrapFormBuilder;
 use Library\Widgets\Wrapper\DatagridWrapper;
-use Library\Widgets\Wrapper\FormWrapperModal;
 
 class OcorrenciasList extends Page
 {
@@ -30,10 +31,13 @@ class OcorrenciasList extends Page
     private $criteria;
     private $connection;
     private $activeRecord;
+    private $breadcrumb;
     private $datagrid;
     private $order_param;
     protected $pageNavigation;
     private $form;
+    private $total_ocorrencias;
+    private $total_registers;
 
     /**
      * Undocumented variable
@@ -55,18 +59,23 @@ class OcorrenciasList extends Page
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Ocorrencia';
 
+        //breadcrumb
+        $this->breadcrumb = new Breadcrumb();
+        $this->breadcrumb->addBreadCrumbItem('Ocorrências');
+        parent::add($this->breadcrumb);
+
         //instancia o obj Datagrid
         $this->datagrid = new DatagridWrapper( new Datagrid );
 
         //instancia as colunas da Datagrid - Cabeçalho 
         $id              = new DatagridColumn('id', 'id', 'center', '');     
-        $numero          = new DatagridColumn('numero_ocorrencia', 'Número', 'center', '9%');
-        $data_ocorrencia = new DatagridColumn('dtocorrencia', 'Data', 'center', '10%');
-        $motivo          = new DatagridColumn('descricao', 'Motivo', 'justify', '25%');
-        $cliente         = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '25%');
-        $projeto         = new DatagridColumn('numero_projeto', 'Proj.', 'center', '4%');
-        $contrato        = new DatagridColumn('numero_contrato', 'Contrato', 'center', '14%');
-        $resp            = new DatagridColumn('ts_usuario_resp_nome', 'Resp.', 'center', '15%');
+        $numero          = new DatagridColumn('numero_ocorrencia', 'Número', 'center', '5%');
+        $data_ocorrencia = new DatagridColumn('dtocorrencia', 'Data', 'center', '8%');
+        $motivo          = new DatagridColumn('descricao', 'Motivo', 'justify', '21%');
+        $cliente         = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '26%');
+        $projeto         = new DatagridColumn('numeroprojeto', 'Proj.', 'center', '4%');
+        $contrato        = new DatagridColumn('numerocontrato', 'Contrato', 'center', '10%');
+        $resp            = new DatagridColumn('nomeusuario_resp', 'Resp.', 'center', '10%');
         $status          = new DatagridColumn('status', 'Status', 'center', '20%');
 
         //adiciona as colunas à Datagrid
@@ -82,7 +91,7 @@ class OcorrenciasList extends Page
 
         // apply transformers
         $motivo->setTransformer(array($this, 'setFirstUpper'));
-        $cliente->setTransformer(array($this, 'setFirstUpper'));
+        //$cliente->setTransformer(array($this, 'setFirstUpper'));
         $resp->setTransformer(array($this, 'setFirstUpper'));
         $status->setTransformer(array($this, 'setStatus'));
         $data_ocorrencia->setTransformer(array($this, 'formatDate'));
@@ -92,7 +101,7 @@ class OcorrenciasList extends Page
         $action2->setLabel('Registrar Negociação');
         $action2->setImage('support.png');
         $action2->setField('id');
-        $this->datagrid->addAction($action2, '5%');
+        $this->datagrid->addAction($action2, '4%');
 
         //cria o modelo da Datagrid montando sua estrutura (cabeçalho)
         $this->datagrid->createModel();
@@ -103,31 +112,36 @@ class OcorrenciasList extends Page
 
         // insert datagrid on card
         $card = new Card();
-        $card->setHeader('Ocorrências Timesharing');
+        $row = new Row();
+        $row->{'class'} = 'row justify-content-between';
+        $title = $row->addCol('Ocorrências Timesharing');
+        $title->{'class'} = 'col';
+        $this->total_ocorrencias = $row->addCol();
+        $this->total_ocorrencias->{'class'} = 'col';
+        
+
+        $card->setHeader($row);
+        //$card->setHeader('Ocorrências Timesharing');
         $card->setBody($this->datagrid);
         $card->setFooter($this->pageNavigation);
 
-        // inert card on page
+        // insert card on page
         parent::add($card);
 
         // *********************** MODAL FORM *************************************
 
-        $this->form = new FormWrapperModal(new Form('form_negociacao_register'));
+        //$this->form = new FormWrapperModal(new Form('form_negociacao_register'));
+        $this->form = new BootstrapFormBuilder('form_negociacao_register');
         $this->form->setFormTitle('Dados da Negociação');
 
         // hidden fields
-        $ocorrencia_id    = new Hidden('ocorrencia_id');
+        $ocorrencia_id = new Hidden('ocorrencia_id');
         $ocorrencia_id->{'id'} = 'ocorrencia_id';
         $ocorrencia_id->setEditable(false);
 
-
-        // $numero_contrato = new Text('dados_contrato');
-        // $numero_contrato->setValue("Lorem Ipsum");
-        // $numero_contrato->setEditable(false);
-
-        $origem           = new Combo('origem_id');
-        $tipo_solicitacao = new Combo('tipo_solicitacao_id');        
-
+        $origem           = new Combo('origem_id', 'combo', 'Selecione a origem...');
+        $tipo_solicitacao = new Combo('tipo_solicitacao_id', 'combo', 'Selecione o tipo de solicitação...');  
+        
         Transaction::open('bp_renegociacao');
         //load origem
         $origens = Origem::all();
@@ -147,15 +161,28 @@ class OcorrenciasList extends Page
 
         Transaction::close();
         
-        $this->form->addField('id_ocorrencia', $ocorrencia_id);
-        //$this->form->addField('Dados Contrato:', $numero_contrato);
-        $this->form->addField('Origem', $origem);
-        $this->form->addField('Tipo de Solicitação', $tipo_solicitacao);
-        
-        $act = new Action(array($this, 'saveNegociacao'));
-        $this->form->addAction('Salvar', $act);
+        // $this->form->addField('id_ocorrencia', $ocorrencia_id);
+        // $this->form->addField('Origem', $origem);
+        // $this->form->addField('Tipo de Solicitação', $tipo_solicitacao);
+        $this->form->addFields([$ocorrencia_id]);
+        $this->form->addFields([new Label('Origem'), $origem]);
+        $this->form->addFields([new Label('Tipo de Solicitação'), $tipo_solicitacao]);
 
-        parent::add($this->form);
+        
+        //$act = new Action(array($this, 'saveNegociacao'));
+        //$this->form->addAction('Salvar', $act);
+
+        $act = $this->form->addAction('Registrar Negociação', new Action(array($this, 'saveNegociacao')));
+        
+
+        $modal = new GenericModal('ModalNegociacao');
+        $modal->setHeader($this->form->getTitle());
+        $modal->setBody($this->form);
+        //$modal->setDefaultCloseOperation();
+        $modal->setFooter($act);
+
+        //parent::add($this->form);
+        parent::add($modal);
 
     }
 
@@ -185,50 +212,106 @@ class OcorrenciasList extends Page
 
     public function saveNegociacao()
     {
+
+        var_dump( $this->form->getData() );
+        var_dump( $_POST );
+        die;
         try{
 
             Transaction::open($this->connection);
-            // Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));
-            
-            $dados = $this->form->getData(); 
+            Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));            
+            $dados = $this->form->getData();
 
+            //obtem a instancia do objeto Ocorrencia e altera o atributo atendida
+            $ocorrencia = new Ocorrencia($dados->ocorrencia_id);
+            $ocorrencia->atendida = true;
+            $ocorrencia->store();
+
+            //cria um novo objeto Cliente
+            $cliente = new Cliente();
+            $cliente->nome          = $ocorrencia->nome_cliente;
+            $cliente->ts_cliente_id = $ocorrencia->idpessoa_cliente;
+            $cliente->store();
+
+            //cria um novo objeto Contrato
+            $contrato = new Contrato();
+            $contrato->cliente_id          = $cliente->id;
+            $contrato->projeto             = $ocorrencia->numeroprojeto;
+            $contrato->numero              = $ocorrencia->numerocontrato;
+            $contrato->produto             = $ocorrencia->nomeprojeto;
+            $contrato->ts_idvendats        = $ocorrencia->idvendats;
+            $contrato->ts_idvendaxcontrato = $ocorrencia->idvendaxcontrato;
+
+            //API CM - dados adicionais do contrato:
+            $api_contrato_service = $this->apiContratoServicesGetData($ocorrencia->idvendaxcontrato);            
+            if ($api_contrato_service) {
+                $contrato->data_venda = $api_contrato_service->DATAVENDA;
+                $contrato->validade   = $api_contrato_service->VALIDADE;
+                $contrato->pontos     = $api_contrato_service->NUMEROPONTOS;
+                $contrato->revertido  = ($api_contrato_service->FLGREVERTIDO == 'S') ? true : false;
+                $contrato->cancelado  = ($api_contrato_service->FLGCANCELADO == 'S') ? true : false;
+            }
+            $contrato->store();
+
+            //API CM - lançamentos financeiro
+            $docs = $this->apiTSLancamentosServicesGetData($ocorrencia->idvendats);
+            if ($docs) {
+                foreach ($docs as $doc) {
+                    $array = (array) $doc;
+                    $pacela = new TSLancamentos();
+                    $pacela->fromArray($array);
+                    $pacela->idvendaxcontrato = $ocorrencia->idvendaxcontrato;
+                    $pacela->store();
+                    unset($pacela);
+                }
+            }
+
+            //cria um novo objeto Negociacao
             $negociacao = new Negociacao();   
-            //dump form data
             $negociacao->fromArray((array) $dados); 
-
-            // additional user data
             $negociacao->usuario_id = Session::getValue('user')->id;
             $negociacao->situacao_id = 1;
-            
-            // persistence negociacao
-            $negociacao->store(); 
-
-            // change ocorrencia properties
-            $ocorrencia = new Ocorrencia($dados->ocorrencia_id);
-            $ocorrencia->atendida = true;            
-            $contrato = $this->getContrato($ocorrencia->idvendaxcontrato);
-
-            if ($contrato) {
-                $ocorrencia->data_venda = $contrato->DATAVENDA;
-            }
-            $ocorrencia->store();            
+            $negociacao->contrato_id = $contrato->id;
+            $negociacao->store();
 
             Transaction::close();
-
             Session::setValue('save_process', true);
             header("Location: ?class=OcorrenciasList");
 
         } catch(Exception $e) {
             new Message('warning', "<b>Erro:</b> " . $e->getMessage());
             Transaction::rollback();
+        }        
+    }
+    
+    private function apiTSLancamentosServicesGetData($idvendats)
+    {
+        // API CM - https://localhost/wser_cm/?class=TSLancamentosServices&method=getData&idvendats=54142
+        $location = CONF_CM_SERVICE . 'resp.php';
+        $parameters['class']  = 'TSLancamentosServices';
+        $parameters['method'] = 'getData';
+        $parameters['idvendats'] = $idvendats;
+        $url = $location . '?' . http_build_query($parameters);
+        $result = json_decode(file_get_contents($url));
+        if ($result) {
+            if ($result->status == 'success') {
+                if (isset($result->data->exception) && $result->data->exception) {
+                    $log  = $result->data->exception->class . PHP_EOL;
+                    $log .= $result->data->exception->method . PHP_EOL;
+                    $log .= $result->data->exception->data;
+                    $this->logger->write($log);
+                } else {
+                    return $result->data;
+                }
+            }
         }
-        
+        $this->logger->write($log);
+        return null;
     }
 
-    public function getContrato($idvendaxcontrato): ?object
+    private function apiContratoServicesGetData($idvendaxcontrato): ?object
     {
         // API CM - https://localhost/wser_cm/?class=ContratoServices&method=getData&idvendaxcontrato=128386
-        $log_msg = '';
         $location = CONF_CM_SERVICE . 'resp.php';
         $parameters['class']  = 'ContratoServices';
         $parameters['method'] = 'getData';
@@ -247,6 +330,7 @@ class OcorrenciasList extends Page
                 }
             }                
         }
+        $this->logger->write($log);
         return null;
     }
 
@@ -265,8 +349,8 @@ class OcorrenciasList extends Page
         $this->order_param = 'numero_ocorrencia DESC';
 
         // filtro de ocorrências
-        $this->filter[] = new Filter('ts_usuario_resp_id', '=', Session::getValue('user')->ts_usuario_id);
-        $this->filter[] = new Filter('ts_motivo_id', 'IN', array(364, 365, 427, 683, 702, 993));
+        $this->filter[] = new Filter('idusuario_resp', '=', Session::getValue('user')->ts_usuario_id);
+        $this->filter[] = new Filter('idmotivots', 'IN', array(364, 365, 427, 683, 702, 993));
         $this->filter[] = new Filter('atendida', '=', false);
         
         $param = $_REQUEST;
@@ -277,6 +361,8 @@ class OcorrenciasList extends Page
     {        
         if(!$this->loaded){
             $this->onReload();
+            $this->total_ocorrencias->add('<h6>Total: <span class="badge badge-warning">' . $this->total_registers . '</span> ocorrências</h3>');
+            
         }        
         parent::show();        
     }

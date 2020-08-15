@@ -18,6 +18,7 @@
         },
         "classmap": [
             "app/apiservices",
+            "app/control/tests",
             "app/control",
             "app/model"
         ],

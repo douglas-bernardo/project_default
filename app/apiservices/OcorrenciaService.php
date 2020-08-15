@@ -8,34 +8,29 @@ class OcorrenciaService
     public static function importaOcorrencias()
     {
         try {
-            // $oc = new OcorrenciaControl;
-            // $result = $oc->getListaOcorrencias();
-
-            // API CM
+            // API CM parameters
             $location = CONF_CM_SERVICE . 'resp.php';
-            $parameters['class']  = 'OcorrenciaService';
-            $parameters['method'] = 'import';
+            $parameters['class']  = 'OcorrenciaServices';
+            $parameters['method'] = 'getData';
             $url = $location . '?' . http_build_query($parameters);
             $result = json_decode(file_get_contents($url));
             
             if ($result) {
-
-                if (isset($result->data->status) && $result->data->status == 'error') {
-                    return $result;
+                if ($result->status == 'success') {
+                    Transaction::open('bp_renegociacao');
+                    foreach ($result->data as $object) {   
+                        $array = (array) $object;                 
+                        $ocorrencia = new Ocorrencia();
+                        $ocorrencia->fromArray($array);
+                        $ocorrencia->store();
+                        unset($ocorrencia);
+                    }
+                    Transaction::close();
+                    $total = count($result->data);
+                    return "Success: " . $total . " dados importados com sucesso!";
+                } else {
+                    return $result->data;
                 }
-              
-                Transaction::open('bp_renegociacao');
-                foreach ($result->data as $object) {   
-                    $array = (array) $object;                 
-                    $ocorrencia = new Ocorrencia();
-                    $ocorrencia->fromArray($array);
-                    $ocorrencia->store();
-                    unset($ocorrencia);
-                }
-                Transaction::close();
-
-                $total = count($result->data);
-                return "Success: " . $total . " dados importados com sucesso!";
 
             } else {
                 return "Error: Sem dados para importar!";

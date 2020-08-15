@@ -11,7 +11,7 @@ class Row extends Element
         $this->class = 'row';
     }
 
-    public function addCol($content)
+    public function addCol($content = '')
     {
         //instancia o obj coll
         $col = new Col($content);

@@ -4,21 +4,24 @@ use Library\Control\Action;
 use Library\Control\Page;
 use Library\Database\Transaction;
 use Library\Session\Session;
+use Library\Widgets\Container\Breadcrumb;
 use Library\Widgets\Container\Card;
+use Library\Widgets\Container\Row;
 use Library\Widgets\Dialog\Message;
+use Library\Widgets\Form\Combo;
 use Library\Widgets\Form\Divider;
 use Library\Widgets\Form\Entry;
+use Library\Widgets\Form\Hidden;
 use Library\Widgets\Form\Label;
 use Library\Widgets\Wrapper\BootstrapFormBuilder;
 
 class NegociacaoForm extends Page
 {
 
-    /**
-     * Undocumented variable
-     *
-     * @var Card
-     */
+    /** @var Breadcrumb */
+    private $breadcrumb;
+
+    /** @var Card */
     private $panel;
 
     /**
@@ -36,6 +39,12 @@ class NegociacaoForm extends Page
 
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Negociacao';
+
+        $this->breadcrumb = new Breadcrumb;
+        $this->breadcrumb->addBreadCrumbItem('Negociações', new Action(['NegociacaoList','reload']));
+        $this->breadcrumb->addBreadCrumbItem('Gerenciar Negociação');
+
+        parent::add($this->breadcrumb);
 
         // //instancia de um formulário
         // $this->form = new FormWrapper(new Form('form_negociacao'), 'row');
@@ -91,12 +100,11 @@ class NegociacaoForm extends Page
 
 
         $this->form = new BootstrapFormBuilder('form_negociacao');
-        //$this->form->setFormTitle('Negociação'); 
         
         $this->form->setDivider(new Divider('Dados do Contrato:', 'border-top: 2px solid #999')); 
 
         $cliente = new Entry('nome_cliente');
-        $cliente->setOptions('sizing', 'form-control-sm');
+        $cliente->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
 
         $this->form->addFields( [new Label('Cliente'), $cliente] );
 
@@ -105,26 +113,25 @@ class NegociacaoForm extends Page
         $produto         = new Entry('nome_projeto');        
         $data_venda      = new Entry('data_venda');
         $valor_venda     = new Entry('valor_venda');        
-        $pontos          = new Entry('pontos');        
-        //$status_contrato = new Entry('status_contrato');
+        $pontos          = new Entry('pontos_contrato');
         
-        $num_contrato->setOptions('sizing', 'form-control-sm');
-        $integralizacao->setOptions('sizing', 'form-control-sm');
-        $produto->setOptions('sizing', 'form-control-sm');
-        $data_venda->setOptions('sizing', 'form-control-sm');
-        $valor_venda->setOptions('sizing', 'form-control-sm');
-        $pontos->setOptions('sizing', 'form-control-sm');
-        //$status_contrato->setOptions('sizing', 'form-control-sm');
+        $num_contrato->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $integralizacao->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $produto->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $data_venda->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $valor_venda->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $pontos->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        
 
-        $this->form->addFields( [new Label('Número Contrato'), $num_contrato, 'size' => 'col-md-6'], 
-                                [new Label('Integralização'), $integralizacao, 'size' => 'col-md-6'] );
-        $this->form->addFields( [new Label('Produto'), $produto ] );
+        $this->form->addFields( [new Label('Número Contrato'), $num_contrato, 'size' => 'col-md-4'], 
+                                [new Label('Integralização'), $integralizacao, 'size' => 'col-md-4'],
+                                [new Label('Produto'), $produto, 'size' => 'col-md-4'] );
+
+        //$this->form->addFields( [new Label('Produto'), $produto ] );
+        
         $this->form->addFields( [new Label('Data Venda'), $data_venda, 'size' => 'col-md-4'], 
                                 [new Label('Valor da venda'), $valor_venda, 'size' => 'col-md-4'],
                                 [new Label('Pontos'), $pontos, 'size' => 'col-md-4'] );
-
-        //$this->form->addFields( [new Label('Pontos'), $pontos, 'size' => 'col-md-6'], 
-        //                        [new Label('Status'), $status_contrato, 'size' => 'col-md-6'] );
         
         // dados da negociação
         $this->form->setDivider(new Divider('Dados Negociação:', 'border-top: 2px solid #999')); 
@@ -135,48 +142,80 @@ class NegociacaoForm extends Page
         $origem           = new Entry('origem');
         $situacao         = new Entry('situacao');
 
-        $this->form->addFields( [new Label('Número da Ocorrência'), $num_ocorrencia, 'size' => 'col-md-6'], 
-                                [new Label('Data da Ocorrência'), $data_ocorrencia, 'size' => 'col-md-6'] );
+        $num_ocorrencia->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $data_ocorrencia->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $tipo_solicitacao->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $origem->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
+        $situacao->setOptions('sizing', 'form-control-sm border-0')->setEditable(false);
 
-        $this->form->addFields( [new Label('Motivo'), $tipo_solicitacao, 'size' => 'col-md-4'],
-                                [new Label('Origem'), $origem, 'size' => 'col-md-4'],
-                                [new Label('Situação'), $situacao, 'size' => 'col-md-4'] );
+        $this->form->addFields( [new Label('Número da Ocorrência'), $num_ocorrencia, 'size' => 'col-md-2'], 
+                                [new Label('Data da Ocorrência'), $data_ocorrencia, 'size' => 'col-md-2'],
+                                [new Label('Motivo'), $tipo_solicitacao, 'size' => 'col-md-4'],
+                                [new Label('Origem'), $origem, 'size' => 'col-md-2'],
+                                [new Label('Situação'), $situacao, 'size' => 'col-md-2'] );
 
+        //input that catch situação value
+        $this->form->addFields([new Hidden('situacao_id')]);
 
         $this->panel = new Card();
-        $this->panel->setBody($this->form);        
+        $this->panel->setBody($this->form);
+
+        //load situação:
+        $combo_situacao = new Combo('situacao_id', 'form-control', 'Selecione para finalizar...');
+        Transaction::open('bp_renegociacao');
+        $situacao_tipos = Situacao::all();
+        foreach ($situacao_tipos as $obj_sit) {
+            $items[$obj_sit->id] = $obj_sit->nome;
+        }
+        $combo_situacao->addItems($items);
+        Transaction::close();
 
         $saveNeg = $this->form->addAction('Finalizar Negociação', new Action(array($this, 'save')));
 
-        $this->panel->setFooter($saveNeg);
+        $row = new Row();
+        $col = $row->addCol($combo_situacao);// add conteudo a coluna
+        $col->class = 'col-6 col-sm-4';
+        $col = $row->addCol($saveNeg);// add conteudo a coluna
+        $col->class = 'col';
+
+        $this->panel->setFooter($row);
 
         parent::add($this->panel);
 
     }
 
-    function management ($param)
+    function management($param)
     {        
         if(isset($param['id'])) {            
             Transaction::open($this->connection);
 
             $id = $param['id'];
-            $negociacao = new Negociacao($id);             
+            $negociacao = new Negociacao($id);       
 
             $form_data = new stdClass;
 
             // dados do contrato
-            $dados_ocorrencia           = $negociacao->getOcorrencia();
-
-            $form_data->nome_cliente    = $dados_ocorrencia->nome_cliente;
-            $form_data->numero_contrato = $negociacao->get_proj_contrato();
-            $form_data->nome_projeto    = $dados_ocorrencia->nome_projeto;
-            $form_data->valor_venda     = number_format($dados_ocorrencia->valor_venda_view , 2, ",", ".");
-            $form_data->data_venda      = $dados_ocorrencia->data_venda;
-            $form_data->integralizacao  = "10% (teste)";
+            $contrato = $negociacao->getContrato();
+            $form_data->nome_cliente    = $contrato->getCliente()->nome;
+            $form_data->numero_contrato = $contrato->projeto . '-' . $contrato->numero;
+            $form_data->nome_projeto    = $contrato->produto;
+            $form_data->valor_venda     = number_format( $contrato->getValorVenda(), 2, ',', '.');
+            $form_data->pontos_contrato = $contrato->pontos;
+            $form_data->data_venda      = date('d/m/Y', strtotime($contrato->data_venda));
+            $vVenda = $contrato->getValorVenda();
+            if ($vVenda != 0) {
+                $perc_int = round(($contrato->getValorPago() / $contrato->getValorVenda() * 100), 2)  . '%';
+            } else {
+                $perc_int = 'N/D';
+            }
+            $form_data->integralizacao  = $perc_int;
 
             //dados da ocorrencia
-            $form_data->numero_ocorrencia = $dados_ocorrencia->numero_ocorrencia;
-            $form_data->data_ocorrencia   = date(CONF_DATE_BR, strtotime($dados_ocorrencia->dtocorrencia));
+            $ocorrencia = $negociacao->getOcorrencia();
+            $form_data->numero_ocorrencia = $ocorrencia->numero_ocorrencia;
+            $form_data->data_ocorrencia   = date(CONF_DATE_BR, strtotime($ocorrencia->dtocorrencia));
+
+            //dados Negociação
             $form_data->tipo_solicitacao  = $negociacao->get_tipo_solicitacao();
             $form_data->origem            = $negociacao->get_origem();
             $form_data->situacao          = $negociacao->get_situacao();
@@ -188,10 +227,17 @@ class NegociacaoForm extends Page
     }
 
 
-    function save()
+    public static function save()
     {
-        $dados = $this->form->getData();
-        var_dump($dados);
+        // $dados = $this->form->getData();
+        // var_dump($dados);
+        // var_dump($_POST);
+        usleep(400000);
+
+        
+        $response = $_POST;
+        return $response;
+        
     }
 
     public function saveNegociacao()
