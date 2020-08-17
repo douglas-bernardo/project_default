@@ -19,7 +19,7 @@ trait ReloadTrait
 
             Transaction::open($this->connection);
             
-            Transaction::setLogger(new LoggerTXT('tmp/onReloadTrait.txt'));
+            //Transaction::setLogger(new LoggerTXT('tmp/onReloadTrait.txt'));
 
             $repository = new Repository($this->activeRecord);  //cria um repositório
             

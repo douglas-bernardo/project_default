@@ -279,8 +279,8 @@ class OcorrenciasList extends Page
             header("Location: ?class=OcorrenciasList");
 
         } catch(Exception $e) {
-            new Message('warning', "<b>Erro:</b> " . $e->getMessage());
             Transaction::rollback();
+            new Message('warning', "<b>Erro:</b> " . $e->getMessage());
         }        
     }
     

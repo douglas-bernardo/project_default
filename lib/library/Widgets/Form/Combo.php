@@ -13,7 +13,7 @@ class Combo extends Field implements FormElementInterface
         parent::__construct($name);
         $this->tag = new Element('select', true);
         $this->tag->{'class'} = $class;    //classe CSS
-        $this->default = $default;        
+        $this->default = $default;
     }
 
     public function addItems($items)

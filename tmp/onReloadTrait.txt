@@ -6248,3 +6248,59 @@ SELECT * FROM contrato WHERE id=1
 SELECT * FROM situacao WHERE id=1
 [log: 2020-08-14 19:29:40]
 SELECT COUNT(*) FROM negociacao
+[log: 2020-08-15 18:21:47]
+SELECT * FROM ocorrencia WHERE (idusuario_resp = '640054' AND idmotivots IN (364, 365, 427, 683, 702, 993) AND atendida = FALSE) ORDER BY numero_ocorrencia DESC LIMIT 10
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '365'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT * FROM motivo WHERE idmotivots = '364'
+[log: 2020-08-15 18:21:47]
+SELECT COUNT(*) FROM ocorrencia WHERE (idusuario_resp = '640054' AND idmotivots IN (364, 365, 427, 683, 702, 993) AND atendida = FALSE)
+[log: 2020-08-15 18:21:49]
+SELECT * FROM negociacao ORDER BY id DESC LIMIT 10
+[log: 2020-08-15 18:21:49]
+SELECT * FROM ocorrencia WHERE id=4
+[log: 2020-08-15 18:21:49]
+SELECT * FROM tipo_solicitacao WHERE id=2
+[log: 2020-08-15 18:21:49]
+SELECT * FROM contrato WHERE id=2
+[log: 2020-08-15 18:21:49]
+SELECT * FROM cliente WHERE id=2
+[log: 2020-08-15 18:21:49]
+SELECT * FROM contrato WHERE id=2
+[log: 2020-08-15 18:21:49]
+SELECT * FROM contrato WHERE id=2
+[log: 2020-08-15 18:21:49]
+SELECT * FROM situacao WHERE id=1
+[log: 2020-08-15 18:21:49]
+SELECT * FROM ocorrencia WHERE id=1
+[log: 2020-08-15 18:21:49]
+SELECT * FROM tipo_solicitacao WHERE id=3
+[log: 2020-08-15 18:21:49]
+SELECT * FROM contrato WHERE id=1
+[log: 2020-08-15 18:21:49]
+SELECT * FROM cliente WHERE id=1
+[log: 2020-08-15 18:21:49]
+SELECT * FROM contrato WHERE id=1
+[log: 2020-08-15 18:21:49]
+SELECT * FROM contrato WHERE id=1
+[log: 2020-08-15 18:21:49]
+SELECT * FROM situacao WHERE id=1
+[log: 2020-08-15 18:21:49]
+SELECT COUNT(*) FROM negociacao

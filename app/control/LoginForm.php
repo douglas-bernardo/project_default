@@ -57,19 +57,18 @@ class LoginForm extends Page
         $this->form->addFields( [new Label('Email'), $email] );
         $this->form->addFields( [new Label('Senha'), $pass] );
 
-        $bntLogin = $this->form->addAction('Login', new Action(array($this, 'onLogin')));
+        $bntLogin = $this->form->addAction('Login', new Action(array($this, 'onLogin')), true);
         $bntLogin->{'class'} = 'btn btn-info buttonLogin';
+        $bntLogin->{'id'} = 'login_system';
+
         $card = new Card();
         $card->setHeader('Renegociação TS', 'center');
         $card->setBody($this->form);
         $card->setFooter($bntLogin);
-
         $div->add($card);
 
         //$div->add($this->form);
-
         parent::add($div);
-
     }
     
     public function onLogin()

@@ -9,6 +9,7 @@ use Library\Widgets\Container\Card;
 use Library\Widgets\Container\Row;
 use Library\Widgets\Dialog\Message;
 use Library\Widgets\Form\Combo;
+use Library\Widgets\Form\DateEntry;
 use Library\Widgets\Form\Divider;
 use Library\Widgets\Form\Entry;
 use Library\Widgets\Form\Hidden;
@@ -32,6 +33,7 @@ class NegociacaoForm extends Page
     private $form;
     private $connection;
     private $activeRecord;
+    private $combo_situacao;
 
     public function __construct() 
     {
@@ -154,6 +156,9 @@ class NegociacaoForm extends Page
                                 [new Label('Origem'), $origem, 'size' => 'col-md-2'],
                                 [new Label('Situação'), $situacao, 'size' => 'col-md-2'] );
 
+        $this->form->addFields([new Hidden('negociacao_id')]);     
+        $this->form->addFields([new Hidden('data_finalizacao')]);                            
+
         //input that catch situação value
         $this->form->addFields([new Hidden('situacao_id')]);
 
@@ -161,21 +166,26 @@ class NegociacaoForm extends Page
         $this->panel->setBody($this->form);
 
         //load situação:
-        $combo_situacao = new Combo('situacao_id', 'form-control', 'Selecione para finalizar...');
+        $this->combo_situacao = new Combo('situacao_id', 'form-control', 'Selecione para finalizar...');
         Transaction::open('bp_renegociacao');
         $situacao_tipos = Situacao::all();
         foreach ($situacao_tipos as $obj_sit) {
             $items[$obj_sit->id] = $obj_sit->nome;
         }
-        $combo_situacao->addItems($items);
-        Transaction::close();
-
-        $saveNeg = $this->form->addAction('Finalizar Negociação', new Action(array($this, 'save')));
+        $this->combo_situacao->addItems($items);
+        Transaction::close();       
 
         $row = new Row();
-        $col = $row->addCol($combo_situacao);// add conteudo a coluna
-        $col->class = 'col-6 col-sm-4';
-        $col = $row->addCol($saveNeg);// add conteudo a coluna
+
+        $col = $row->addCol($this->combo_situacao);// add conteudo a coluna
+        $col->class = 'col-6 col-sm-3';
+
+        $data_finalizacao = new DateEntry('data_finalizacao_footer');
+        $data_finalizacao->{'class'} = 'form-control';
+        $col = $row->addCol($data_finalizacao);
+
+        $finalizaNegociacao = $this->form->addAction('Finalizar Negociação', new Action(array($this, 'finalizaNegociacao')));
+        $col = $row->addCol($finalizaNegociacao);// add conteudo a coluna
         $col->class = 'col';
 
         $this->panel->setFooter($row);
@@ -190,11 +200,12 @@ class NegociacaoForm extends Page
             Transaction::open($this->connection);
 
             $id = $param['id'];
-            $negociacao = new Negociacao($id);       
+            $negociacao = new Negociacao($id);   
 
             $form_data = new stdClass;
 
             // dados do contrato
+            $form_data->negociacao_id = $id;
             $contrato = $negociacao->getContrato();
             $form_data->nome_cliente    = $contrato->getCliente()->nome;
             $form_data->numero_contrato = $contrato->projeto . '-' . $contrato->numero;
@@ -227,17 +238,79 @@ class NegociacaoForm extends Page
     }
 
 
-    public static function save()
+    public static function finalizaNegociacao()
     {
         // $dados = $this->form->getData();
         // var_dump($dados);
         // var_dump($_POST);
-        usleep(400000);
+        
+        //$this->form->setData($this->form->getData());
 
+        if(isset($_POST['situacao_id']) AND !empty($_POST['situacao_id'])){
+            $dados = (object) $_POST;    
+            
+            if (isset($_POST['data_finalizacao']) AND !empty($_POST['data_finalizacao'])) {
+
+                try {
+                    Transaction::open('bp_renegociacao');
+    
+                    $negociacao_id = (int) $dados->negociacao_id;
+                    $negociacao = new Negociacao($negociacao_id);
         
-        $response = $_POST;
-        return $response;
+                    $situacao_id = (int) $dados->situacao_id;
+                    switch ($situacao_id) {
+                        case 2: //cancelado
+                            $contrato = $negociacao->getContrato();
+                            $contrato->cancelado = true;
+                            $contrato->store();
+
+                            $negociacao->data_finalizacao = $dados->data_finalizacao;
+                            $negociacao->multa            = $dados->multa;
+                            $negociacao->reembolso        = $dados->reembolso;
+                            $negociacao->numero_pc        = $dados->numero_pc;
+                            $negociacao->taxas_extras     = $dados->taxas_extras;
+                            $negociacao->situacao_id      = $situacao_id;
+                            $negociacao->finalizada       = true;
+                            $negociacao->store();
+                            
+                            Transaction::close();
+                            return 'Cancelamento registrado com sucesso!';
+                            break;
+                        
+                        case 6:
+
+                            Transaction::close();
+                            return 'Retenção';
+                            break;
         
+                        case 7:
+
+                            Transaction::close();
+                            return 'Reversão';
+                            break;
+        
+                        default:
+                            
+                            $situacao = new Situacao($situacao_id);
+                            Transaction::close();
+                            return 'Negociação finalizada como: ' . $situacao->nome;
+                            break;
+                    }
+                    
+                } catch (Exception $e) {
+                    //Transaction::rollback();
+                    return $e->getMessage();
+                }
+
+            } else {
+                //$this->combo_situacao->setValue($dados->situacao_id);
+                return "Informe a data de finalização!";
+            }
+
+        } else {
+            return "Escolha uma opção válida para finalizar a negociação!";
+        }
+
     }
 
     public function saveNegociacao()
@@ -279,7 +352,9 @@ class NegociacaoForm extends Page
         }
 
         catch(Exception $e){
+            Transaction::rollback();
             new Message('warning', "<b>Erro:</b> " . $e->getMessage());
         }
     }
+
 }

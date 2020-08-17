@@ -31,20 +31,25 @@ $(function() {
 
 
     /**forms relativos a negociação */
+    // captura a situação esolhida
     $('select[name="situacao_id"]').on('change', function() {
 
+        if ($('.alert').length) {
+            $('.alert').remove();
+        }
+
+        var template = "app/templates/fragments/";
+        var content = null;
         if ($(".extra_data").length) {
             $(".extra_data").slideUp(300, function () {
                 $(this).remove(); 
             });
         }
 
-        var template = "app/templates/fragments/";
-        $('[name="form_negociacao"] > div:last').after( '<div class="extra_data border"></div>' );
-        var content = $( ".extra_data" );
-
         switch ($(this).val()) {
             case '2':
+                $('[name="form_negociacao"] > div:last').after( '<div class="extra_data border"></div>' );
+                content = $( ".extra_data" );
                 template += 'form_cancelamento.html';
                 content.css("display", "none").slideDown(300, function() {
                              $("html, body").stop().animate({scrollTop: $(this).offset().top}, 300);
@@ -52,6 +57,8 @@ $(function() {
                 break;
                          
             case '6':
+                $('[name="form_negociacao"] > div:last').after( '<div class="extra_data border"></div>' );
+                content = $( ".extra_data" );
                 template += 'form_retencao.html';
                 content.css("display", "none").slideDown(300, function() {
                                 $("html, body").stop().animate({scrollTop: $(this).offset().top}, 300);
@@ -59,45 +66,59 @@ $(function() {
                 break;
 
             case '7':
+                $('[name="form_negociacao"] > div:last').after( '<div class="extra_data border"></div>' );
+                content = $( ".extra_data" );
                 template += 'form_reversao.html';
                 content.css("display", "none").slideDown(300, function() {
                                 $("html, body").stop().animate({scrollTop: $(this).offset().top}, 300);
                             }).load( template );                
                 break;
 
-            default:
-                if (content.length) {
-                    content.slideUp(300, function () {
-                         $(this).remove(); 
-                    });
-                 }
-                break;
         }
-        //input[name="situacao_id"]' -> hidden
+
         $('form[name="form_negociacao"] input[name="situacao_id"]').val($(this).val());
+
     });
+
+    // captura a data de finalização
+    $('input[name="data_finalizacao_footer"]').on('change', function() {
+
+        if($('input[name="data_finalizacao_footer"]').val()) {
+            var data_finalizacao = $('input[name="data_finalizacao_footer"]').val();
+            $('form[name="form_negociacao"] input[name="data_finalizacao"]').val(data_finalizacao);
+        }
+
+    });
+    
 
 
     // finalizando negociação
     $('input[name="finalizar_negociação"]').click(function (e) {
         e.preventDefault();
+        if ($('.alert').length) {
+            $('.alert').remove();
+        }
 
         var situacao = $('select[name="situacao_id"]');
-        //console.log(situacao.children("option:selected").val());
+        
         if (situacao.val() == null) {
-            if ($('.alert').length) {
-                $('.alert').remove();
-            }
-            $('.container-fluid nav').prepend(__alert("danger", 'Selecione uma opção válida!'))
+            $('.container-fluid nav').prepend(__alert("danger", 'Selecione uma opção válida!'));
             return;
         }
+
+        if (!$('input[name="data_finalizacao_footer"]').val()) {
+            $('.container-fluid nav').prepend(__alert("danger", 'Informe a data da finalização!'));
+            return;
+        }
+
 
         var baseURL = 'https://localhost/project-default/rest.php';
         var form_finalizar = $('form[name="form_negociacao"]');
         var form_data = form_finalizar.serialize();
 
         $.ajax({
-            url:baseURL + '?class=NegociacaoForm&method=save',
+
+            url:baseURL + '?class=NegociacaoForm&method=finalizaNegociacao',
             type:'POST',
             data:form_data,
             dataType: 'JSON',
@@ -108,25 +129,31 @@ $(function() {
                     $('.alert').remove();
                 }
                 
-           },
-           success:function (response, textStatus, jqXHR) {
+            },
+            success:function (response, textStatus, jqXHR) {
             //$('.container-fluid nav').prepend(__alert("success", errorThrow));
                 if (response.status == 'error') {
-                    $('.container-fluid nav').prepend(__alert("danger", response.data))
+                    $('.container-fluid nav').prepend(__alert("danger", response.data));
                 } else {
-                    //$('.container-fluid nav').prepend(__alert("success", response.data))
-                    console.clear();
-                    console.log(response.data);
+                    $('.container-fluid nav').prepend(__alert("success", response.data));                    
+                    console.log(response);
                 }
-           },
-           error: function (jqXHR, textStatus, errorThrow) {
+
+                
+                // setTimeout(function () {
+                //     window.location.href = 'https://localhost/project-default/?class=NegociacaoList';
+                // },3000);
+
+            },
+            error: function (jqXHR, textStatus, errorThrow) {
                 $('.container-fluid nav').prepend(__alert("danger", errorThrow));
-           },
-           complete: function (jqXHR, textStatus) {
+            },
+            complete: function (jqXHR, textStatus) {
                 $('.container-fluid').find('.loader').fadeOut(400, function () {
                     $(this).remove();
                 });
-           }
+            }
+
        });
         
     })

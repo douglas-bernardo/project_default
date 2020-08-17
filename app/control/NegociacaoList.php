@@ -114,8 +114,12 @@ class NegociacaoList extends Page
         return number_format($value, 2, ",", ".");
     }
 
-    public function setSituacao($value)
+    public function setSituacao($value, $row)
     {
+        if ($value != 'Aguardando Retorno') {
+            $row->children[0]->{'class'} = "datagrig-disable-link";
+            $row->children[0]->children[0]->{'href'} = '#';
+        }
         return ($value == 'Aguardando Retorno' ? '<span class="badge badge-danger">'. $value .'</span>' : $value);
     }
 

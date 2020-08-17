@@ -78,12 +78,12 @@ class BootstrapFormBuilder implements FormInterface
         return $this->decorated->getData($class);
     }
 
-    public function addAction($label, ActionInterface $action)
+    public function addAction($label, ActionInterface $action, $submit = false)
     {
         $name = \strtolower(str_replace(' ', '_', $label));
         $btn = new Button($name);
         $btn->setFormName($this->decorated->getName());
-        $btn->setAction($action, $label);        
+        $btn->setAction($action, $label, $submit);        
         $btn->{'class'} = 'btn btn-info';
         $this->decorated->addAction($label, $action);
         return $btn;

@@ -8,12 +8,13 @@ class Button extends Field implements FormElementInterface
     private $action;
     private $label;
     private $formName;
-    //private $class;
+    private $submitForm;
 
-    public function setAction(ActionInterface $action, $label)
+    public function setAction(ActionInterface $action, $label, $submitForm = false)
     {
         $this->action = $action;
         $this->label = $label;
+        $this->submitForm = $submitForm;
     }
 
     public function setFormName($name)
@@ -40,8 +41,11 @@ class Button extends Field implements FormElementInterface
         //$this->tag->class = $this->class;    
         $this->tag->value = $this->label; //rótulo do botão
         //define a ação do botão
-        //$this->tag->onclick = "document.{$this->formName}.action='{$url}';"."document.{$this->formName}.submit()";
-        $this->tag->onclick = "document.{$this->formName}.action='{$url}';";
+        if ($this->submitForm) {
+            $this->tag->onclick = "document.{$this->formName}.action='{$url}';"."document.{$this->formName}.submit()";
+        } else {
+            $this->tag->onclick = "document.{$this->formName}.action='{$url}';";
+        }
         //exibe o botão
         $this->tag->show();
     }
