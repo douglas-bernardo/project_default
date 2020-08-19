@@ -13,6 +13,12 @@ class DateEntry extends Field implements FormElementInterface
         $this->tag->type = 'date';
     }
 
+    public function setMetaData(string $data)
+    {
+        $this->tag->setMetaData($data);
+    }
+
+
     public function show()
     {
         $this->tag->show();

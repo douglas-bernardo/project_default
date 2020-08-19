@@ -67,6 +67,8 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
         'Pessoa' => __DIR__ . '/../..' . '/app/model/Pessoa.php',
         'PessoaGrupo' => __DIR__ . '/../..' . '/app/model/PessoaGrupo.php',
         'Produto' => __DIR__ . '/../..' . '/app/model/Produto.php',
+        'Retencao' => __DIR__ . '/../..' . '/app/model/Retencao.php',
+        'Reversao' => __DIR__ . '/../..' . '/app/model/Reversao.php',
         'Situacao' => __DIR__ . '/../..' . '/app/model/Situacao.php',
         'TSLancamentos' => __DIR__ . '/../..' . '/app/model/TSLancamentos.php',
         'TestService' => __DIR__ . '/../..' . '/app/apiservices/TestService.php',

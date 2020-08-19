@@ -76,7 +76,7 @@ class OcorrenciasList extends Page
         $projeto         = new DatagridColumn('numeroprojeto', 'Proj.', 'center', '4%');
         $contrato        = new DatagridColumn('numerocontrato', 'Contrato', 'center', '10%');
         $resp            = new DatagridColumn('nomeusuario_resp', 'Resp.', 'center', '10%');
-        $status          = new DatagridColumn('status', 'Status', 'center', '20%');
+        $status          = new DatagridColumn('status', 'Status TS', 'center', '20%');
 
         //adiciona as colunas à Datagrid
         $this->datagrid->addColumn($id);
@@ -172,8 +172,7 @@ class OcorrenciasList extends Page
         //$act = new Action(array($this, 'saveNegociacao'));
         //$this->form->addAction('Salvar', $act);
 
-        $act = $this->form->addAction('Registrar Negociação', new Action(array($this, 'saveNegociacao')));
-        
+        $act = $this->form->addAction('Registrar Negociação', new Action( [$this, 'registraNegociacao'] ), true);   
 
         $modal = new GenericModal('ModalNegociacao');
         $modal->setHeader($this->form->getTitle());
@@ -210,16 +209,12 @@ class OcorrenciasList extends Page
         return date('d-m-Y', strtotime( $value ));
     }
 
-    public function saveNegociacao()
+    public function registraNegociacao()
     {
-
-        var_dump( $this->form->getData() );
-        var_dump( $_POST );
-        die;
         try{
 
             Transaction::open($this->connection);
-            Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));            
+            //Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));            
             $dados = $this->form->getData();
 
             //obtem a instancia do objeto Ocorrencia e altera o atributo atendida
@@ -234,6 +229,7 @@ class OcorrenciasList extends Page
             $cliente->store();
 
             //cria um novo objeto Contrato
+            // *** IMPORTANTE: Adicionar validação para contratos inseridos manualmente no processo de reversão.
             $contrato = new Contrato();
             $contrato->cliente_id          = $cliente->id;
             $contrato->projeto             = $ocorrencia->numeroprojeto;
@@ -241,6 +237,7 @@ class OcorrenciasList extends Page
             $contrato->produto             = $ocorrencia->nomeprojeto;
             $contrato->ts_idvendats        = $ocorrencia->idvendats;
             $contrato->ts_idvendaxcontrato = $ocorrencia->idvendaxcontrato;
+            $contrato->origem_contrato_id  = 1; //API service.
 
             //API CM - dados adicionais do contrato:
             $api_contrato_service = $this->apiContratoServicesGetData($ocorrencia->idvendaxcontrato);            
@@ -250,7 +247,7 @@ class OcorrenciasList extends Page
                 $contrato->pontos     = $api_contrato_service->NUMEROPONTOS;
                 $contrato->revertido  = ($api_contrato_service->FLGREVERTIDO == 'S') ? true : false;
                 $contrato->cancelado  = ($api_contrato_service->FLGCANCELADO == 'S') ? true : false;
-            }
+            } 
             $contrato->store();
 
             //API CM - lançamentos financeiro
@@ -275,7 +272,7 @@ class OcorrenciasList extends Page
             $negociacao->store();
 
             Transaction::close();
-            Session::setValue('save_process', true);
+            Session::setValue('neg_register_process', true);
             header("Location: ?class=OcorrenciasList");
 
         } catch(Exception $e) {
@@ -336,13 +333,13 @@ class OcorrenciasList extends Page
 
     public function onReload()
     {
-        if (Session::getValue('save_process')) {
+        if (Session::getValue('neg_register_process')) {
             $link = new Element('a');
             $link->{'class'} = 'alert-link';
             $link->{'href'} = '?class=NegociacaoList';
             $link->add('negociações');
             new Message('success', "Negociação registrada com sucesso! Clique em {$link}, para gerenciar suas ocorrências");
-            Session::unSet('save_process');
+            Session::unSet('neg_register_process');
         }
         
         // order to show

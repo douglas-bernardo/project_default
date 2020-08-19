@@ -19,6 +19,16 @@ class FormBase implements FormInterface
         $this->setName($name);
     }
 
+    public function setClass(string $class)
+    {
+        $this->element->{'class'} = $class;
+    }
+
+    public function setMetaData(string $data): void
+    {
+        $this->element->setMetaData($data);
+    }
+
     public function setName($name)
     {
         $this->element->{'name'} = $name;

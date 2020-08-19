@@ -28,6 +28,16 @@ class BootstrapFormBuilder implements FormInterface
         $this->decorated = new FormBase($name);
     }
 
+    public function setClass(string $class)
+    {
+        $this->decorated->setClass($class);
+    }
+
+    public function setMetaData(string $data): void
+    {
+        $this->decorated->setMetaData($data);
+    }
+
     public function setName($name)
     {
         $this->decorated->setName($name);

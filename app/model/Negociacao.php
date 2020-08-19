@@ -27,13 +27,14 @@ class Negociacao extends Record
 
     public function get_valor_venda()
     {
-        $c = $this->getContrato();
-        if (isset($c)) {
-            $valor = $c->getValorVenda();
+        $contrato = $this->getContrato();
+        if (isset($contrato)) {
+            $valor = $contrato->getValorVenda();
             if ($valor) {
                 return  $valor;
             } else {
-                return 0;
+                //return 0;
+               return $this->getOcorrencia()->valor_venda;
             }
         }
     }

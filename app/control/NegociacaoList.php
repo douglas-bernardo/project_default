@@ -118,6 +118,7 @@ class NegociacaoList extends Page
     {
         if ($value != 'Aguardando Retorno') {
             $row->children[0]->{'class'} = "datagrig-disable-link";
+            $row->{'title'} = 'Negociação Concluída';
             $row->children[0]->children[0]->{'href'} = '#';
         }
         return ($value == 'Aguardando Retorno' ? '<span class="badge badge-danger">'. $value .'</span>' : $value);

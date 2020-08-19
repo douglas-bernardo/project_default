@@ -63,3 +63,12 @@ INSERT INTO tipo_solicitacao (nome) VALUES ('Negociação PDD');
 INSERT INTO tipo_solicitacao (nome) VALUES ('Sol. De Negociação');
 INSERT INTO tipo_solicitacao (nome) VALUES ('Procedimento Cancelamento PDD');
 INSERT INTO tipo_solicitacao (nome) VALUES ('Sol. de Informação');
+
+-- -----------------------------------------------------
+-- Carga dados: origem_contrato
+-- -----------------------------------------------------
+INSERT INTO origem_contrato (nome) VALUES ('API: Automático');
+INSERT INTO origem_contrato (nome) VALUES ('Processo: Reversão Manual');
+INSERT INTO origem_contrato (nome) VALUES ('Processo: Insert Manual');
+INSERT INTO origem_contrato (nome) VALUES ('Processo: Importação Sistema');
+INSERT INTO origem_contrato (nome) VALUES ('Processo: Correção Manual');

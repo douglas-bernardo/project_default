@@ -1,21 +1,14 @@
 /*
 // default way to begin
 $(document).ready(function () {
-
 });
-
 // simple default way to begin
 $(function () {
-
 });
-
 // before another lib
 JQuery(function($){
-
 });
-
 */
-
 $(function() {
 
     /**relativo ao menu */
@@ -38,6 +31,7 @@ $(function() {
             $('.alert').remove();
         }
 
+        // template de formulário relativo ao tipo de finalização (Rev, Ret, Canc, etc...)
         var template = "app/templates/fragments/";
         var content = null;
         if ($(".extra_data").length) {
@@ -73,24 +67,29 @@ $(function() {
                                 $("html, body").stop().animate({scrollTop: $(this).offset().top}, 300);
                             }).load( template );                
                 break;
-
         }
 
         $('form[name="form_negociacao"] input[name="situacao_id"]').val($(this).val());
 
     });
 
+    //clear required alerts
+    $(document).on('change', 'form[name="form_negociacao"] .extra_data input', function() {
+        __clear($(this));
+    });
+
+    // clear required alerts on footer
+    $('.card-footer .form-control').on('change', function() {
+        __clear($(this));
+    });
+
     // captura a data de finalização
     $('input[name="data_finalizacao_footer"]').on('change', function() {
-
         if($('input[name="data_finalizacao_footer"]').val()) {
             var data_finalizacao = $('input[name="data_finalizacao_footer"]').val();
-            $('form[name="form_negociacao"] input[name="data_finalizacao"]').val(data_finalizacao);
+            $('form[name="form_negociacao"] input[name="data_finalizacao"]').val(data_finalizacao);            
         }
-
     });
-    
-
 
     // finalizando negociação
     $('input[name="finalizar_negociação"]').click(function (e) {
@@ -99,18 +98,29 @@ $(function() {
             $('.alert').remove();
         }
 
-        var situacao = $('select[name="situacao_id"]');
-        
+        if ($('.extra_data').length) {
+            if (!__valida_form_neg('form[name="form_negociacao"] .extra_data input')) {
+                $('.container-fluid nav').prepend(__alert("danger", 'Um ou mais campos obrigatórios não foram preenchidos!'));
+                $("html, body").stop().animate({scrollTop:0}, 300, 'swing');
+                return;
+            }
+        }
+
+        var situacao = $('select[name="situacao_id"]');        
         if (situacao.val() == null) {
-            $('.container-fluid nav').prepend(__alert("danger", 'Selecione uma opção válida!'));
+            $('.container-fluid nav').prepend(__alert("danger", 'Selecione uma opção de finalização válida!'));
+            $("html, body").stop().animate({scrollTop:0}, 300, 'swing');
+            situacao.addClass('is-invalid');
             return;
         }
 
-        if (!$('input[name="data_finalizacao_footer"]').val()) {
+        var data_finalizacao_footer = $('input[name="data_finalizacao_footer"]');
+        if (!data_finalizacao_footer.val()) {
             $('.container-fluid nav').prepend(__alert("danger", 'Informe a data da finalização!'));
+            $("html, body").stop().animate({scrollTop:0}, 300, 'swing');
+            data_finalizacao_footer.addClass('is-invalid');
             return;
         }
-
 
         var baseURL = 'https://localhost/project-default/rest.php';
         var form_finalizar = $('form[name="form_negociacao"]');
@@ -131,18 +141,18 @@ $(function() {
                 
             },
             success:function (response, textStatus, jqXHR) {
-            //$('.container-fluid nav').prepend(__alert("success", errorThrow));
+            
                 if (response.status == 'error') {
                     $('.container-fluid nav').prepend(__alert("danger", response.data));
                 } else {
-                    $('.container-fluid nav').prepend(__alert("success", response.data));                    
-                    console.log(response);
+                    $('.container-fluid nav').prepend(__alert("success", response.data));
                 }
 
-                
-                // setTimeout(function () {
-                //     window.location.href = 'https://localhost/project-default/?class=NegociacaoList';
-                // },3000);
+                // Redireciona para a lista de negociações
+                $("html, body").stop().animate({scrollTop:0}, 300, 'swing');
+                setTimeout(function () {
+                    window.location.href = 'https://localhost/project-default/?class=NegociacaoList';
+                },3000);
 
             },
             error: function (jqXHR, textStatus, errorThrow) {
@@ -159,8 +169,31 @@ $(function() {
     })
 
 
+
 })
 
+
+function __valida_form_neg(form_name) {
+    var isFormValid = true;
+    $(form_name).each(function(){
+        if($(this).prop('required')){           
+            if (!$(this).val()) {
+                $(this).addClass('is-invalid');
+                isFormValid = false;
+            }
+        }
+    });
+    return isFormValid;
+}
+
+function __clear(input_object){
+    if($(input_object).prop('required')){
+        if ($(input_object).hasClass('is-invalid')) {
+            $(input_object).removeClass('is-invalid');
+            $(input_object).addClass('is-valid');  
+        }      
+    }
+}
 
 function __alert (type, message) {
     var component = '';
@@ -182,23 +215,6 @@ function __spinner_loader(type) {
 
     return spinner;
 }
-
-// $(document).ready(function () {
-
-//     $('form[name="form_negociacao"]').submit(function (e) {
-//         e.preventDefault();
-//         e.stopPropagation()
-
-//         return false;
-//     });
-
-//     $('input[name="finalizar_negociação"]').click(function (e) {
-//         e.preventDefault();
-//         e.stopPropagation()
-//         alert('click');
-//     })
-
-// })
 
 function confirm(param, url, activeRecord) {
     $('#ModalConfirm').find('.modal-body').html('<strong>Tem certeza que deseja excluir o registro?</strong>');
