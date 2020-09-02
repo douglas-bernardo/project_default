@@ -168,13 +168,16 @@ class NegociacaoForm extends Page
         $this->panel->setBody($this->form);
 
         //load situação:
-        $this->combo_situacao = new Combo('situacao_id', 'form-control', 'Selecione para finalizar...');        
+        $this->combo_situacao = new Combo(
+            'situacao_id', 'form-control', 'Selecione para finalizar...');        
         Transaction::open('bp_renegociacao');
         $situacao_tipos = Situacao::all();
-        foreach ($situacao_tipos as $obj_sit) {
-            $items[$obj_sit->id] = $obj_sit->nome;
+        if ($situacao_tipos) {
+            foreach ($situacao_tipos as $obj_sit) {
+                $items[$obj_sit->id] = $obj_sit->nome;
+            }
+            $this->combo_situacao->addItems($items);
         }
-        $this->combo_situacao->addItems($items);
         Transaction::close();       
 
         $row = new Row();
@@ -189,6 +192,7 @@ class NegociacaoForm extends Page
         $col->class = 'col-md-3 col-sm-4 mb-2';
 
         $finalizaNegociacao = $this->form->addAction('Finalizar Negociação', new Action(array($this, 'finalizaNegociacao')));
+        $finalizaNegociacao->{'id'} = 'finaliza_negociacao';
         $col = $row->addCol($finalizaNegociacao);// add conteudo a coluna
         $col->class = 'col-md-4 col-sm-4 mb-2';
 
@@ -214,14 +218,14 @@ class NegociacaoForm extends Page
             $form_data->nome_cliente    = $contrato->getCliente()->nome;
             $form_data->numero_contrato = $contrato->projeto . '-' . $contrato->numero;
             $form_data->nome_projeto    = $contrato->produto;            
-            $vl_venda = $contrato->getValorVenda();
+            $vl_venda = $contrato->getValorTotalLancamentos();
             $vl_venda = ($vl_venda == 0) ? $negociacao->getOcorrencia()->valor_venda : $vl_venda;
             $form_data->valor_venda     = number_format( $vl_venda, 2, ',', '.');
             $form_data->pontos_contrato = $contrato->pontos;
             $form_data->data_venda      = date('d/m/Y', strtotime($contrato->data_venda));
-            $vVenda = $contrato->getValorVenda();
+            $vVenda = $contrato->getValorTotalLancamentos();
             if ($vVenda != 0) {
-                $perc_int = round(($contrato->getValorPago() / $contrato->getValorVenda() * 100), 2)  . '%';
+                $perc_int = round(($contrato->getValorPago() / $contrato->getValorTotalLancamentos() * 100), 2)  . '%';
             } else {
                 $perc_int = 'N/D';
             }
@@ -243,16 +247,9 @@ class NegociacaoForm extends Page
         }
     }
 
-
     public static function finalizaNegociacao()
     {
-        // $dados = $this->form->getData();
-        // var_dump($dados);
-        // var_dump($_POST);        
-        //$this->form->setData($this->form->getData());
-        // return 'Teste';
-        // die;
-
+        usleep(400000);
         if(isset($_POST['situacao_id']) AND !empty($_POST['situacao_id'])) {
             if (isset($_POST['data_finalizacao']) AND !empty($_POST['data_finalizacao'])) {
                 try {
@@ -264,6 +261,12 @@ class NegociacaoForm extends Page
         
                     $situacao_id = (int) $dados->situacao_id;
                     switch ($situacao_id) {
+
+                        case 1: // Aguardando Retorno
+                            Transaction::close();
+                            return 'Negociação permanece como "Aguardando Retorno"!';
+                            break;
+
                         case 2: // Cancelado
                             // obtem e atualiza contrato
                             $contrato = $negociacao->getContrato();
@@ -271,8 +274,8 @@ class NegociacaoForm extends Page
                             $contrato->store();
 
                             $negociacao->data_finalizacao = $dados->data_finalizacao;
-                            $negociacao->reembolso        = ($dados->reembolso) ? $dados->reembolso : '0.00';
-                            $negociacao->taxas_extras     = ($dados->taxas_multas_extras) ? $dados->taxas_multas_extras : '0.00';
+                            $negociacao->reembolso        = ($dados->reembolso) ?  str_format_currency( $dados->reembolso ) : '0.00';
+                            $negociacao->taxas_extras     = ($dados->taxas_multas_extras) ? str_format_currency( $dados->taxas_multas_extras ) : '0.00';
                             $negociacao->numero_pc        = $dados->numero_pc;
                             $negociacao->situacao_id      = $situacao_id;
                             $negociacao->finalizada       = true;
@@ -290,20 +293,20 @@ class NegociacaoForm extends Page
                             $retencao = new Retencao();
                             $retencao->negociacao_id = $negociacao->id;
                             $retencao->contrato_id   = $contrato->id;
-                            $retencao->valor_antigo  = $contrato->getValorVenda(); // verificar em casos de API off, se é viável obter valor de venda antigo da tbl de ocorrencias
-                            $retencao->data          = $dados->data_retencao;                            
-                            $retencao->valor_novo    = $dados->valor_financiado;
+                            $retencao->valor_antigo  = $contrato->getValorTotalLancamentos(); // verificar em casos de API off, se é viável obter valor de venda antigo da tbl de ocorrencias
+                            $retencao->data          = $dados->data_retencao;
+                            $retencao->valor_novo    = str_format_currency( $dados->valor_financiado );
                             $retencao->store();
 
                             // atualiza negociação
                             $negociacao->data_finalizacao       = $dados->data_finalizacao;
-                            $negociacao->valor_primeira_parcela = ($dados->valor_primeira_parcela) ? $dados->valor_primeira_parcela : '0.00';
+                            $negociacao->valor_primeira_parcela = ($dados->valor_primeira_parcela) ? str_format_currency($dados->valor_primeira_parcela) : '0.00';
                             $negociacao->situacao_id            = $situacao_id;
                             $negociacao->finalizada             = true;
                             $negociacao->store();
 
                             // atualiza contrato
-                            $contrato->valor_venda = $dados->valor_financiado;
+                            $contrato->valor_venda = str_format_currency($dados->valor_financiado);
                             $contrato->store();
 
                             Transaction::close();
@@ -321,7 +324,7 @@ class NegociacaoForm extends Page
                             $contrato_novo->cliente_id         = $contrato_antigo->getCliente()->id;
                             $contrato_novo->projeto            = $dados->rev_projeto;
                             $contrato_novo->numero             = $dados->rev_numero_contrato;
-                            $contrato_novo->valor_venda        = $dados->rev_valor_venda;
+                            $contrato_novo->valor_venda        = str_format_currency($dados->rev_valor_venda);
                             $contrato_novo->origem_contrato_id = 2; // Reversão
                             $contrato_novo->store();
                             
@@ -334,9 +337,9 @@ class NegociacaoForm extends Page
 
                             // atualiza negociação
                             $negociacao->data_finalizacao       = $dados->data_finalizacao;
-                            $negociacao->reembolso              = ($dados->reembolso) ? $dados->reembolso : '0.00';
-                            $negociacao->taxas_extras           = ($dados->taxas_multas_extras) ? $dados->taxas_multas_extras : '0.00';
-                            $negociacao->valor_primeira_parcela = ($dados->valor_primeira_parcela) ? $dados->valor_primeira_parcela : '0.00';
+                            $negociacao->reembolso              = ($dados->reembolso) ? str_format_currency($dados->reembolso) : '0.00';
+                            $negociacao->taxas_extras           = ($dados->taxas_multas_extras) ? str_format_currency($dados->taxas_multas_extras) : '0.00';
+                            $negociacao->valor_primeira_parcela = ($dados->valor_primeira_parcela) ? str_format_currency($dados->valor_primeira_parcela) : '0.00';
                             $negociacao->numero_pc              = $dados->numero_pc;
                             $negociacao->situacao_id            = $situacao_id;
                             $negociacao->finalizada             = true;
@@ -349,7 +352,6 @@ class NegociacaoForm extends Page
                             break;
         
                         default:
-
                             $negociacao->data_finalizacao = $dados->data_finalizacao;
                             $negociacao->situacao_id      = $situacao_id;
                             $negociacao->finalizada       = true;
@@ -380,14 +382,6 @@ class NegociacaoForm extends Page
     public function saveNegociacao()
     {
         try{
-
-            // $class = new ReflectionClass($_SESSION['ocorrencia']);
-            // var_dump(
-            //     $_SESSION, 
-            //     $class->getMethods()
-            // );
-            // die;
-
             Transaction::open($this->connection);
             // Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));
             $class = $this->activeRecord; 

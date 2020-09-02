@@ -16,4 +16,18 @@ class Ocorrencia extends Record
         return (new Motivo())->loadBy('idmotivots', $this->idmotivots)->descricao;
     }
 
+    /**
+     * Retorna a última ocorrência salva no banco de dados
+     *
+     * @return Ocorrencia|null
+     */
+    public function getLastStored(): ? Ocorrencia
+    {
+        $ocorrencia = $this->load($this->getLast());
+        if ($ocorrencia) {
+            return $ocorrencia;
+        }
+        return null;
+    }
+
 }

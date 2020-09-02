@@ -11,7 +11,6 @@ class Session
         }
     }
 
-
     public static function setValue($var, $value)
     {
         $_SESSION[$var] = (is_array($value)? (object) $value : $value);

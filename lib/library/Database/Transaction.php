@@ -40,11 +40,13 @@ final class Transaction
         }
     }
     //recebe a instancia de alguma classe concreta filha da classe abstrata Logger (LoggerXML ou LoggerTXT)
-    public static function setLogger(Logger $logger){//injeção de dependencia
+    public static function setLogger(Logger $logger)
+    {//injeção de dependencia
         self::$logger = $logger;
     }
 
-    public static function log($message){
+    public static function log($message)
+    {
         if (self::$logger) {
             self::$logger->write($message);
         }

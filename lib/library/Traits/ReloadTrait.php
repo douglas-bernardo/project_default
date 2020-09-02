@@ -57,6 +57,7 @@ trait ReloadTrait
                 $this->pageNavigation->setCount($count);
                 $this->pageNavigation->setProperties($param);
             }
+
             Transaction::close();
             $this->loaded = true;
         }

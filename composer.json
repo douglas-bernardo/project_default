@@ -24,6 +24,7 @@
         ],
         "files": [
             "init.php",
+            "lib/library/Support/Helpers.php",
             "services/boot/Config.php",
             "services/boot/Helpers.php"
         ]

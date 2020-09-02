@@ -1,4 +1,5 @@
 <?php
+
 namespace Library\Widgets\Base;
 
 class Element

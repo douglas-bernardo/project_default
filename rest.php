@@ -1,5 +1,7 @@
 <?php
 
+use Library\session\Session;
+
 header('Content-type: application/json; charset=utf-8');
 
 require __DIR__ . '/vendor/autoload.php';
@@ -8,6 +10,7 @@ class RestServer
 {
     public static function run($request)
     {
+        
         $class  = isset($request['class']) ? $request['class'] : '';
         $method = isset($request['method']) ? $request['method'] : '';
         $response = null;

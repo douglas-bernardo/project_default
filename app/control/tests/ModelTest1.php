@@ -11,15 +11,18 @@ class ModelTest1 extends Page
 
             Transaction::open('bp_renegociacao');
 
-            $cl = new Cliente;
-            $cl->nome          = 'Douglas';
-            $cl->ts_cliente_id = 2;    
-            var_dump($cl);
+            // $cl = new Cliente;
+            // $cl->nome          = 'Douglas';
+            // $cl->ts_cliente_id = 2;    
+            // var_dump($cl);
 
-            echo 'Saving object...';
+            // echo 'Saving object...';
             
-            var_dump($cl->store());
+            // var_dump($cl->store());
 
+            // var_dump($cl);
+            
+            $cl = new Negociacao(1);
             var_dump($cl);
 
             Transaction::close();

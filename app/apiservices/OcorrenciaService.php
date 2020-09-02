@@ -1,23 +1,35 @@
 <?php
 
 use Library\Database\Transaction;
-use Services\Controllers\OcorrenciaControl;
 
 class OcorrenciaService
 {
     public static function importaOcorrencias()
     {
-        try {
+        try {            
+            Transaction::open('bp_renegociacao');
+            $last_ocorrencia = (new Ocorrencia())->getLastStored();
+
             // API CM parameters
-            $location = CONF_CM_SERVICE . 'resp.php';
+            $location = CONF_URL_CM_SERVICE . 'resp.php';
             $parameters['class']  = 'OcorrenciaServices';
             $parameters['method'] = 'getData';
+            if ($last_ocorrencia) {
+                $value    = $last_ocorrencia->numero_ocorrencia;
+                $parameters['last_ocorrencia_id'] = $value;
+            } else {
+                $parameters['dtocorrencia'] = '01/07/2020';
+            }
+            
             $url = $location . '?' . http_build_query($parameters);
             $result = json_decode(file_get_contents($url));
-            
+
             if ($result) {
                 if ($result->status == 'success') {
-                    Transaction::open('bp_renegociacao');
+                    if (isset($result->data->exception)) {
+                        return ["error" => "Houve um erro na API!", 
+                        "description" => $result->data->exception->data]; 
+                    }
                     foreach ($result->data as $object) {   
                         $array = (array) $object;                 
                         $ocorrencia = new Ocorrencia();
@@ -27,22 +39,36 @@ class OcorrenciaService
                     }
                     Transaction::close();
                     $total = count($result->data);
-                    return "Success: " . $total . " dados importados com sucesso!";
+                    return [
+                        "success"=> $total . " dados importados com sucesso!"
+                    ];
                 } else {
                     return $result->data;
                 }
 
             } else {
+                Transaction::close();
                 return "Error: Sem dados para importar!";
             }            
 
         } catch (Exception $e) {
-            return "Error: " . $e->getMessage();
+            return ["error" => $e->getMessage()];
         }
     }
 
-    public static function restTest()
+    public static function getOcorrencia($id)
     {
-        return "Teste API Restful ok!";
+        if (isset($id)) {
+            $id = (int) $id['id'];
+            try {
+                Transaction::open('bp_renegociacao');
+                $ocorrencia = new Ocorrencia($id);
+                $data = $ocorrencia->toArray();
+                Transaction::close();
+                return $data;
+            } catch (Exception $e) {
+                return ["error" => $e->getMessage()];
+            }
+        }
     }
 }

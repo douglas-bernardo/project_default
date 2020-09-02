@@ -3,10 +3,19 @@ namespace Library\Database;
 
 use Exception;
 
+/**
+ * Implements a active record pattern class
+ */
 abstract class Record
-{    
-    protected $data; //array contendo os dados do obj
-    public function __construct($id = NULL)
+{   
+    /**
+     * Store object data
+     *
+     * @var array
+     */
+    protected $data = [];
+
+    public function __construct(int $id = NULL)
     {
         if($id){//se o ID for informado carrega o OBJ correspondente
             $object = $this->load($id);
@@ -18,10 +27,20 @@ abstract class Record
 
     public function __clone()
     {
-        //limpa o id sempre que um obj for clonado
         unset($this->data['id']);
     }
 
+    /**
+     * This magical method has two functions:
+     * When an object is invoked with a method that matches the string 'set_. $ prop ', 
+     * this method will be executed.
+     * If the above condition does not occur, a new property is
+     * stored in the data array.
+     *
+     * @param mixed $prop
+     * @param mixed $value
+     * @return void
+     */
     public function __set($prop, $value)
     {
         if (method_exists($this, 'set_'.$prop)){
@@ -32,11 +51,17 @@ abstract class Record
                 unset($this->data[$prop]);
             }
             else{
-                $this->data[$prop] = $value; //atribui o valor da propriedade
+                $this->data[$prop] = $value;
             }
         }
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param mixed $prop
+     * @return void
+     */
     public function __get($prop)
     {
         if (method_exists($this, 'get_'.$prop)){
@@ -182,7 +207,7 @@ abstract class Record
         return $rep->load(new Criteria);
     }
 
-    private function getLast()
+    public function getLast()
     {
         if ($conn = Transaction::get()) {
             $sql = "SELECT max(id) FROM {$this->getEntity()}";

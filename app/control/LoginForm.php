@@ -30,27 +30,12 @@ class LoginForm extends Page
 
         $div = new Element('div');
         $div->class = 'wrapper';
-        
-        // $logo = new Image('app/images/logo-vacation-club.jpeg');
-        // $logo->{'class'} = 'mb-4';
-        // $logo->{'width'} = '110';
-        // $logo->{'heigth'} = '62';
-        
-        // $div->add($logo);
-
-        // $this->form = new FormWrapper(new Form('form_login'), null, 'buttonLogin');
-        // $this->form->setFormTitle('Renegociação TS');
 
         $email = new Entry('email');
         $email->id = 'email';
 
         $pass = new Password('password');
         $pass->id = 'password';
-
-        // $this->form->addField('Email', $email);
-        // $this->form->addField('Senha', $pass);
-
-        // $this->form->addAction('Login', new Action(array($this, 'onLogin')));
 
         $this->form = new BootstrapFormBuilder('form_login');
 
@@ -66,8 +51,7 @@ class LoginForm extends Page
         $card->setBody($this->form);
         $card->setFooter($bntLogin);
         $div->add($card);
-
-        //$div->add($this->form);
+        
         parent::add($div);
     }
     
@@ -108,6 +92,7 @@ class LoginForm extends Page
                     // Session::setValue( 'ts_usuario_id', $user[0]->ts_usuario_id );
 
                     Transaction::close();
+
                     header("Location: index.php");
 
                 } else {

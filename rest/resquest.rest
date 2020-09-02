@@ -4,9 +4,9 @@ https://localhost/project-default/rest/rest-test.php
 
 ###
 
-https://localhost/project-default/rest/rest-motivos.php
+https://localhost/project-default/rest/rest-import-motivos.php
 
 
 ###
 
-https://localhost/project-default/rest/rest-ocorrencias.php
+https://localhost/project-default/rest/rest-import-ocorrencias.php

@@ -25,7 +25,6 @@ use Library\Widgets\Wrapper\DatagridWrapper;
 
 class OcorrenciasList extends Page
 {
-
     private $loaded;
     private $filter;   
     private $criteria;
@@ -34,17 +33,13 @@ class OcorrenciasList extends Page
     private $breadcrumb;
     private $datagrid;
     private $order_param;
-    protected $pageNavigation;
+    private $pageNavigation;
     private $form;
     private $total_ocorrencias;
     private $total_registers;
 
-    /**
-     * Undocumented variable
-     *
-     * @var LoggerTXT
-     */
-    private $logger;
+    /** @var LoggerTXT */
+    private static $logger;
 
     use ReloadTrait{
         onReload as onReloadTrait;
@@ -54,7 +49,7 @@ class OcorrenciasList extends Page
     {
         parent::__construct();
 
-        $this->logger =  new LoggerTXT('tmp/ocorrencias_proccess.txt');
+        self::$logger =  new LoggerTXT('tmp/ocorrencias_proccess.txt');
 
         $this->connection   = 'bp_renegociacao';
         $this->activeRecord = 'Ocorrencia';
@@ -91,13 +86,12 @@ class OcorrenciasList extends Page
 
         // apply transformers
         $motivo->setTransformer(array($this, 'setFirstUpper'));
-        //$cliente->setTransformer(array($this, 'setFirstUpper'));
         $resp->setTransformer(array($this, 'setFirstUpper'));
         $status->setTransformer(array($this, 'setStatus'));
         $data_ocorrencia->setTransformer(array($this, 'formatDate'));
 
         // Datagrid Action Ajax 
-        $action2 = new DatagridActionAjax('negociacao');
+        $action2 = new DatagridActionAjax('modal_reg_negociacao_open');
         $action2->setLabel('Registrar Negociação');
         $action2->setImage('support.png');
         $action2->setField('id');
@@ -119,7 +113,6 @@ class OcorrenciasList extends Page
         $this->total_ocorrencias = $row->addCol();
         $this->total_ocorrencias->{'class'} = 'col';
         
-
         $card->setHeader($row);
         //$card->setHeader('Ocorrências Timesharing');
         $card->setBody($this->datagrid);
@@ -128,22 +121,26 @@ class OcorrenciasList extends Page
         // insert card on page
         parent::add($card);
 
-        // *********************** MODAL FORM *************************************
-
-        //$this->form = new FormWrapperModal(new Form('form_negociacao_register'));
+        // *********************** MODAL FORM *****************************
         $this->form = new BootstrapFormBuilder('form_negociacao_register');
-        $this->form->setFormTitle('Dados da Negociação');
+        $this->form->setFormTitle('Dados da Ocorrência');
 
         // hidden fields
         $ocorrencia_id = new Hidden('ocorrencia_id');
         $ocorrencia_id->{'id'} = 'ocorrencia_id';
         $ocorrencia_id->setEditable(false);
+        $idusuario_resp = new Hidden('idusuario_resp');
+        $idusuario_resp->{'id'} = 'idusuario_resp';
+        $idusuario_resp->setEditable(false);
 
-        $origem           = new Combo('origem_id', 'combo', 'Selecione a origem...');
-        $tipo_solicitacao = new Combo('tipo_solicitacao_id', 'combo', 'Selecione o tipo de solicitação...');  
+        $origem           = new Combo('origem_id', 'combo', 
+                                      'Selecione a origem...');
+        $tipo_solicitacao = new Combo('tipo_solicitacao_id', 
+                                      'combo', 
+                                      'Selecione o tipo de solicitação...');  
         
         Transaction::open('bp_renegociacao');
-        //load origem
+        // origem
         $origens = Origem::all();
         $items = array();
         foreach ($origens as $obj_origem) {
@@ -151,7 +148,7 @@ class OcorrenciasList extends Page
         }
         $origem->addItems($items);
 
-        //load tipo_solicitacao
+        // tipo_solicitacao
         $tipo_sol = TipoSolicitacao::all();
         $items = array();
         foreach ($tipo_sol as $obj_tp) {
@@ -161,18 +158,18 @@ class OcorrenciasList extends Page
 
         Transaction::close();
         
-        // $this->form->addField('id_ocorrencia', $ocorrencia_id);
-        // $this->form->addField('Origem', $origem);
-        // $this->form->addField('Tipo de Solicitação', $tipo_solicitacao);
         $this->form->addFields([$ocorrencia_id]);
+        $this->form->addFields([$idusuario_resp]);
         $this->form->addFields([new Label('Origem'), $origem]);
-        $this->form->addFields([new Label('Tipo de Solicitação'), $tipo_solicitacao]);
+        $this->form->addFields([new Label('Tipo de Solicitação'), 
+                                            $tipo_solicitacao]);
 
-        
-        //$act = new Action(array($this, 'saveNegociacao'));
-        //$this->form->addAction('Salvar', $act);
+        $act = $this->form->addAction(
+            'Registrar Negociação', 
+            new Action( [$this, 'registraNegociacao'] )
+        );
 
-        $act = $this->form->addAction('Registrar Negociação', new Action( [$this, 'registraNegociacao'] ), true);   
+        $act->{'id'} = 'registrar_negociacao';
 
         $modal = new GenericModal('ModalNegociacao');
         $modal->setHeader($this->form->getTitle());
@@ -200,7 +197,11 @@ class OcorrenciasList extends Page
         //     $row->children[0]->children[0]->{'href'} = '#';
         // }
         // return ($value == 0 ? '<span class="badge badge-danger">Não atendida</span>' : '<span class="badge badge-success">Atendida</span>');
-        $status = array('P' => 'Pendente', 'F' => 'Finalizado', 'C' => 'Cancelado');
+        $status = array(
+            'P' => 'Pendente', 
+            'F' => 'Finalizado', 
+            'C' => 'Cancelado'
+        );
         return $status[$value];
     }    
 
@@ -209,13 +210,21 @@ class OcorrenciasList extends Page
         return date('d-m-Y', strtotime( $value ));
     }
 
-    public function registraNegociacao()
+     public static function teste()
+    {
+        return "teste";
+    }
+
+    public static function registraNegociacao()
     {
         try{
 
-            Transaction::open($this->connection);
+            Transaction::open('bp_renegociacao');
             //Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));            
-            $dados = $this->form->getData();
+            //$dados = $this->form->getData();
+            $dados = (object) $_POST;
+
+            $user_resp = (new Users())->loadBy('ts_usuario_id', $dados->idusuario_resp);
 
             //obtem a instancia do objeto Ocorrencia e altera o atributo atendida
             $ocorrencia = new Ocorrencia($dados->ocorrencia_id);
@@ -227,9 +236,13 @@ class OcorrenciasList extends Page
             $cliente->nome          = $ocorrencia->nome_cliente;
             $cliente->ts_cliente_id = $ocorrencia->idpessoa_cliente;
             $cliente->store();
-
-            //cria um novo objeto Contrato
-            // *** IMPORTANTE: Adicionar validação para contratos inseridos manualmente no processo de reversão.
+            
+            // ***************************************   IMPORTANTE!!!   *****************************************
+            // Adicionar um método de validação para contratos inseridos manualmente no processo de reversão.
+            // Um contrato já adicionado no processo de reversão, não pode ser adicionado novamente no processo
+            // de registro de negociação. O mesmo vale para retenções - se o contrato já foi retido uma vez, não
+            // será necessário adicioná-lo novamente na base do sistema.
+            // cria um novo objeto Contrato
             $contrato = new Contrato();
             $contrato->cliente_id          = $cliente->id;
             $contrato->projeto             = $ocorrencia->numeroprojeto;
@@ -239,19 +252,19 @@ class OcorrenciasList extends Page
             $contrato->ts_idvendaxcontrato = $ocorrencia->idvendaxcontrato;
             $contrato->origem_contrato_id  = 1; //API service.
 
-            //API CM - dados adicionais do contrato:
-            $api_contrato_service = $this->apiContratoServicesGetData($ocorrencia->idvendaxcontrato);            
-            if ($api_contrato_service) {
-                $contrato->data_venda = $api_contrato_service->DATAVENDA;
-                $contrato->validade   = $api_contrato_service->VALIDADE;
-                $contrato->pontos     = $api_contrato_service->NUMEROPONTOS;
-                $contrato->revertido  = ($api_contrato_service->FLGREVERTIDO == 'S') ? true : false;
-                $contrato->cancelado  = ($api_contrato_service->FLGCANCELADO == 'S') ? true : false;
+            //API CM - Obtém os dados adicionais do contrato no cm timesharing
+            $api_contrato = self::apiContratoServicesGetData($ocorrencia->idvendaxcontrato);            
+            if ($api_contrato) {
+                $contrato->data_venda = $api_contrato->DATAVENDA;
+                $contrato->validade   = $api_contrato->VALIDADE;
+                $contrato->pontos     = $api_contrato->NUMEROPONTOS;
+                $contrato->revertido  = ($api_contrato->FLGREVERTIDO == 'S') ? true : false;
+                $contrato->cancelado  = ($api_contrato->FLGCANCELADO == 'S') ? true : false;
             } 
             $contrato->store();
 
             //API CM - lançamentos financeiro
-            $docs = $this->apiTSLancamentosServicesGetData($ocorrencia->idvendats);
+            $docs = self::apiTSLancamentosServicesGetData($ocorrencia->idvendats);
             if ($docs) {
                 foreach ($docs as $doc) {
                     $array = (array) $doc;
@@ -265,15 +278,18 @@ class OcorrenciasList extends Page
 
             //cria um novo objeto Negociacao
             $negociacao = new Negociacao();   
-            $negociacao->fromArray((array) $dados); 
-            $negociacao->usuario_id = Session::getValue('user')->id;
+            $negociacao->origem_id  = $dados->origem_id;
+            $negociacao->tipo_solicitacao_id = $dados->tipo_solicitacao_id;
+            $negociacao->ocorrencia_id = $dados->ocorrencia_id;
+            $negociacao->usuario_id = $user_resp->id;
             $negociacao->situacao_id = 1;
             $negociacao->contrato_id = $contrato->id;
             $negociacao->store();
 
             Transaction::close();
-            Session::setValue('neg_register_process', true);
-            header("Location: ?class=OcorrenciasList");
+            //Session::setValue('neg_register_process', true);            
+            return 'Negociação registrada com sucesso';
+            //header("Location: ?class=OcorrenciasList");
 
         } catch(Exception $e) {
             Transaction::rollback();
@@ -281,10 +297,10 @@ class OcorrenciasList extends Page
         }        
     }
     
-    private function apiTSLancamentosServicesGetData($idvendats)
+    private static function apiTSLancamentosServicesGetData($idvendats)
     {
         // API CM - https://localhost/wser_cm/?class=TSLancamentosServices&method=getData&idvendats=54142
-        $location = CONF_CM_SERVICE . 'resp.php';
+        $location = CONF_URL_CM_SERVICE . 'resp.php';
         $parameters['class']  = 'TSLancamentosServices';
         $parameters['method'] = 'getData';
         $parameters['idvendats'] = $idvendats;
@@ -293,63 +309,71 @@ class OcorrenciasList extends Page
         if ($result) {
             if ($result->status == 'success') {
                 if (isset($result->data->exception) && $result->data->exception) {
-                    $log  = $result->data->exception->class . PHP_EOL;
-                    $log .= $result->data->exception->method . PHP_EOL;
-                    $log .= $result->data->exception->data;
-                    $this->logger->write($log);
+                    $log  = 'Erro no processo de consulta CM - Descrição:' . PHP_EOL; 
+                    $log .= '[local class=>' . __CLASS__ . '| local method=>' . __METHOD__ . ']' . PHP_EOL;
+                    $log .= 'Service Error:' . PHP_EOL;
+                    $log .= 'class: ' . $result->data->exception->class . PHP_EOL;
+                    $log .= 'method: ' . $result->data->exception->method . PHP_EOL;
+                    $log .= 'description: ' . $result->data->exception->data . PHP_EOL;
+                    //self::$logger->write($log);
                 } else {
                     return $result->data;
                 }
             }
         }
-        $this->logger->write($log);
+        //self::$logger->write($log);
         return null;
     }
 
-    private function apiContratoServicesGetData($idvendaxcontrato): ?object
+    private static function apiContratoServicesGetData($idvendaxcontrato): ?object
     {
         // API CM - https://localhost/wser_cm/?class=ContratoServices&method=getData&idvendaxcontrato=128386
-        $location = CONF_CM_SERVICE . 'resp.php';
+        $location = CONF_URL_CM_SERVICE . 'resp.php';
         $parameters['class']  = 'ContratoServices';
         $parameters['method'] = 'getData';
         $parameters['idvendaxcontrato'] = $idvendaxcontrato;
+
         $url = $location . '?' . http_build_query($parameters);
         $result = json_decode(file_get_contents($url));
+
         if ($result) {
             if ($result->status == 'success') {                
-                if (isset($result->data->exception) && $result->data->exception) {
-                    $log  = $result->data->exception->class . PHP_EOL;
-                    $log .= $result->data->exception->method . PHP_EOL;
-                    $log .= $result->data->exception->data;
-                    $this->logger->write($log);
+                if (isset($result->data->exception)) {
+                    $log  = 'Erro no processo de consulta CM - Descrição:' . PHP_EOL; 
+                    $log .= '[local class=>' . __CLASS__ . '| local method=>' . __METHOD__ . ']' . PHP_EOL;
+                    $log .= 'Service Error:' . PHP_EOL;
+                    $log .= 'class: ' . $result->data->exception->class . PHP_EOL;
+                    $log .= 'method: ' . $result->data->exception->method . PHP_EOL;
+                    $log .= 'description: ' . $result->data->exception->data . PHP_EOL;
+                    //self::$logger->write($log);
                 } else {
                     return $result->data;
                 }
             }                
         }
-        $this->logger->write($log);
+        //self::$logger->write($log);
         return null;
     }
 
     public function onReload()
     {
-        if (Session::getValue('neg_register_process')) {
-            $link = new Element('a');
-            $link->{'class'} = 'alert-link';
-            $link->{'href'} = '?class=NegociacaoList';
-            $link->add('negociações');
-            new Message('success', "Negociação registrada com sucesso! Clique em {$link}, para gerenciar suas ocorrências");
-            Session::unSet('neg_register_process');
-        }
+        // if (Session::getValue('neg_register_process')) {
+        //     $link = new Element('a');
+        //     $link->{'class'} = 'alert-link';
+        //     $link->{'href'} = '?class=NegociacaoList';
+        //     $link->add('negociações');
+        //     new Message('success', "Negociação registrada com sucesso! Clique em {$link}, para gerenciar suas ocorrências");
+        //     Session::unSet('neg_register_process');
+        // }
         
         // order to show
         $this->order_param = 'numero_ocorrencia DESC';
 
-        // filtro de ocorrências
+        // filtro de ocorrências Session::getValue('user')->ts_usuario_id
         $this->filter[] = new Filter('idusuario_resp', '=', Session::getValue('user')->ts_usuario_id);
         $this->filter[] = new Filter('idmotivots', 'IN', array(364, 365, 427, 683, 702, 993));
         $this->filter[] = new Filter('atendida', '=', false);
-        
+                
         $param = $_REQUEST;
         $this->onReloadTrait($param);
     }
@@ -359,7 +383,6 @@ class OcorrenciasList extends Page
         if(!$this->loaded){
             $this->onReload();
             $this->total_ocorrencias->add('<h6>Total: <span class="badge badge-warning">' . $this->total_registers . '</span> ocorrências</h3>');
-            
         }        
         parent::show();        
     }

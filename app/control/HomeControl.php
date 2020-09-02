@@ -1,6 +1,7 @@
 <?php
 
 use Library\Control\Page;
+use Library\Widgets\Base\Element;
 use Library\Widgets\Container\Breadcrumb;
 use Library\Widgets\Container\Card;
 use Library\Widgets\Container\Row;
@@ -42,9 +43,19 @@ class HomeControl extends Page
         // parent::add($row);        
 
         // Power BI
-        $frame = '<iframe width="100%" height="700" src="https://app.powerbi.com/view?r=eyJrIjoiYjVlNTc5ZjYtZjgxNC00YzIzLTkzYzQtYjUxMTQ1YjhkNjkwIiwidCI6IjVkNGI5OGM5LTM5MmYtNGM4Ny05OWE5LTUyNjA3ODE0MDUxZCJ9" frameborder="0" allowFullScreen="true"></iframe>';
-        parent::add($frame);
+        $src = 'https://app.powerbi.com/view?r=eyJrIjoiYjVlNTc5ZjYtZjgxNC00YzIzLTkzYzQtYjUxMTQ1YjhkNjkwIiwidCI6IjVkNGI5OGM5LTM5MmYtNGM4Ny05OWE5LTUyNjA3ODE0MDUxZCJ9';
+        $iframe = new Element('iframe');
+        $iframe->{'class'} = 'embed-responsive-item';
+        $iframe->{'src'} = $src;
+        $iframe->{'frameborder'} = 0;
+        $iframe->{'allowFullScreen'} = true;
 
-
+        //$frame = '<iframe class="embed-responsive-item" src="' . $src . '" frameborder="0" allowFullScreen="true"></iframe>';
+        $div =  new Element('div');
+        $div->{'class'} = 'embed-responsive embed-responsive-16by9';
+        $div->add($iframe);
+               
+        parent::add($div);
+        
     }
 }

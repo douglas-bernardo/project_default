@@ -8,6 +8,7 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
 {
     public static $files = array (
         '7dc4b6f9ee593fc2a3ea307d4199ec7f' => __DIR__ . '/../..' . '/init.php',
+        'b42365d23a54a81cb1e09e48e0067689' => __DIR__ . '/../..' . '/lib/library/Support/Helpers.php',
         'c89a91e8362c2a538aa38c6e0dad83bf' => __DIR__ . '/../..' . '/services/boot/Config.php',
         'b678a33e61b122510090acfb060bc723' => __DIR__ . '/../..' . '/services/boot/Helpers.php',
     );
@@ -49,6 +50,7 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
         'Conta' => __DIR__ . '/../..' . '/app/model/Conta.php',
         'Contrato' => __DIR__ . '/../..' . '/app/model/Contrato.php',
         'Grupo' => __DIR__ . '/../..' . '/app/model/Grupo.php',
+        'HelpersTest' => __DIR__ . '/../..' . '/app/control/tests/HelpersTest.php',
         'HomeControl' => __DIR__ . '/../..' . '/app/control/HomeControl.php',
         'ItemVenda' => __DIR__ . '/../..' . '/app/model/ItemVenda.php',
         'LoginForm' => __DIR__ . '/../..' . '/app/control/LoginForm.php',

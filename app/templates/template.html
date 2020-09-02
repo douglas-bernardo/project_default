@@ -65,9 +65,14 @@
                     </ul>
                 </div>                
             </nav>
-
+            <!-- toast area notification -->
+            <div aria-alive="polite" aria-atomic="true" class="position-relative">
+                <div class="position-absolute" id="toast-place" style="top: 0px; right:20px; z-index: 1;"></div>
+            </div>
+            
             <!-- page view -->
             <div class="container-fluid">
+            
                 {content}
             </div>
             
@@ -81,7 +86,9 @@
     <script type="text/javascript" src="app/templates/assets/js/bootstrap.min.js" ></script>
 
     <!-- Optional JavaScript -->
+    <script type="text/javascript" src="app/templates/assets/js/jquery.mask.js"></script>
     <script type="text/javascript" src="app/templates/assets/js/script.js"></script>
+    <script type="text/javascript" src="app/include/js/moment.min.js"></script>
 
     </body>
 </html>

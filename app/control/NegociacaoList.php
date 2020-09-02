@@ -18,6 +18,7 @@ class NegociacaoList extends Page
     private $datagrid;
     private $connection;
     private $activeRecord;
+    private $pageNavigation;
     private $total_registers = 0;
 
     use ReloadTrait{
@@ -41,11 +42,11 @@ class NegociacaoList extends Page
         $id               = new DatagridColumn('id', 'id', 'center', '');  // hidden
         $num_ocorrencia   = new DatagridColumn('numero_ocorrencia', 'Ocorrência', 'center','10%');
         $data_ocorrencia  = new DatagridColumn('data_ocorrencia', 'Data', 'center','10%');
-        $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'justify','15%');
-        $cliente          = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '25%');
+        $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'justify','14%');
+        $cliente          = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '24%');
         $proj_contrato    = new DatagridColumn('projeto_contrato', 'Proj-Contrato', 'center', '15%');
         $valor_venda      = new DatagridColumn('valor_venda', 'Valor Venda', 'center', '15%');
-        $situacao         = new DatagridColumn('situacao', 'Situação', 'center', '20%');
+        $situacao         = new DatagridColumn('situacao', 'Situação', 'center', '22%');
 
         // add columns to datagrid
         $this->datagrid->addColumn($id);
@@ -57,8 +58,6 @@ class NegociacaoList extends Page
         $this->datagrid->addColumn($valor_venda);
         $this->datagrid->addColumn($situacao);
 
-        //$finalizada->setTransformer(array($this, 'setColor'));
-        //$cliente->setTransformer(array($this, 'setFirstUpper'));
         $data_ocorrencia->setTransformer(array($this, 'formatDate'));
         $valor_venda->setTransformer(array($this, 'setCurrence'));
         $situacao->setTransformer(array($this, 'setSituacao'));
@@ -127,13 +126,11 @@ class NegociacaoList extends Page
     public function onReload()
     {
         $this->order_param = 'id DESC';
-        $this->onReloadTrait();
+        $param = $_REQUEST;
+        $this->onReloadTrait($param);
     }
 
-    public static function reload()
-    {
-
-    }
+    public static function reload() {}
 
     function show()
     {

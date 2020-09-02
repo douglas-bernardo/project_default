@@ -12,6 +12,7 @@ return array(
     'Conta' => $baseDir . '/app/model/Conta.php',
     'Contrato' => $baseDir . '/app/model/Contrato.php',
     'Grupo' => $baseDir . '/app/model/Grupo.php',
+    'HelpersTest' => $baseDir . '/app/control/tests/HelpersTest.php',
     'HomeControl' => $baseDir . '/app/control/HomeControl.php',
     'ItemVenda' => $baseDir . '/app/model/ItemVenda.php',
     'LoginForm' => $baseDir . '/app/control/LoginForm.php',

@@ -7,17 +7,22 @@ class MotivoService
     public static function importaMotivos()
     {
         try {
-            // API CM parameters
-            $location = CONF_CM_SERVICE . 'resp.php';
+            // API CM
+            $location = CONF_URL_CM_SERVICE . 'resp.php';
             $parameters['class']  = 'MotivoServices';
             $parameters['method'] = 'getData';
             $url = $location . '?' . http_build_query($parameters);
             $result = json_decode(file_get_contents($url));
-            $total = count($result->data);
-
+            
             if ($result) {                
-                //return $result;
+
                 if ($result->status == 'success') {
+                    if (isset($result->data->exception)) {
+                        return [
+                            "error" => "Houve um erro na API!", 
+                            "description" => $result->data->exception->data
+                        ]; 
+                    }
                     Transaction::open('bp_renegociacao');
                     foreach ($result->data as $object) {
                         $array = (array) $object;
@@ -27,17 +32,20 @@ class MotivoService
                         unset($motivo);
                     }
                     Transaction::close();
-                    return "Success: " . $total . " - dados importados com sucesso!";
+                    $total = count($result->data);
+                    return [
+                        "success"=> $total . " dados importados com sucesso!"
+                    ];
                 } else {
                     return $result->data;
                 }
  
             } else {
-                return "Error: Sem dados para importar!";
+                return ["error" => "sem dados para importar!"];
             }
 
         } catch (\Throwable $e) {
-            return "Error: " . $e->getMessage();
+            return ["error" => $e->getMessage()];
         }
     }
 }
