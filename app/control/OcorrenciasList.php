@@ -210,15 +210,9 @@ class OcorrenciasList extends Page
         return date('d-m-Y', strtotime( $value ));
     }
 
-     public static function teste()
-    {
-        return "teste";
-    }
-
     public static function registraNegociacao()
     {
         try{
-
             Transaction::open('bp_renegociacao');
             //Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));            
             //$dados = $this->form->getData();
@@ -237,11 +231,13 @@ class OcorrenciasList extends Page
             $cliente->ts_cliente_id = $ocorrencia->idpessoa_cliente;
             $cliente->store();
             
-            // ***************************************   IMPORTANTE!!!   *****************************************
-            // Adicionar um método de validação para contratos inseridos manualmente no processo de reversão.
-            // Um contrato já adicionado no processo de reversão, não pode ser adicionado novamente no processo
-            // de registro de negociação. O mesmo vale para retenções - se o contrato já foi retido uma vez, não
-            // será necessário adicioná-lo novamente na base do sistema.
+            // ******************   IMPORTANTE!!!   ***************************
+            // Adicionar um método de validação para contratos inseridos 
+            // manualmente no processo de reversão.
+            // Um contrato já adicionado no processo de reversão, não pode ser 
+            // adicionado novamente no processo de registro de negociação. 
+            // O mesmo vale para retenções | se o contrato já foi retido uma vez, 
+            // não será necessário adicioná-lo novamente na base do sistema.
             // cria um novo objeto Contrato
             $contrato = new Contrato();
             $contrato->cliente_id          = $cliente->id;
@@ -357,23 +353,22 @@ class OcorrenciasList extends Page
 
     public function onReload()
     {
-        // if (Session::getValue('neg_register_process')) {
-        //     $link = new Element('a');
-        //     $link->{'class'} = 'alert-link';
-        //     $link->{'href'} = '?class=NegociacaoList';
-        //     $link->add('negociações');
-        //     new Message('success', "Negociação registrada com sucesso! Clique em {$link}, para gerenciar suas ocorrências");
-        //     Session::unSet('neg_register_process');
-        // }
-        
+        if (isset($_GET['success']) && $_GET['success']==true) {
+            $link = new Element('a');
+            $link->{'class'} = 'alert-link';
+            $link->{'href'} = '?class=NegociacaoList';
+            $link->add('negociações');
+            new Message(
+                'success', 
+                "Negociação registrada com sucesso! Clique em {$link}, para gerenciar suas ocorrências");
+        }
+
         // order to show
         $this->order_param = 'numero_ocorrencia DESC';
-
         // filtro de ocorrências Session::getValue('user')->ts_usuario_id
         $this->filter[] = new Filter('idusuario_resp', '=', Session::getValue('user')->ts_usuario_id);
         $this->filter[] = new Filter('idmotivots', 'IN', array(364, 365, 427, 683, 702, 993));
-        $this->filter[] = new Filter('atendida', '=', false);
-                
+        $this->filter[] = new Filter('atendida', '=', false);                
         $param = $_REQUEST;
         $this->onReloadTrait($param);
     }

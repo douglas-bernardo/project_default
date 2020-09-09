@@ -9,6 +9,7 @@ use Library\Widgets\Datagrid\Datagrid;
 use Library\Widgets\Datagrid\DatagridAction;
 use Library\Widgets\Datagrid\DatagridColumn;
 use Library\Widgets\Datagrid\PageNavigation;
+use Library\Widgets\Dialog\Message;
 use Library\Widgets\Wrapper\DatagridWrapper;
 
 class NegociacaoList extends Page
@@ -45,8 +46,8 @@ class NegociacaoList extends Page
         $tipo_solicitacao = new DatagridColumn('tipo_solicitacao', 'Tipo', 'justify','14%');
         $cliente          = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '24%');
         $proj_contrato    = new DatagridColumn('projeto_contrato', 'Proj-Contrato', 'center', '15%');
-        $valor_venda      = new DatagridColumn('valor_venda', 'Valor Venda', 'center', '15%');
-        $situacao         = new DatagridColumn('situacao', 'Situação', 'center', '22%');
+        $valor_venda      = new DatagridColumn('valor_venda', 'Valor Venda', 'justify', '10%');
+        $situacao         = new DatagridColumn('situacao', 'Situação', 'justify', '25%');
 
         // add columns to datagrid
         $this->datagrid->addColumn($id);
@@ -64,9 +65,9 @@ class NegociacaoList extends Page
 
         // actions
         $manager = new DatagridAction( [new NegociacaoForm, 'management'] );
-        $manager->setLabel('Gerenciar Negociação');
-        //$action1->setClass('btn btn-info btn-sm');
-        //$action1->setStyle('font-size:10px');
+        $manager->setLabel('Gerenciar');
+        //$manager->setClass('btn btn-info btn-sm');
+        //$manager->setStyle('font-size:10px');
         $manager->setImage('phone.png');
         $manager->setField('id');
         $this->datagrid->addAction($manager, '5%');
@@ -125,7 +126,12 @@ class NegociacaoList extends Page
 
     public function onReload()
     {
-        $this->order_param = 'id DESC';
+        if (isset($_GET['success']) && $_GET['success']==true) {
+            $msg = 'Negociação finalizada com sucesso!';
+            new Message('success', $msg);
+        }
+        
+        $this->order_param = 'data_finalizacao';
         $param = $_REQUEST;
         $this->onReloadTrait($param);
     }

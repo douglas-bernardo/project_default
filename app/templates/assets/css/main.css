@@ -96,13 +96,13 @@
 }
 
 /* Datagrids options */
-
 .datagrig-disable-link{
     pointer-events: none;
     opacity: 0.5;
 }
 
 .off {
+    display: none;
     color: #a3a0a0;
 }
 

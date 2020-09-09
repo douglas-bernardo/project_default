@@ -31,6 +31,8 @@ return array(
     'Pessoa' => $baseDir . '/app/model/Pessoa.php',
     'PessoaGrupo' => $baseDir . '/app/model/PessoaGrupo.php',
     'Produto' => $baseDir . '/app/model/Produto.php',
+    'Projeto' => $baseDir . '/app/model/Projeto.php',
+    'ProjetoTsService' => $baseDir . '/app/apiservices/ProjetoTsService.php',
     'Retencao' => $baseDir . '/app/model/Retencao.php',
     'Reversao' => $baseDir . '/app/model/Reversao.php',
     'Situacao' => $baseDir . '/app/model/Situacao.php',

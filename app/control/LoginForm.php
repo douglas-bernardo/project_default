@@ -6,16 +6,15 @@ use Library\Widgets\Base\Element;
 use Library\Widgets\Form\Form;
 use Library\Widgets\Form\Entry;
 use Library\Widgets\Form\Password;
-use Library\Widgets\Wrapper\FormWrapper;
 use Library\Widgets\Dialog\Message;
 use Library\Database\Transaction;
 use Library\Database\Repository;
 use Library\Database\Criteria;
 use Library\Database\Filter;
 use Library\Session\Session;
-use Library\Widgets\Base\Image;
+use Library\Widgets\Base\IconIMG;
+use Library\Widgets\Base\IconSVG;
 use Library\Widgets\Container\Card;
-use Library\Widgets\Form\Label;
 use Library\Widgets\Wrapper\BootstrapFormBuilder;
 
 class LoginForm extends Page
@@ -33,16 +32,24 @@ class LoginForm extends Page
 
         $email = new Entry('email');
         $email->id = 'email';
+        $email->placeholder = 'E-mail';
 
         $pass = new Password('password');
         $pass->id = 'password';
+        $pass->placeholder = 'Senha';
 
         $this->form = new BootstrapFormBuilder('form_login');
 
-        $this->form->addFields( [new Label('Email'), $email] );
-        $this->form->addFields( [new Label('Senha'), $pass] );
+        //$this->form->addFields( [new Label('Email'), $email] );
+        $this->form->addFields( [new IconSVG('person-fill', '25px', IconSVG::PRIMARY), $email] );
 
-        $bntLogin = $this->form->addAction('Login', new Action(array($this, 'onLogin')), true);
+        //$this->form->addFields( [new Label('Senha'), $pass] );
+        //new IconIMG('lock-fill')
+        $this->form->addFields( [new IconSVG('lock-fill', '25px', IconSVG::PRIMARY), $pass] );
+
+        $bntLogin = $this->form->addAction(
+            'Login', 
+            new Action(array($this, 'onLogin')), true);
         $bntLogin->{'class'} = 'btn btn-info buttonLogin';
         $bntLogin->{'id'} = 'login_system';
 
@@ -105,7 +112,7 @@ class LoginForm extends Page
             }
 
         } else {
-            new Message('warning ', "Informe seu usuário e senha...", '100', 'AlertLogin');
+            new Message('danger ', "Informe seu usuário e senha...", '100', 'AlertLogin');
         }
     }
 

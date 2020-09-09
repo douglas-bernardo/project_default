@@ -3,6 +3,7 @@ namespace Library\Widgets\Wrapper;
 
 use Library\Control\ActionInterface;
 use Library\Widgets\Base\Element;
+use Library\Widgets\Base\Icon;
 use Library\Widgets\Form\Button;
 use Library\Widgets\Form\Divider;
 use Library\Widgets\Form\FormBase;
@@ -118,12 +119,22 @@ class BootstrapFormBuilder implements FormInterface
             $form_group->{'class'} = 'form-group ' . $size;
             $form_row->add($form_group);
             foreach($slot as $item) {
-                if (!$item instanceof Label) {
+
+                if (!$item instanceof Label && !$item instanceof Icon) {
                     $control_sizing = ($item->getOptions('sizing')) ? $item->getOptions('sizing') : '' ;
                     $item->{'class'} = 'form-control ' . $control_sizing;
                 }
-                $form_group->add($item);
-                $this->decorated->addField($item);                
+
+                if ($item instanceof Icon) {
+                    $form_group->style = 'display: flex; align-items: center;';
+                    $div = new Element('div');
+                    $div->class = 'mr-2';
+                    $div->add($item);
+                    $form_group->add($div);
+                } else {
+                    $form_group->add($item);
+                    $this->decorated->addField($item);
+                }
             }            
         }
 

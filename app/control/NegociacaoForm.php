@@ -2,8 +2,12 @@
 
 use Library\Control\Action;
 use Library\Control\Page;
+use Library\Database\Criteria;
+use Library\Database\Filter;
+use Library\Database\Repository;
 use Library\Database\Transaction;
 use Library\Session\Session;
+use Library\Widgets\Base\Script;
 use Library\Widgets\Container\Breadcrumb;
 use Library\Widgets\Container\Card;
 use Library\Widgets\Container\Row;
@@ -377,6 +381,30 @@ class NegociacaoForm extends Page
             return "Escolha uma opção válida para finalizar a negociação!";
         }
 
+    }
+
+    public static function getProjetos(): ? array
+    {
+        $items = [];
+        Transaction::open('bp_renegociacao');
+        //$projetos = Projeto::all();
+
+        $repository = new Repository('Projeto');
+        $criteria = new Criteria();
+        $criteria->add(new Filter('flgativo', '=', 'S'));
+        $criteria->setProperty('order', 'numeroprojeto');
+        $projetos = $repository->load($criteria);   
+
+        if ($projetos) {
+            foreach ($projetos as $projeto) {
+                $items[] = [
+                    "id" => $projeto->id, 
+                    "projeto" => $projeto->numeroprojeto
+                ];
+            }
+        }
+        Transaction::close(); 
+        return $items;
     }
 
     public function saveNegociacao()

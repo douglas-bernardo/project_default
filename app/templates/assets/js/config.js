@@ -1,1 +1,0 @@
-const base_url = 'https://localhost/project-default/rest.php?';

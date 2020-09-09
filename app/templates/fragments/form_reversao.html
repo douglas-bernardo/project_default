@@ -12,8 +12,12 @@
             </div>
         </div>
         <div class="form-group col-md-3">
-            <label>Número Projeto</label>
-            <input class="form-control form-control-sm number" name="rev_projeto" value="" type="text" autocomplete="off" required>
+            <label for="inputProjeto">Número Projeto</label>
+            <!-- <input class="form-control form-control-sm number" name="rev_projeto" value="" type="text" autocomplete="off" required> -->
+            <select id="inputProjeto" class="form-control form-control-sm" name="rev_projeto" required>
+                <option value="0" disabled="" selected="">
+                    Selecione o projeto...</option>
+            </select>
             <div class="invalid-feedback">
                 Número Projeto é obrigatório.
             </div>

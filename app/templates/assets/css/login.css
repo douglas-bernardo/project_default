@@ -9,13 +9,13 @@ body{
 }
 
 
-.AlertLogin{
+/* .AlertLogin{
     position: absolute;
     margin-top: 325px;
     margin-left: -175px;
     left: 50%;
     max-width: 350px;
-}
+} */
 
 .buttonLogin{
     width: 100%;

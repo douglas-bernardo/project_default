@@ -13,7 +13,7 @@ class DatagridWrapper extends Element
         parent::__construct('div');
 
         $responsive_wrapper = new Element('div');
-        $responsive_wrapper->{'class'} = 'table-responsive-sm';
+        $responsive_wrapper->{'class'} = 'table-responsive';
 
         $this->decorated = $datagrid;
         $this->decorated->{'class'} = 'table table-sm table-hover';
