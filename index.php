@@ -1,40 +1,21 @@
 <?php
 
-// composer autoload
 require __DIR__ . '/vendor/autoload.php';
 
 use Library\Session\Session;
-
-// //Library loader
-// require_once 'Lib/Livro/Core/ClassLoader.php';
-// $al = new Livro\Core\ClassLoader;
-// $al->addNamespace('Livro', 'Lib/Livro');
-// $al->register();
-
-// //Application loader
-// require_once 'Lib/Livro/Core/AppLoader.php';
-// $al = new Livro\Core\AppLoader;
-// $al->addDirectory('App/Control');
-// $al->addDirectory('App/Model');
-// $al->register();
-
-// var_dump(get_included_files());
-// die;
-
-$content = '';
-
 new Session;
 
-if (Session::getValue('logged')){//se parametro logged == true
-    $template = file_get_contents('app/templates/template.html');// carrega o template principal
+$content = '';
+if (Session::getValue('logged')){
+    $template = file_get_contents('app/templates/template.html');
     $class = 'HomeControl';
 } else {    
-    $template = file_get_contents('app/templates/login.html');//retorna para a página de login
-    $class = 'LoginForm';//
+    $template = file_get_contents('app/templates/login.html');
+    $class = 'LoginForm';
 }
 
 if (isset($_GET['class']) AND Session::getValue('logged')){
-    $class = $_GET['class'];//armazena as classes das requisições
+    $class = $_GET['class'];
 }
 
 if(class_exists($class)){
@@ -55,10 +36,8 @@ if (Session::getValue('user')) {
     $email = Session::getValue('user')->email;
 }
 
-//Injeta conteúdo gerado dentro do template
 $output = str_replace('{content}', $content, $template);
 $output = str_replace('{class}', $class, $output);
 $output = str_replace('{user_email}', $email, $output);
 
-//Exibe a saída gerada
 echo $output;

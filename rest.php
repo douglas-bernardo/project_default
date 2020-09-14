@@ -1,7 +1,5 @@
 <?php
 
-use Library\session\Session;
-
 header('Content-type: application/json; charset=utf-8');
 
 require __DIR__ . '/vendor/autoload.php';

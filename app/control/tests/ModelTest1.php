@@ -7,7 +7,6 @@ class ModelTest1 extends Page
 {
     public function show()
     {
-        $icon = new IconSVG('person-fill');
-        $icon->show();
+        var_dump($_SESSION);
     }
 }

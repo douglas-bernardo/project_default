@@ -260,6 +260,7 @@ class NegociacaoForm extends Page
                     Transaction::open('bp_renegociacao');
 
                     $dados = (object) $_POST;
+
                     $negociacao_id = (int) $dados->negociacao_id;
                     $negociacao = new Negociacao($negociacao_id);
         
@@ -326,7 +327,9 @@ class NegociacaoForm extends Page
                             // novo contrato (reversão)
                             $contrato_novo = new Contrato();
                             $contrato_novo->cliente_id         = $contrato_antigo->getCliente()->id;
-                            $contrato_novo->projeto            = $dados->rev_projeto;
+                            $contrato_novo->data_venda         = $dados->data_reversao;
+                            $contrato_novo->produto            = (new Projeto($dados->rev_projeto))->nomeprojeto;
+                            $contrato_novo->projeto            = (new Projeto($dados->rev_projeto))->numeroprojeto;
                             $contrato_novo->numero             = $dados->rev_numero_contrato;
                             $contrato_novo->valor_venda        = str_format_currency($dados->rev_valor_venda);
                             $contrato_novo->origem_contrato_id = 2; // Reversão
@@ -350,12 +353,14 @@ class NegociacaoForm extends Page
                             $negociacao->store();
 
                             Transaction::close();
+                            Session::setValue('teste', 'teste');
                             $resp = 'Reversão do contrato <b>' . $contrato_antigo->projeto . '-' . $contrato_antigo->numero . '</b> registrada com sucesso! ';
                             $resp .=  'Novo contrato: ' . $contrato_novo->projeto . '-' . $contrato_novo->numero; 
                             return $resp;
                             break;
         
                         default:
+                            Session::setValue('teste', 'teste');
                             $negociacao->data_finalizacao = $dados->data_finalizacao;
                             $negociacao->situacao_id      = $situacao_id;
                             $negociacao->finalizada       = true;
@@ -363,7 +368,7 @@ class NegociacaoForm extends Page
                             $situacao = new Situacao($situacao_id);
 
                             Transaction::close();
-                            return 'Negociação finalizada como: ' . $situacao->nome;
+                            return 'Negociação finalizada como: ' . $situacao->nome . ' - ' . Session::getValue('teste');
                             break;
                     }
                     
@@ -381,30 +386,6 @@ class NegociacaoForm extends Page
             return "Escolha uma opção válida para finalizar a negociação!";
         }
 
-    }
-
-    public static function getProjetos(): ? array
-    {
-        $items = [];
-        Transaction::open('bp_renegociacao');
-        //$projetos = Projeto::all();
-
-        $repository = new Repository('Projeto');
-        $criteria = new Criteria();
-        $criteria->add(new Filter('flgativo', '=', 'S'));
-        $criteria->setProperty('order', 'numeroprojeto');
-        $projetos = $repository->load($criteria);   
-
-        if ($projetos) {
-            foreach ($projetos as $projeto) {
-                $items[] = [
-                    "id" => $projeto->id, 
-                    "projeto" => $projeto->numeroprojeto
-                ];
-            }
-        }
-        Transaction::close(); 
-        return $items;
     }
 
     public function saveNegociacao()

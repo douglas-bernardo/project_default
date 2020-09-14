@@ -1,5 +1,8 @@
 <?php
 
+use Library\Database\Criteria;
+use Library\Database\Filter;
+use Library\Database\Repository;
 use Library\Database\Transaction;
 
 class ProjetoTsService
@@ -47,5 +50,49 @@ class ProjetoTsService
         } catch (\Throwable $e) {
             return ["error" => $e->getMessage()];
         }
+    }
+
+    public static function getAll(): ? array
+    {
+        $items = [];
+        Transaction::open('bp_renegociacao');
+        //$projetos = Projeto::all();
+
+        $repository = new Repository('Projeto');
+        $criteria = new Criteria();
+        $criteria->add(new Filter('flgativo', '=', 'S'));
+        $criteria->setProperty('order', 'numeroprojeto');
+        $projetos = $repository->load($criteria);   
+
+        if ($projetos) {
+            foreach ($projetos as $projeto) {
+                $items[] = [
+                    "id" => $projeto->id, 
+                    "projeto" => $projeto->numeroprojeto
+                ];
+            }
+        }
+        Transaction::close(); 
+        return $items;
+    }
+
+    public static function getProjetoById($request): ? array
+    {
+        if (!isset($request['projeto_id'])) {
+            return ["error"=> "Paramenter 'projeto_id' is required"];
+        }
+
+        Transaction::open('bp_renegociacao');
+
+        $data = [];
+
+        $projeto_id = $request['projeto_id'];
+        $projeto = new Projeto($projeto_id);   
+        
+        $data = $projeto->toArray();
+
+        Transaction::close();
+
+        return $data;
     }
 }

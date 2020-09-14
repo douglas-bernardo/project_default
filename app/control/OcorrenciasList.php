@@ -284,8 +284,17 @@ class OcorrenciasList extends Page
 
             Transaction::close();
             //Session::setValue('neg_register_process', true);            
-            return 'Negociação registrada com sucesso';
+            //return 'Negociação registrada com sucesso';
+            // header('Content-type: application/json; charset=utf-8');
+            // echo json_encode(array('status'=>'success', 'data'=>'Negociação registrada com sucesso'));
             //header("Location: ?class=OcorrenciasList");
+
+            echo json_encode([
+                'status'=>'success', 
+                'data'=>'Negociação registrada com sucesso',
+                'session'=>Session::getValue('user')->toArray()
+                ]);
+            exit;
 
         } catch(Exception $e) {
             Transaction::rollback();

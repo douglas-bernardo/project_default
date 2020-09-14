@@ -2,6 +2,7 @@
 
 use Library\Control\Action;
 use Library\Control\Page;
+use Library\session\Session;
 use Library\Traits\ReloadTrait;
 use Library\Widgets\Container\Breadcrumb;
 use Library\Widgets\Container\Card;
@@ -128,7 +129,7 @@ class NegociacaoList extends Page
     {
         if (isset($_GET['success']) && $_GET['success']==true) {
             $msg = 'Negociação finalizada com sucesso!';
-            new Message('success', $msg);
+            new Message('success', $msg . ' - ' . Session::getValue('teste'));
         }
         
         $this->order_param = 'data_finalizacao';

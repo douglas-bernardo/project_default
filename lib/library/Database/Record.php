@@ -32,7 +32,8 @@ abstract class Record
 
     /**
      * This magical method has two functions:
-     * When an object is invoked with a method that matches the string 'set_. $ prop ', 
+     * When an object is invoked with a method that matches the 
+     * string 'set_. $ prop ', 
      * this method will be executed.
      * If the above condition does not occur, a new property is
      * stored in the data array.
@@ -124,7 +125,7 @@ abstract class Record
                 }
             }
             $sql .= ' SET ' . implode(', ', $set);
-            $sql .= ' WHERE id=' . (int) $this->data['id']; //(int), (integer) - converte para inteiro
+            $sql .= ' WHERE id=' . (int) $this->data['id'];
         }
         //obtém a transação ativa
         if($conn = Transaction::get()){
@@ -152,7 +153,7 @@ abstract class Record
             }
             return $object;
         } else {
-            throw new Exception("Não há transação ativa!");            
+            throw new Exception("Não há transação ativa!");   
         }
     }
 
@@ -195,7 +196,7 @@ abstract class Record
 
     public static function find($id)
     {
-        $classname = get_called_class(); //Obtém o nome da classe em que o método estático é chamado.
+        $classname = get_called_class();
         $ar = new $classname;
         return $ar->load($id);
     }

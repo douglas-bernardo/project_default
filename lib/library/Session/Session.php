@@ -1,5 +1,6 @@
 <?php
-namespace Library\session;
+
+namespace Library\Session;
 
 class Session
 {

@@ -1,17 +1,21 @@
 
-https://localhost/project-default/rest/rest-test.php
+http://localhost/project-default/rest/rest-test.php
 
 
 ###
 
-https://localhost/project-default/rest/rest-import-motivos.php
+http://localhost/project-default/rest/rest-import-motivos.php
 
 
 ###
 
-https://localhost/project-default/rest/rest-import-projetos.php
+http://localhost/project-default/rest/rest-import-projetos.php
 
 
 ###
 
-https://localhost/project-default/rest/rest-import-ocorrencias.php
+http://localhost/project-default/rest/rest-import-ocorrencias.php
+
+###
+
+http://localhost/wser_cm/?class=MotivoServices&method=getData

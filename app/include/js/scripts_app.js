@@ -123,7 +123,7 @@ $('input[id="registrar_negociacao"]').click(function () {
 
     $.ajax({
 
-        url:base_url_api + 'class=OcorrenciasList&method=registraNegociacao',
+        url:base_url_app + 'class=OcorrenciasList&method=registraNegociacao',
         type:'POST',
         data:form_data,
         dataType: 'JSON',
@@ -131,11 +131,12 @@ $('input[id="registrar_negociacao"]').click(function () {
             $('.modal-footer')
             .prepend('<img src="app/include/svg/Spinner-1s-64px.gif" width="40" height="40"/>');
         },
-        success:function (response, textStatus, jqXHR) {        
+        success:function (response, textStatus, jqXHR) {  
+            //console.log(response);
             if (response.status == 'error') {
                 $('.container-fluid nav')
                 .prepend(__alert("danger", response.data));
-            } else {               
+            } else {     
                 $('#ModalNegociacao').modal('hide');
                 let url = base_url_app + 'class=OcorrenciasList&success=true';
                 window.location.href = url;
@@ -215,8 +216,7 @@ $('input[id="registrar_negociacao"]').click(function () {
 
 function loadProjetos() {    
     $.ajax({
-        url:base_url_api + 'class=NegociacaoForm&method=getProjetos',
-        type:'POST',
+        url:base_url_api + 'class=ProjetoTsService&method=getAll',
         dataType: 'JSON',
         success:function (response) {        
             if (response.status == 'error') {
@@ -233,12 +233,38 @@ function loadProjetos() {
    });
 }
 
+/**
+ * Obtem informações do projeto escolhido no momento da reversão
+ */
 $(document).on('change', 'form[name="form_negociacao"] select[name="rev_projeto"]', function() {
-    if ($('.alert').length) {
+    var situacao = $('select[name="situacao_id"]').val();
+    console.log(situacao);
+    if ($('.alert').length && situacao != '7') {
         $('.alert').remove();
     }
-    $('form[name="form_negociacao"] .divider_form')
-    .append(__alert('warning', 'Escolheu o projeto', false));
+
+    var projeto_id = $(this).val();
+
+    $.ajax({
+        url:base_url_api + 'class=ProjetoTsService&method=getProjetoById',
+        type:'GET',
+        data: {projeto_id:projeto_id},
+        dataType: 'JSON',
+        success:function (response) {        
+            if (response.status == 'error') {
+                $('.container-fluid nav')
+                .prepend(__alert("danger", response.data));
+            } else {     
+                if ($('.alert').length) {
+                    $('.alert').text('Produto: ' + response.data.nomeprojeto);
+                } else {       
+                $('form[name="form_negociacao"] .divider_form')
+                    .append(__alert('warning', 'Produto: ' + response.data.nomeprojeto, false));
+                }
+            }
+        },
+   });
+
 });
 
 // limpa os alertas de validação
@@ -272,11 +298,13 @@ $('input[id="finaliza_negociacao"]').click(function (e) {
         $('.alert').remove();
     }
 
-    var projeto = $('select[name="rev_projeto"]'); 
-    if (projeto.val() == null) {
-        $('.container-fluid nav').prepend(__alert("danger", 'Informe o projeto!'));
-        projeto.addClass('is-invalid');
-        return;
+    if ( $('select[name="rev_projeto"]').length) {
+        var projeto = $('select[name="rev_projeto"]'); 
+        if (projeto.val() == null) {
+            $('.container-fluid nav').prepend(__alert("danger", 'Informe o projeto!'));
+            projeto.addClass('is-invalid');
+            return;
+        }        
     }
 
     if ($('.extra_data').length) {
@@ -332,17 +360,9 @@ $('input[id="finaliza_negociacao"]').click(function (e) {
                 $('.container-fluid nav')
                 .prepend(__alert("danger", response.data));
             } else {
-                // $('.container-fluid nav')
-                // .prepend(__alert("success", response.data));
-                // console.log(response.data);
                 let url = base_url_app+'class=NegociacaoList&success=true';
                 window.location.href = url;
             }
-            // Redireciona para a lista de negociações
-            // $("html, body").stop().animate({scrollTop:0}, 300, 'swing');
-            // setTimeout(function () {
-            //     window.location.href = base_url_app + 'class=NegociacaoList';
-            // },3000);
         },
         error: function (jqXHR, textStatus, errorThrow) {
             $('.container-fluid nav')
