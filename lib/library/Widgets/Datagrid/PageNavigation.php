@@ -94,6 +94,7 @@ class PageNavigation
         $nav = new Element('nav');
         $ul = new Element('ul');
         $ul->{'class'} = 'pagination pagination-sm';
+        $ul->{'style'} = 'margin-bottom: 0;';
 
         $nav->add($ul);
 

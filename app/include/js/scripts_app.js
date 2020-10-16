@@ -1,5 +1,31 @@
-const base_url_api = 'https://localhost/project-default/rest.php?';
-const base_url_app = 'https://localhost/project-default/?';
+const base_url_api = 'http://localhost/project-default/rest.php?';
+const base_url_app = 'http://localhost/project-default/?';
+
+
+$( document ).ready(function() {
+
+    if (sessionStorage.getItem('negociacao_register') != null) {
+    $('.container-fluid nav:first').prepend(
+        __alert(
+            "success", 
+            sessionStorage.getItem('negociacao_register')
+            )
+        );        
+    sessionStorage.removeItem('negociacao_register');
+    }
+
+    if (sessionStorage.getItem('negociacao_finaliza') != null) {
+        $('.container-fluid nav:first').prepend(
+            __alert(
+                "success", 
+                sessionStorage.getItem('negociacao_finaliza')
+                )
+            );        
+        sessionStorage.removeItem('negociacao_finaliza');
+    }
+
+});
+
 
 function confirm(param, url, activeRecord) {
     $('#ModalConfirm').find('.modal-body')
@@ -132,14 +158,13 @@ $('input[id="registrar_negociacao"]').click(function () {
             .prepend('<img src="app/include/svg/Spinner-1s-64px.gif" width="40" height="40"/>');
         },
         success:function (response, textStatus, jqXHR) {  
-            //console.log(response);
             if (response.status == 'error') {
                 $('.container-fluid nav')
                 .prepend(__alert("danger", response.data));
-            } else {     
+            } else {
                 $('#ModalNegociacao').modal('hide');
-                let url = base_url_app + 'class=OcorrenciasList&success=true';
-                window.location.href = url;
+                sessionStorage.setItem('negociacao_register', response.data );
+                location.reload();
             }
         },
 
@@ -155,13 +180,14 @@ $('input[id="registrar_negociacao"]').click(function () {
  * começe a editar o form form_negociacao e feche a operação sem concluir
  */
 //$.getScript("app/include/js/page_confirm_leave.js", function () {
-    $('select[name="situacao_id"]').on('change', function() {        
+    $('select[name="situacao_id"]').on('change', function() {
 
             if ($('.alert').length) {
                 $('.alert').remove();
             }
             var template = "app/templates/fragments/";
             var content = null;
+
             if ($(".extra_data").length) {
                 $(".extra_data").slideUp(300, function () {
                     $(this).remove(); 
@@ -197,7 +223,7 @@ $('input[id="registrar_negociacao"]').click(function () {
                     $('[name="form_negociacao"] > div:last')
                     .after( '<div class="extra_data border"></div>' );
                     content = $( ".extra_data" );
-                    template += 'form_reversao.html';
+                    template += 'form_reversao_novo.html';
                     content.css("display", "none").slideDown(300, function() {
                                     $("html, body").stop()
                                     .animate({scrollTop: $(this)
@@ -224,9 +250,8 @@ function loadProjetos() {
                 .prepend(__alert("danger", response.data));
             } else {               
                 response.data.forEach( proj => {
-                    //console.log(proj);
-                    $('select[name="rev_projeto"]')
-                    .append(`<option value="${proj.id}">${proj.projeto}</option>`);
+                    $('select[name="reversao_projeto_id"]')
+                    .append(`<option value="${proj.id}">${proj.info}</option>`);
                 });
             }
         },
@@ -236,11 +261,16 @@ function loadProjetos() {
 /**
  * Obtem informações do projeto escolhido no momento da reversão
  */
-$(document).on('change', 'form[name="form_negociacao"] select[name="rev_projeto"]', function() {
-    var situacao = $('select[name="situacao_id"]').val();
-    console.log(situacao);
-    if ($('.alert').length && situacao != '7') {
-        $('.alert').remove();
+$(document).on('change', 'form[name="form_negociacao"] select[name="reversao_projeto_id"]', function() {
+
+    var projeto = $('select[name="reversao_projeto_id"]');
+    if (projeto.hasClass("is-invalid")) {
+        projeto.removeClass("is-invalid");
+        projeto.addClass('is-valid');
+    }
+
+    if ($('#projeto_error').length) {
+        $('#projeto_error').remove();
     }
 
     var projeto_id = $(this).val();
@@ -250,16 +280,16 @@ $(document).on('change', 'form[name="form_negociacao"] select[name="rev_projeto"
         type:'GET',
         data: {projeto_id:projeto_id},
         dataType: 'JSON',
-        success:function (response) {        
+        success:function (response) {     
             if (response.status == 'error') {
                 $('.container-fluid nav')
                 .prepend(__alert("danger", response.data));
             } else {     
-                if ($('.alert').length) {
-                    $('.alert').text('Produto: ' + response.data.nomeprojeto);
+                if ($('#produto_nome').length) {
+                    $('#produto_nome').text('Produto: ' + response.data.nomeprojeto);
                 } else {       
                 $('form[name="form_negociacao"] .divider_form')
-                    .append(__alert('warning', 'Produto: ' + response.data.nomeprojeto, false));
+                    .append(__alert('warning', 'Produto: ' + response.data.nomeprojeto, false, "produto_nome"));
                 }
             }
         },
@@ -268,8 +298,7 @@ $(document).on('change', 'form[name="form_negociacao"] select[name="rev_projeto"
 });
 
 // limpa os alertas de validação
-$(document).on('change', 
-               'form[name="form_negociacao"] .extra_data input', function() {
+$(document).on('change', 'form[name="form_negociacao"] .extra_data input', function() {
     __clear_to_valid($(this));
 });
 
@@ -286,7 +315,6 @@ $('input[name="data_finalizacao_footer"]').on('change', function() {
     }
 });
 
-
 /**
  * Validação e finalização de negociação
  * Controller: NegociacaoForm
@@ -298,13 +326,14 @@ $('input[id="finaliza_negociacao"]').click(function (e) {
         $('.alert').remove();
     }
 
-    if ( $('select[name="rev_projeto"]').length) {
-        var projeto = $('select[name="rev_projeto"]'); 
+    if ( $('select[name="reversao_projeto_id"]').length) {
+        var projeto = $('select[name="reversao_projeto_id"]'); 
         if (projeto.val() == null) {
-            $('.container-fluid nav').prepend(__alert("danger", 'Informe o projeto!'));
+            $('.container-fluid nav').prepend(__alert("danger", 'Informe o projeto!', true, "projeto_error"));
+            $("html, body").stop().animate({scrollTop:0}, 300, 'swing');
             projeto.addClass('is-invalid');
             return;
-        }        
+        }
     }
 
     if ($('.extra_data').length) {
@@ -341,7 +370,7 @@ $('input[id="finaliza_negociacao"]').click(function (e) {
 
     $.ajax({
 
-        url:base_url_api + 'class=NegociacaoForm&method=finalizaNegociacao',
+        url:base_url_app + 'class=NegociacaoForm&method=finalizaNegociacao',
         type:'POST',
         data:form_data,
         dataType: 'JSON',
@@ -359,8 +388,10 @@ $('input[id="finaliza_negociacao"]').click(function (e) {
             if (response.status == 'error') {
                 $('.container-fluid nav')
                 .prepend(__alert("danger", response.data));
+                $("html, body").stop().animate({scrollTop:0}, 300, 'swing');
             } else {
-                let url = base_url_app+'class=NegociacaoList&success=true';
+                sessionStorage.setItem('negociacao_finaliza', response.data );
+                let url = base_url_app+'class=NegociacaoList';
                 window.location.href = url;
             }
         },
@@ -415,9 +446,9 @@ function __hello(){
     });
 }
 
-function __alert (type, message, close = true) {
+function __alert (type, message, close = true, id = "alert") {
     var component = '';
-    component += '<div class="alert alert-' + type + '" alert-dismissible fade show" role="alert">';
+    component += `<div class="alert alert-${type}" alert-dismissible fade show" role="alert" id="${id}">`;
     component +=    message;
     if (close) {
         component += '<button type="button" class="close" data-dismiss="alert" aria-label="Close">';

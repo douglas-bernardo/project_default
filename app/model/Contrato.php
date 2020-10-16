@@ -32,6 +32,11 @@ class Contrato extends Record
         return $this->lancamentos;
     }
 
+    public function getProjeto(): ? Projeto
+    {
+        return (new Projeto($this->projeto_id));
+    }
+
     public function getValorTotalLancamentos()
     {
         $valor = 0;

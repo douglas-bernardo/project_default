@@ -66,7 +66,7 @@ class OcorrenciasList extends Page
         $id              = new DatagridColumn('id', 'id', 'center', '');     
         $numero          = new DatagridColumn('numero_ocorrencia', 'Número', 'center', '5%');
         $data_ocorrencia = new DatagridColumn('dtocorrencia', 'Data', 'center', '8%');
-        $motivo          = new DatagridColumn('descricao', 'Motivo', 'justify', '21%');
+        $motivo          = new DatagridColumn('motivo', 'Motivo', 'justify', '21%');
         $cliente         = new DatagridColumn('nome_cliente', 'Cliente', 'justify', '26%');
         $projeto         = new DatagridColumn('numeroprojeto', 'Proj.', 'center', '4%');
         $contrato        = new DatagridColumn('numerocontrato', 'Contrato', 'center', '10%');
@@ -161,8 +161,10 @@ class OcorrenciasList extends Page
         $this->form->addFields([$ocorrencia_id]);
         $this->form->addFields([$idusuario_resp]);
         $this->form->addFields([new Label('Origem'), $origem]);
-        $this->form->addFields([new Label('Tipo de Solicitação'), 
-                                            $tipo_solicitacao]);
+        $this->form->addFields(
+            [new Label('Tipo de Solicitação'), 
+            $tipo_solicitacao]
+        );
 
         $act = $this->form->addAction(
             'Registrar Negociação', 
@@ -210,14 +212,16 @@ class OcorrenciasList extends Page
         return date('d-m-Y', strtotime( $value ));
     }
 
+    /**
+     * Registra uma nova negociação apartir da lista de ocorrências TS 
+     *
+     * @return void
+     */
     public static function registraNegociacao()
     {
         try{
             Transaction::open('bp_renegociacao');
-            //Transaction::setLogger(new LoggerTXT('tmp/save_negociacao.txt'));            
-            //$dados = $this->form->getData();
             $dados = (object) $_POST;
-
             $user_resp = (new Users())->loadBy('ts_usuario_id', $dados->idusuario_resp);
 
             //obtem a instancia do objeto Ocorrencia e altera o atributo atendida
@@ -229,7 +233,10 @@ class OcorrenciasList extends Page
             $cliente = new Cliente();
             $cliente->nome          = $ocorrencia->nome_cliente;
             $cliente->ts_cliente_id = $ocorrencia->idpessoa_cliente;
-            $cliente->store();
+            $cliente->store();    
+
+            //instancia de um projeto
+            $projeto = (new Projeto())->loadBy("idprojetots", $ocorrencia->idprojetots);
             
             // ******************   IMPORTANTE!!!   ***************************
             // Adicionar um método de validação para contratos inseridos 
@@ -239,11 +246,12 @@ class OcorrenciasList extends Page
             // O mesmo vale para retenções | se o contrato já foi retido uma vez, 
             // não será necessário adicioná-lo novamente na base do sistema.
             // cria um novo objeto Contrato
+            
             $contrato = new Contrato();
             $contrato->cliente_id          = $cliente->id;
-            $contrato->projeto             = $ocorrencia->numeroprojeto;
+            $contrato->projeto_id          = $projeto->id;
             $contrato->numero              = $ocorrencia->numerocontrato;
-            $contrato->produto             = $ocorrencia->nomeprojeto;
+            $contrato->valor_venda         = $ocorrencia->valor_venda;
             $contrato->ts_idvendats        = $ocorrencia->idvendats;
             $contrato->ts_idvendaxcontrato = $ocorrencia->idvendaxcontrato;
             $contrato->origem_contrato_id  = 1; //API service.
@@ -288,12 +296,16 @@ class OcorrenciasList extends Page
             // header('Content-type: application/json; charset=utf-8');
             // echo json_encode(array('status'=>'success', 'data'=>'Negociação registrada com sucesso'));
             //header("Location: ?class=OcorrenciasList");
+            $link = new Element('a');
+            $link->{'class'} = 'alert-link';
+            $link->{'href'} = '?class=NegociacaoList';
+            $link->add('aqui');
 
             echo json_encode([
                 'status'=>'success', 
-                'data'=>'Negociação registrada com sucesso',
+                'data'=>'Negociação registrada para a ocorrência nº: ' . $ocorrencia->numero_ocorrencia . ". Clique {$link}, para gerenciar suas ocorrências",
                 'session'=>Session::getValue('user')->toArray()
-                ]);
+            ]);            
             exit;
 
         } catch(Exception $e) {
@@ -305,11 +317,11 @@ class OcorrenciasList extends Page
     private static function apiTSLancamentosServicesGetData($idvendats)
     {
         // API CM - https://localhost/wser_cm/?class=TSLancamentosServices&method=getData&idvendats=54142
-        $location = CONF_URL_CM_SERVICE . 'resp.php';
+       // $location = CONF_URL_CM_SERVICE;
         $parameters['class']  = 'TSLancamentosServices';
         $parameters['method'] = 'getData';
         $parameters['idvendats'] = $idvendats;
-        $url = $location . '?' . http_build_query($parameters);
+        $url = CONF_URL_CM_SERVICE . '?' . http_build_query($parameters);
         $result = json_decode(file_get_contents($url));
         if ($result) {
             if ($result->status == 'success') {
@@ -333,12 +345,12 @@ class OcorrenciasList extends Page
     private static function apiContratoServicesGetData($idvendaxcontrato): ?object
     {
         // API CM - https://localhost/wser_cm/?class=ContratoServices&method=getData&idvendaxcontrato=128386
-        $location = CONF_URL_CM_SERVICE . 'resp.php';
+        //$location = CONF_URL_CM_SERVICE . 'resp.php';
         $parameters['class']  = 'ContratoServices';
         $parameters['method'] = 'getData';
         $parameters['idvendaxcontrato'] = $idvendaxcontrato;
 
-        $url = $location . '?' . http_build_query($parameters);
+        $url = CONF_URL_CM_SERVICE . '?' . http_build_query($parameters);
         $result = json_decode(file_get_contents($url));
 
         if ($result) {

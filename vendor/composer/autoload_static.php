@@ -7,16 +7,31 @@ namespace Composer\Autoload;
 class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
 {
     public static $files = array (
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '7dc4b6f9ee593fc2a3ea307d4199ec7f' => __DIR__ . '/../..' . '/init.php',
         'b42365d23a54a81cb1e09e48e0067689' => __DIR__ . '/../..' . '/lib/library/Support/Helpers.php',
-        'c89a91e8362c2a538aa38c6e0dad83bf' => __DIR__ . '/../..' . '/services/boot/Config.php',
         'b678a33e61b122510090acfb060bc723' => __DIR__ . '/../..' . '/services/boot/Helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'Whoops\\' => 7,
+        ),
+        'T' => 
+        array (
+            'Twig\\' => 5,
+        ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Ctype\\' => 23,
             'Services\\' => 9,
+        ),
+        'P' => 
+        array (
+            'Psr\\Log\\' => 8,
         ),
         'L' => 
         array (
@@ -29,9 +44,29 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
     );
 
     public static $prefixDirsPsr4 = array (
+        'Whoops\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
+        ),
+        'Twig\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/twig/twig/src',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
+        ),
         'Services\\' => 
         array (
             0 => __DIR__ . '/../..' . '/services/source',
+        ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
         'Library\\' => 
         array (
@@ -44,15 +79,13 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
     );
 
     public static $classMap = array (
-        'Cidade' => __DIR__ . '/../..' . '/app/model/Cidade.php',
         'Cliente' => __DIR__ . '/../..' . '/app/model/Cliente.php',
-        'Company' => __DIR__ . '/../..' . '/app/model/Company.php',
-        'Conta' => __DIR__ . '/../..' . '/app/model/Conta.php',
         'Contrato' => __DIR__ . '/../..' . '/app/model/Contrato.php',
-        'Grupo' => __DIR__ . '/../..' . '/app/model/Grupo.php',
+        'EficienciaPerdaFinChart' => __DIR__ . '/../..' . '/app/control/dashboard/EficienciaPerdaFinChart.php',
+        'EficienciaPerdaFinSeteDiasChart' => __DIR__ . '/../..' . '/app/control/dashboard/EficienciaPerdaFinSeteDiasChart.php',
+        'EficienciaPerdaMensalChart' => __DIR__ . '/../..' . '/app/control/dashboard/EficienciaPerdaMensalChart.php',
         'HelpersTest' => __DIR__ . '/../..' . '/app/control/tests/HelpersTest.php',
         'HomeControl' => __DIR__ . '/../..' . '/app/control/HomeControl.php',
-        'ItemVenda' => __DIR__ . '/../..' . '/app/model/ItemVenda.php',
         'LoginForm' => __DIR__ . '/../..' . '/app/control/LoginForm.php',
         'ModelTest1' => __DIR__ . '/../..' . '/app/control/tests/ModelTest1.php',
         'Motivo' => __DIR__ . '/../..' . '/app/model/Motivo.php',
@@ -64,11 +97,7 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
         'OcorrenciaService' => __DIR__ . '/../..' . '/app/apiservices/OcorrenciaService.php',
         'OcorrenciasList' => __DIR__ . '/../..' . '/app/control/OcorrenciasList.php',
         'Origem' => __DIR__ . '/../..' . '/app/model/Origem.php',
-        'PermissionGroup' => __DIR__ . '/../..' . '/app/model/PermissionGroup.php',
-        'Permissions' => __DIR__ . '/../..' . '/app/model/Permissions.php',
-        'Pessoa' => __DIR__ . '/../..' . '/app/model/Pessoa.php',
-        'PessoaGrupo' => __DIR__ . '/../..' . '/app/model/PessoaGrupo.php',
-        'Produto' => __DIR__ . '/../..' . '/app/model/Produto.php',
+        'OrigemTotalChart' => __DIR__ . '/../..' . '/app/control/dashboard/OrigemTotalChart.php',
         'Projeto' => __DIR__ . '/../..' . '/app/model/Projeto.php',
         'ProjetoTsService' => __DIR__ . '/../..' . '/app/apiservices/ProjetoTsService.php',
         'Retencao' => __DIR__ . '/../..' . '/app/model/Retencao.php',
@@ -76,13 +105,12 @@ class ComposerStaticInit7230d7ff72d3f5b3ad994d0601f5f4ea
         'Situacao' => __DIR__ . '/../..' . '/app/model/Situacao.php',
         'TSLancamentos' => __DIR__ . '/../..' . '/app/model/TSLancamentos.php',
         'TestService' => __DIR__ . '/../..' . '/app/apiservices/TestService.php',
-        'Tipo' => __DIR__ . '/../..' . '/app/model/Tipo.php',
         'TipoSolicitacao' => __DIR__ . '/../..' . '/app/model/TipoSolicitacao.php',
-        'Unidade' => __DIR__ . '/../..' . '/app/model/Unidade.php',
         'Users' => __DIR__ . '/../..' . '/app/model/Users.php',
         'UsersForm' => __DIR__ . '/../..' . '/app/control/UsersForm.php',
         'UsersList' => __DIR__ . '/../..' . '/app/control/UsersList.php',
-        'Venda' => __DIR__ . '/../..' . '/app/model/Venda.php',
+        'ValorEmAbertoTable' => __DIR__ . '/../..' . '/app/control/dashboard/ValorEmAbertoTable.php',
+        'ValorSituacaoChart' => __DIR__ . '/../..' . '/app/control/dashboard/ValorSituacaoChart.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

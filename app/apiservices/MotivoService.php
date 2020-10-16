@@ -7,11 +7,10 @@ class MotivoService
     public static function importaMotivos()
     {
         try {
-            // API CM
-            $location = CONF_URL_CM_SERVICE . 'resp.php';
             $parameters['class']  = 'MotivoServices';
             $parameters['method'] = 'getData';
-            $url = $location . '?' . http_build_query($parameters);
+            $url = CONF_URL_CM_SERVICE . '?' . http_build_query($parameters);
+
             $result = json_decode(file_get_contents($url));
             
             if ($result) {                

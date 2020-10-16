@@ -1,0 +1,58 @@
+<div class="rev_data">
+    <div class="divider_form">
+        <h5>Informe os dados reversão:</h5>
+        <hr style="border-top: 2px solid #95afc0">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Data da Reversão</label>
+            <input class="form-control form-control-sm" name="data_reversao" value="" type="date" autocomplete="off" required>
+            <div class="invalid-feedback">
+                Data da Reversão é obrigatório.
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label for="inputProjeto">Número Projeto</label>
+            <!-- <input class="form-control form-control-sm number" name="rev_projeto" value="" type="text" autocomplete="off" required> -->
+            <select id="inputProjeto" class="form-control form-control-sm" name="reversao_projeto_id" required>
+                <option value="0" disabled="" selected="">
+                    Selecione o projeto...</option>
+            </select>
+            <div class="invalid-feedback">
+                Número Projeto é obrigatório.
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Número Contrato</label>
+            <input class="form-control form-control-sm number" name="reversao_contrato_numero" value="" type="text" autocomplete="off" required>
+            <div class="invalid-feedback">
+                Número Contrato é obrigatório.
+            </div>
+        </div>
+        <div class="form-group col-md-3">
+            <label>Valor da Venda</label>
+            <input class="form-control form-control-sm money2" name="rev_valor_venda" value="" type="text" autocomplete="off" required>
+            <div class="invalid-feedback">
+                Valor da Venda é obrigatório.
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Reembolso</label>
+            <input class="form-control form-control-sm money2" name="reembolso" value="" type="text" autocomplete="off">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Número PC</label>
+            <input class="form-control form-control-sm number" name="numero_pc" value="" type="text" autocomplete="off">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Taxas/Multas Extras</label>
+            <input class="form-control form-control-sm money2" name="taxas_multas_extras" value="" type="text" autocomplete="off">
+        </div>
+        <div class="form-group col-md-3">
+            <label>Valor 1ª Parcela</label>
+            <input class="form-control form-control-sm money2" name="valor_primeira_parcela" value="" type="text" autocomplete="off">
+        </div>
+    </div>
+</div>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Library\Widgets\Container;
 
 use Library\Widgets\Base\Element;

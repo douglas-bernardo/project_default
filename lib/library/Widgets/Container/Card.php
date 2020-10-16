@@ -2,6 +2,7 @@
 namespace Library\Widgets\Container;
 
 use Library\Widgets\Base\Element;
+use Retencao;
 
 class Card extends Element
 {
@@ -72,17 +73,22 @@ class Card extends Element
             }
         }
         $this->header->add($header);
-        // parent::add($this->header);
+        return $this->header;
     }
 
     public function setBody($content)
     {
         $this->body->add($content);
+        return $this->body;
         //parent::add($this->body);
     }
 
     public function setFooter($footer)
     {
+        if(is_null($footer)){
+            $this->footer->add("");
+            $this->footer->{'style'} = 'display: none;';
+        }
         $this->footer->add($footer);
         //parent::add($this->footer);
     }

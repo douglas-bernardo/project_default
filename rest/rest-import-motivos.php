@@ -1,6 +1,8 @@
 <?php
 
-$location =  'https://localhost/project-default/rest.php';
+require_once '../init.php';
+
+$location = CONF_URL_SERVICE . 'rest.php';
 $parameters = [];
 $parameters['class']  = 'MotivoService';
 $parameters['method'] = 'importaMotivos';

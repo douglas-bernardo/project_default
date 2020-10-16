@@ -9,11 +9,21 @@ class Ocorrencia extends Record
     /**
      * Motivo da abertura da ocorrência
      *
-     * @return string
+     * @return string|null
      */
-    public function get_descricao(): string
+    public function get_motivo(): ? string
     {
         return (new Motivo())->loadBy('idmotivots', $this->idmotivots)->descricao;
+    }
+
+    /**
+     * Produto relacionado ao contrato da ocorrência
+     *
+     * @return string|null
+     */
+    public function get_produto(): ? string
+    {
+        return (new Projeto())->loadBy('idprojetots', $this->idprojetots)->nomeprojeto;
     }
 
     /**

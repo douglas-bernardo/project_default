@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
+//require __DIR__ . '/lib/library/Support/Whoops.php'; *problema com xdebug e sqlite ver depois
 
 use Library\Session\Session;
 new Session;

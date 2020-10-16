@@ -1,7 +1,6 @@
 <?php
 
 use Library\Control\Page;
-use Library\Widgets\Base\Element;
 use Library\Widgets\Container\Breadcrumb;
 use Library\Widgets\Container\Card;
 use Library\Widgets\Container\Row;
@@ -10,52 +9,77 @@ class HomeControl extends Page
 {
     private $breadcrumb;
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
 
         $this->breadcrumb = new Breadcrumb;
         $this->breadcrumb->addBreadCrumbItem('Home');
-        parent::add($this->breadcrumb);
+        parent::add($this->breadcrumb);        
 
-        // //criando uma row Bootstrap:
-        // $row = new Row;
+        // chart.js view
+        // $hbox = new HBox;        
+        // $hbox->add( new ValorSituacaoChart )->style.=';width:48%';
+        // $hbox->add( new OrigemTotalChart )->style.=';width:48%;';
+        // parent::add($hbox);
 
-        // //criando um card:
-        // $card = new Card('Special title treatment');
-        // $card->setHeader('Featured');
-        // $card->setBody('With supporting text below as a natural lead-in to additional content.');
-        // $card->setFooter('teste');
+        $row1 = new Row;
 
-        // // //criando um card2:
-        // $card2 = new Card('Special title treatment');
-        // $card2->setHeader('Featured');
-        // $card2->setBody('With supporting text below as a natural lead-in to additional content.');
-        // $card2->setFooter('teste');
+        $card = new Card();
+        $card->setHeader('Valor Recebido Por Situação')->{'style'} = 'background-color: #FFF; font-size: 12px';
+        $card->setBody( new ValorSituacaoChart );
+        $card->setFooter(null);
+        $col = $row1->addCol($card);// add conteudo a coluna
+        $col->class = 'col-sm-6';
+
+        $card2 = new Card();
+        $card2->setHeader('Principais Origens')->{'style'} = 'background-color: #FFF; font-size: 12px';
+        $card2->setBody( new OrigemTotalChart );
+        $card2->setFooter(null);
+        $col2 = $row1->addCol($card2);// add conteudo a coluna
+        $col2->class = 'col-sm-6';
+
+        parent::add($row1);
+
+        // level 2
+        $row2 = new Row;
+        $eficiencia_perda_graf =  new Card();
+        $eficiencia_perda_graf->setHeader('Eficiência x Perda Acumulado (%)')->{'style'} = 'background-color: #FFF; font-size: 12px';
+        $eficiencia_perda_graf->setBody( new EficienciaPerdaFinChart );
+        $eficiencia_perda_graf->setFooter(null);
+        $col3 = $row2->addCol($eficiencia_perda_graf);
+        $col3->class = 'col-sm-6';
+
+        $eficiencia_perda_sete_dias_graf =  new Card();
+        $eficiencia_perda_sete_dias_graf->setHeader('Eficiência x Perda Acumulado 7 Dias (%)')->{'style'} = 'background-color: #FFF; font-size: 12px';
+        $eficiencia_perda_sete_dias_graf->setBody( new EficienciaPerdaFinSeteDiasChart );
+        $eficiencia_perda_sete_dias_graf->setFooter(null);
+        $col4 = $row2->addCol($eficiencia_perda_sete_dias_graf);
+        $col4->class = 'col-sm-6';
+
+        parent::add($row2);
+
+        // level 3
+        $row3 = new Row;
+        $efi_mensal = new Card();
+        $efi_mensal->setHeader('% Eficiência x Perda Mensal')->{'style'} = 'background-color: #FFF; font-size: 12px';
+        $efi_mensal->setBody( new EficienciaPerdaMensalChart );
+        $efi_mensal->setFooter(null);
+        $col = $row3->addCol($efi_mensal);
+        $col->class = 'col';        
+        parent::add($row3);
 
 
-        // // //criando uma col Bootstrap:
-        // $col = $row->addCol($card);// add conteudo a coluna
-        // $col->class = 'col-sm-6';
+        //level 4
+        $row4 = new Row;
+        $em_aberto = new Card();
+        $em_aberto->setHeader('Perncentual em aberto')->{'style'} = 'background-color: #FFF; font-size: 12px';
+        $em_aberto->setBody( new ValorEmAbertoTable );
+        $em_aberto->setFooter(null);
+        $col = $row4->addCol($em_aberto);
+        $col->class = 'col';        
+        parent::add($row4);
 
-        // $col2 = $row->addCol($card2);// add conteudo a coluna
-        // $col2->class = 'col-sm-6';
 
-        // parent::add($row);        
-
-        // // Power BI
-        // $src = 'https://app.powerbi.com/view?r=eyJrIjoiYjVlNTc5ZjYtZjgxNC00YzIzLTkzYzQtYjUxMTQ1YjhkNjkwIiwidCI6IjVkNGI5OGM5LTM5MmYtNGM4Ny05OWE5LTUyNjA3ODE0MDUxZCJ9';
-        // $iframe = new Element('iframe');
-        // $iframe->{'class'} = 'embed-responsive-item';
-        // $iframe->{'src'} = $src;
-        // $iframe->{'frameborder'} = 0;
-        // $iframe->{'allowFullScreen'} = true;
-
-        // //$frame = '<iframe class="embed-responsive-item" src="' . $src . '" frameborder="0" allowFullScreen="true"></iframe>';
-        // $div =  new Element('div');
-        // $div->{'class'} = 'embed-responsive embed-responsive-16by9';
-        // $div->add($iframe);
-               
-        // parent::add($div);
-        
-    }
+    }        
 }

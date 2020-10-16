@@ -1,0 +1,40 @@
+<canvas id="bar-chart3" width="400"></canvas>
+
+<script>
+ new Chart(document.getElementById("bar-chart3"), {
+  type: 'bar',
+  data: {
+    labels: {{labels|raw}},
+    datasets: [
+      {
+        label: "Vendas",
+        backgroundColor: [ '#36A2EB', '#FF6384'],
+        data: {{data|raw}}
+      }
+    ]
+  },
+  options: {
+    plugins:{
+      datalabels: {
+              formatter: function(value) {
+                  return value + '%';
+              }
+          }
+        },
+    legend: { display: false },
+    maintainAspectRatio: false,
+    title: {
+        display: false,
+        text: ''
+    },
+    scales: {
+      yAxes: [{
+          ticks: {
+              suggestedMin: 0,
+              suggestedMax: 100
+          },      
+      }],
+    }
+  }
+ });
+</script>

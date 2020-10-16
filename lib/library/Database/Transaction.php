@@ -7,6 +7,11 @@ final class Transaction
 {   
     //final class não pode ser super classe
 
+    /**
+     * Undocumented variable
+     *
+     * @var PDO
+     */
     private static $conn; //conexão ativa - atributos estaticos pertencem a classe n ao obj
     private static $logger;//objeto de log
 

@@ -18,6 +18,7 @@
         },
         "classmap": [
             "app/apiservices",
+            "app/control/dashboard",
             "app/control/tests",
             "app/control",
             "app/model"
@@ -25,10 +26,11 @@
         "files": [
             "init.php",
             "lib/library/Support/Helpers.php",
-            "services/boot/Config.php",
             "services/boot/Helpers.php"
         ]
     },    
     "require": {
+        "filp/whoops": "^2.7",
+        "twig/twig": "^3.0"
     }
 }

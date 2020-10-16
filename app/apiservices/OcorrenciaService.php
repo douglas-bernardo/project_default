@@ -18,7 +18,7 @@ class OcorrenciaService
                 $value    = $last_ocorrencia->numero_ocorrencia;
                 $parameters['last_ocorrencia_id'] = $value;
             } else {
-                $parameters['dtocorrencia'] = '01/07/2020';
+                $parameters['dtocorrencia'] = '01/05/2020';
             }
             
             $url = $location . '?' . http_build_query($parameters);
@@ -64,6 +64,7 @@ class OcorrenciaService
                 Transaction::open('bp_renegociacao');
                 $ocorrencia = new Ocorrencia($id);
                 $data = $ocorrencia->toArray();
+                $data['nomeprojeto'] = $ocorrencia->get_produto();
                 Transaction::close();
                 return $data;
             } catch (Exception $e) {

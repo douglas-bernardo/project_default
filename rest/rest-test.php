@@ -1,6 +1,6 @@
 <?php
 
-require '../config.php'; 
+require_once '../init.php';
 
 $location =  CONF_URL_SERVICE . 'rest.php';
 // $parameters = [];

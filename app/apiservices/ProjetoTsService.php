@@ -67,8 +67,8 @@ class ProjetoTsService
         if ($projetos) {
             foreach ($projetos as $projeto) {
                 $items[] = [
-                    "id" => $projeto->id, 
-                    "projeto" => $projeto->numeroprojeto
+                    "id" => $projeto->id,
+                    "info" => $projeto->numeroprojeto . ' - ' . $projeto->nomeprojeto
                 ];
             }
         }
@@ -87,7 +87,7 @@ class ProjetoTsService
         $data = [];
 
         $projeto_id = $request['projeto_id'];
-        $projeto = new Projeto($projeto_id);   
+        $projeto = new Projeto($projeto_id);
         
         $data = $projeto->toArray();
 

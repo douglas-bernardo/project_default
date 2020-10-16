@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  APP no servidor
+ * APP no servidor
  * na raiz do projeto criar a pasta storage e sub-pasta sessions
  */
 
@@ -28,6 +28,6 @@ define("CONF_PASSWD_MAX_LEN", 40);
 /**
  * URL
  */
- define("CONF_URL_BASE", "https://localhost/project-default");
- define("CONF_URL_SERVICE", "https://localhost/project-default/");
- define("CONF_URL_CM_SERVICE", "https://localhost/wser_cm/");
+ define("CONF_URL_BASE", "http://localhost/project-default");
+ define("CONF_URL_SERVICE", "http://localhost/project-default/");
+ define("CONF_URL_CM_SERVICE", "http://localhost/wser_cm/");
